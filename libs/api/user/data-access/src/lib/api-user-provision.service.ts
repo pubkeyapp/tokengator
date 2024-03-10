@@ -3,6 +3,7 @@ import { OnEvent } from '@nestjs/event-emitter'
 import { Prisma, UserStatus } from '@prisma/client'
 import { ApiCoreService, CORE_APP_STARTED, hashPassword, slugifyId } from '@tokengator-mint/api-core-data-access'
 import { provisionUsers } from './api-user-provision-data'
+import { USER_PROVISIONED } from './api-user.events'
 
 @Injectable()
 export class ApiUserProvisionService {
@@ -15,6 +16,7 @@ export class ApiUserProvisionService {
     if (this.core.config.databaseProvision) {
       await this.provisionUsers()
       this.logger.verbose(`Provisioned database`)
+      this.core.eventEmitter.emit(USER_PROVISIONED)
     }
   }
 

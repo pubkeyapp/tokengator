@@ -6,6 +6,8 @@ import { ApiUserFeatureModule } from '@tokengator-mint/api-user-feature'
 import { ApiCoreController } from './api-core.controller'
 import { ApiCoreResolver } from './api-core.resolver'
 import { ApiMintFeatureModule } from '@tokengator-mint/api-mint-feature'
+import { ApiCommunityFeatureModule } from '@tokengator-mint/api-community-feature'
+import { ApiCommunityMemberFeatureModule } from '@tokengator-mint/api-community-member-feature'
 
 const imports = [
   // The api-feature generator will add the imports here
@@ -14,6 +16,8 @@ const imports = [
   ApiIdentityFeatureModule,
   ApiUserFeatureModule,
   ApiMintFeatureModule,
+  ApiCommunityFeatureModule,
+  ApiCommunityMemberFeatureModule,
 ]
 
 @Module({

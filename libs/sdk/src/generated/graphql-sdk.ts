@@ -24,6 +24,12 @@ export type Scalars = {
   JSON: { input: any; output: any }
 }
 
+export type AdminCreateCommunityMemberInput = {
+  communityId: Scalars['String']['input']
+  role?: InputMaybe<CommunityMemberRole>
+  userId: Scalars['String']['input']
+}
+
 export type AdminCreateIdentityInput = {
   ownerId: Scalars['String']['input']
   provider: IdentityProvider
@@ -41,6 +47,20 @@ export type AdminCreateMintInput = {
 export type AdminCreateUserInput = {
   password?: InputMaybe<Scalars['String']['input']>
   username: Scalars['String']['input']
+}
+
+export type AdminFindManyCommunityInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type AdminFindManyCommunityMemberInput = {
+  communityId: Scalars['String']['input']
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  role?: InputMaybe<CommunityMemberRole>
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminFindManyIdentityInput = {
@@ -62,6 +82,16 @@ export type AdminFindManyUserInput = {
   status?: InputMaybe<UserStatus>
 }
 
+export type AdminUpdateCommunityInput = {
+  description?: InputMaybe<Scalars['String']['input']>
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+}
+
+export type AdminUpdateCommunityMemberInput = {
+  role?: InputMaybe<CommunityMemberRole>
+}
+
 export type AdminUpdateMintInput = {
   decimals?: InputMaybe<Scalars['Float']['input']>
   imageUrl?: InputMaybe<Scalars['String']['input']>
@@ -79,6 +109,12 @@ export type AdminUpdateUserInput = {
   username?: InputMaybe<Scalars['String']['input']>
 }
 
+export type AnonFindManyCommunityInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type AppConfig = {
   __typename?: 'AppConfig'
   authDiscordEnabled: Scalars['Boolean']['output']
@@ -88,6 +124,47 @@ export type AppConfig = {
   authRegisterEnabled: Scalars['Boolean']['output']
   authSolanaEnabled: Scalars['Boolean']['output']
   authTwitterEnabled: Scalars['Boolean']['output']
+}
+
+export type Community = {
+  __typename?: 'Community'
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  description: Scalars['String']['output']
+  id: Scalars['String']['output']
+  imageUrl?: Maybe<Scalars['String']['output']>
+  name: Scalars['String']['output']
+  publicUrl?: Maybe<Scalars['String']['output']>
+  slug: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+  viewUrl?: Maybe<Scalars['String']['output']>
+}
+
+export type CommunityMember = {
+  __typename?: 'CommunityMember'
+  communityId: Scalars['String']['output']
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  role: CommunityMemberRole
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+  user?: Maybe<User>
+  userId: Scalars['String']['output']
+}
+
+export type CommunityMemberPaging = {
+  __typename?: 'CommunityMemberPaging'
+  data: Array<CommunityMember>
+  meta: PagingMeta
+}
+
+export enum CommunityMemberRole {
+  Admin = 'Admin',
+  Member = 'Member',
+}
+
+export type CommunityPaging = {
+  __typename?: 'CommunityPaging'
+  data: Array<Community>
+  meta: PagingMeta
 }
 
 export type Identity = {
@@ -158,25 +235,40 @@ export type MintPaging = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  adminCreateCommunityMember?: Maybe<CommunityMember>
   adminCreateIdentity?: Maybe<Identity>
   adminCreateMint?: Maybe<Mint>
   adminCreateUser?: Maybe<User>
+  adminDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
+  adminDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteMint?: Maybe<Scalars['Boolean']['output']>
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
+  adminUpdateCommunity?: Maybe<Community>
+  adminUpdateCommunityMember?: Maybe<CommunityMember>
   adminUpdateMint?: Maybe<Mint>
   adminUpdateUser?: Maybe<User>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
+  userCreateCommunity?: Maybe<Community>
+  userCreateCommunityMember?: Maybe<CommunityMember>
   userCreateMint?: Maybe<Mint>
+  userDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
+  userDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   userDeleteMint?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
+  userUpdateCommunity?: Maybe<Community>
+  userUpdateCommunityMember?: Maybe<CommunityMember>
   userUpdateMint?: Maybe<Mint>
   userUpdateUser?: Maybe<User>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
+}
+
+export type MutationAdminCreateCommunityMemberArgs = {
+  input: AdminCreateCommunityMemberInput
 }
 
 export type MutationAdminCreateIdentityArgs = {
@@ -191,6 +283,14 @@ export type MutationAdminCreateUserArgs = {
   input: AdminCreateUserInput
 }
 
+export type MutationAdminDeleteCommunityArgs = {
+  communityId: Scalars['String']['input']
+}
+
+export type MutationAdminDeleteCommunityMemberArgs = {
+  communityMemberId: Scalars['String']['input']
+}
+
 export type MutationAdminDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
@@ -201,6 +301,16 @@ export type MutationAdminDeleteMintArgs = {
 
 export type MutationAdminDeleteUserArgs = {
   userId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateCommunityArgs = {
+  communityId: Scalars['String']['input']
+  input: AdminUpdateCommunityInput
+}
+
+export type MutationAdminUpdateCommunityMemberArgs = {
+  communityMemberId: Scalars['String']['input']
+  input: AdminUpdateCommunityMemberInput
 }
 
 export type MutationAdminUpdateMintArgs = {
@@ -225,8 +335,24 @@ export type MutationRegisterArgs = {
   input: RegisterInput
 }
 
+export type MutationUserCreateCommunityArgs = {
+  input: UserCreateCommunityInput
+}
+
+export type MutationUserCreateCommunityMemberArgs = {
+  input: UserCreateCommunityMemberInput
+}
+
 export type MutationUserCreateMintArgs = {
   input: UserCreateMintInput
+}
+
+export type MutationUserDeleteCommunityArgs = {
+  communityId: Scalars['String']['input']
+}
+
+export type MutationUserDeleteCommunityMemberArgs = {
+  communityMemberId: Scalars['String']['input']
 }
 
 export type MutationUserDeleteIdentityArgs = {
@@ -239,6 +365,16 @@ export type MutationUserDeleteMintArgs = {
 
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
+}
+
+export type MutationUserUpdateCommunityArgs = {
+  communityId: Scalars['String']['input']
+  input: UserUpdateCommunityInput
+}
+
+export type MutationUserUpdateCommunityMemberArgs = {
+  communityMemberId: Scalars['String']['input']
+  input: UserUpdateCommunityMemberInput
 }
 
 export type MutationUserUpdateMintArgs = {
@@ -267,21 +403,39 @@ export type PagingMeta = {
 
 export type Query = {
   __typename?: 'Query'
+  adminFindManyCommunity: CommunityPaging
+  adminFindManyCommunityMember: CommunityMemberPaging
   adminFindManyIdentity?: Maybe<Array<Identity>>
   adminFindManyMint: MintPaging
   adminFindManyUser: UserPaging
+  adminFindOneCommunity?: Maybe<Community>
+  adminFindOneCommunityMember?: Maybe<CommunityMember>
   adminFindOneMint?: Maybe<Mint>
   adminFindOneUser?: Maybe<User>
+  anonFindManyCommunity: CommunityPaging
+  anonFindOneCommunity?: Maybe<Community>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
   me?: Maybe<User>
   uptime: Scalars['Float']['output']
+  userFindManyCommunity: CommunityPaging
+  userFindManyCommunityMember: CommunityMemberPaging
   userFindManyIdentity?: Maybe<Array<Identity>>
   userFindManyMint: MintPaging
   userFindManyUser: UserPaging
+  userFindOneCommunity?: Maybe<Community>
+  userFindOneCommunityMember?: Maybe<CommunityMember>
   userFindOneMint?: Maybe<Mint>
   userFindOneUser?: Maybe<User>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
+}
+
+export type QueryAdminFindManyCommunityArgs = {
+  input: AdminFindManyCommunityInput
+}
+
+export type QueryAdminFindManyCommunityMemberArgs = {
+  input: AdminFindManyCommunityMemberInput
 }
 
 export type QueryAdminFindManyIdentityArgs = {
@@ -296,6 +450,14 @@ export type QueryAdminFindManyUserArgs = {
   input: AdminFindManyUserInput
 }
 
+export type QueryAdminFindOneCommunityArgs = {
+  communityId: Scalars['String']['input']
+}
+
+export type QueryAdminFindOneCommunityMemberArgs = {
+  communityMemberId: Scalars['String']['input']
+}
+
 export type QueryAdminFindOneMintArgs = {
   mintId: Scalars['String']['input']
 }
@@ -304,8 +466,24 @@ export type QueryAdminFindOneUserArgs = {
   userId: Scalars['String']['input']
 }
 
+export type QueryAnonFindManyCommunityArgs = {
+  input: AnonFindManyCommunityInput
+}
+
+export type QueryAnonFindOneCommunityArgs = {
+  slug: Scalars['String']['input']
+}
+
 export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
+}
+
+export type QueryUserFindManyCommunityArgs = {
+  input: UserFindManyCommunityInput
+}
+
+export type QueryUserFindManyCommunityMemberArgs = {
+  input: UserFindManyCommunityMemberInput
 }
 
 export type QueryUserFindManyIdentityArgs = {
@@ -318,6 +496,14 @@ export type QueryUserFindManyMintArgs = {
 
 export type QueryUserFindManyUserArgs = {
   input: UserFindManyUserInput
+}
+
+export type QueryUserFindOneCommunityArgs = {
+  slug: Scalars['String']['input']
+}
+
+export type QueryUserFindOneCommunityMemberArgs = {
+  communityMemberId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneMintArgs = {
@@ -357,12 +543,38 @@ export type User = {
   username?: Maybe<Scalars['String']['output']>
 }
 
+export type UserCreateCommunityInput = {
+  description: Scalars['String']['input']
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name: Scalars['String']['input']
+}
+
+export type UserCreateCommunityMemberInput = {
+  communityId: Scalars['String']['input']
+  role?: InputMaybe<CommunityMemberRole>
+  userId: Scalars['String']['input']
+}
+
 export type UserCreateMintInput = {
   decimals?: InputMaybe<Scalars['Float']['input']>
   imageUrl?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']
   secretKey?: InputMaybe<Scalars['String']['input']>
   symbol: Scalars['String']['input']
+}
+
+export type UserFindManyCommunityInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type UserFindManyCommunityMemberInput = {
+  communityId: Scalars['String']['input']
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  role?: InputMaybe<CommunityMemberRole>
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserFindManyIdentityInput = {
@@ -396,6 +608,16 @@ export enum UserStatus {
   Active = 'Active',
   Created = 'Created',
   Inactive = 'Inactive',
+}
+
+export type UserUpdateCommunityInput = {
+  description?: InputMaybe<Scalars['String']['input']>
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+}
+
+export type UserUpdateCommunityMemberInput = {
+  role?: InputMaybe<CommunityMemberRole>
 }
 
 export type UserUpdateMintInput = {
@@ -482,6 +704,550 @@ export type MeQuery = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+  } | null
+}
+
+export type CommunityMemberDetailsFragment = {
+  __typename?: 'CommunityMember'
+  createdAt?: Date | null
+  id: string
+  userId: string
+  communityId: string
+  role: CommunityMemberRole
+  updatedAt?: Date | null
+  user?: {
+    __typename?: 'User'
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    developer?: boolean | null
+    id: string
+    name?: string | null
+    profileUrl: string
+    role?: UserRole | null
+    status?: UserStatus | null
+    updatedAt?: Date | null
+    username?: string | null
+  } | null
+}
+
+export type UserFindManyCommunityMemberQueryVariables = Exact<{
+  input: UserFindManyCommunityMemberInput
+}>
+
+export type UserFindManyCommunityMemberQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityMemberPaging'
+    data: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      communityId: string
+      role: CommunityMemberRole
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneCommunityMemberQueryVariables = Exact<{
+  communityMemberId: Scalars['String']['input']
+}>
+
+export type UserFindOneCommunityMemberQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    communityId: string
+    role: CommunityMemberRole
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type UserCreateCommunityMemberMutationVariables = Exact<{
+  input: UserCreateCommunityMemberInput
+}>
+
+export type UserCreateCommunityMemberMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    communityId: string
+    role: CommunityMemberRole
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type UserUpdateCommunityMemberMutationVariables = Exact<{
+  communityMemberId: Scalars['String']['input']
+  input: UserUpdateCommunityMemberInput
+}>
+
+export type UserUpdateCommunityMemberMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    communityId: string
+    role: CommunityMemberRole
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type UserDeleteCommunityMemberMutationVariables = Exact<{
+  communityMemberId: Scalars['String']['input']
+}>
+
+export type UserDeleteCommunityMemberMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminFindManyCommunityMemberQueryVariables = Exact<{
+  input: AdminFindManyCommunityMemberInput
+}>
+
+export type AdminFindManyCommunityMemberQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityMemberPaging'
+    data: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      communityId: string
+      role: CommunityMemberRole
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOneCommunityMemberQueryVariables = Exact<{
+  communityMemberId: Scalars['String']['input']
+}>
+
+export type AdminFindOneCommunityMemberQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    communityId: string
+    role: CommunityMemberRole
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type AdminCreateCommunityMemberMutationVariables = Exact<{
+  input: AdminCreateCommunityMemberInput
+}>
+
+export type AdminCreateCommunityMemberMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    communityId: string
+    role: CommunityMemberRole
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type AdminUpdateCommunityMemberMutationVariables = Exact<{
+  communityMemberId: Scalars['String']['input']
+  input: AdminUpdateCommunityMemberInput
+}>
+
+export type AdminUpdateCommunityMemberMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    communityId: string
+    role: CommunityMemberRole
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type AdminDeleteCommunityMemberMutationVariables = Exact<{
+  communityMemberId: Scalars['String']['input']
+}>
+
+export type AdminDeleteCommunityMemberMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type CommunityDetailsFragment = {
+  __typename?: 'Community'
+  createdAt?: Date | null
+  id: string
+  name: string
+  slug: string
+  description: string
+  imageUrl?: string | null
+  publicUrl?: string | null
+  updatedAt?: Date | null
+}
+
+export type UserFindManyCommunityQueryVariables = Exact<{
+  input: UserFindManyCommunityInput
+}>
+
+export type UserFindManyCommunityQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityPaging'
+    data: Array<{
+      __typename?: 'Community'
+      viewUrl?: string | null
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneCommunityQueryVariables = Exact<{
+  slug: Scalars['String']['input']
+}>
+
+export type UserFindOneCommunityQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Community'
+    viewUrl?: string | null
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserCreateCommunityMutationVariables = Exact<{
+  input: UserCreateCommunityInput
+}>
+
+export type UserCreateCommunityMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Community'
+    viewUrl?: string | null
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserUpdateCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  input: UserUpdateCommunityInput
+}>
+
+export type UserUpdateCommunityMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Community'
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserDeleteCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type UserDeleteCommunityMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminFindManyCommunityQueryVariables = Exact<{
+  input: AdminFindManyCommunityInput
+}>
+
+export type AdminFindManyCommunityQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityPaging'
+    data: Array<{
+      __typename?: 'Community'
+      viewUrl?: string | null
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOneCommunityQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type AdminFindOneCommunityQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Community'
+    viewUrl?: string | null
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdateCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  input: AdminUpdateCommunityInput
+}>
+
+export type AdminUpdateCommunityMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Community'
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeleteCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type AdminDeleteCommunityMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AnonFindManyCommunityQueryVariables = Exact<{
+  input: AnonFindManyCommunityInput
+}>
+
+export type AnonFindManyCommunityQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityPaging'
+    data: Array<{
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AnonFindOneCommunityQueryVariables = Exact<{
+  slug: Scalars['String']['input']
+}>
+
+export type AnonFindOneCommunityQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Community'
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
   } | null
 }
 
@@ -1172,6 +1938,46 @@ export type UserUpdateUserMutation = {
   } | null
 }
 
+export const UserDetailsFragmentDoc = gql`
+  fragment UserDetails on User {
+    avatarUrl
+    createdAt
+    developer
+    id
+    name
+    profileUrl
+    role
+    status
+    updatedAt
+    username
+  }
+`
+export const CommunityMemberDetailsFragmentDoc = gql`
+  fragment CommunityMemberDetails on CommunityMember {
+    createdAt
+    id
+    userId
+    user {
+      ...UserDetails
+    }
+    communityId
+    role
+    updatedAt
+  }
+  ${UserDetailsFragmentDoc}
+`
+export const CommunityDetailsFragmentDoc = gql`
+  fragment CommunityDetails on Community {
+    createdAt
+    id
+    name
+    slug
+    description
+    imageUrl
+    publicUrl
+    updatedAt
+  }
+`
 export const AppConfigDetailsFragmentDoc = gql`
   fragment AppConfigDetails on AppConfig {
     authDiscordEnabled
@@ -1234,20 +2040,6 @@ export const MintDetailsFragmentDoc = gql`
     updatedAt
   }
 `
-export const UserDetailsFragmentDoc = gql`
-  fragment UserDetails on User {
-    avatarUrl
-    createdAt
-    developer
-    id
-    name
-    profileUrl
-    role
-    status
-    updatedAt
-    username
-  }
-`
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {
     login(input: $input) {
@@ -1276,6 +2068,197 @@ export const MeDocument = gql`
     }
   }
   ${UserDetailsFragmentDoc}
+`
+export const UserFindManyCommunityMemberDocument = gql`
+  query userFindManyCommunityMember($input: UserFindManyCommunityMemberInput!) {
+    paging: userFindManyCommunityMember(input: $input) {
+      data {
+        ...CommunityMemberDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneCommunityMemberDocument = gql`
+  query userFindOneCommunityMember($communityMemberId: String!) {
+    item: userFindOneCommunityMember(communityMemberId: $communityMemberId) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const UserCreateCommunityMemberDocument = gql`
+  mutation userCreateCommunityMember($input: UserCreateCommunityMemberInput!) {
+    created: userCreateCommunityMember(input: $input) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const UserUpdateCommunityMemberDocument = gql`
+  mutation userUpdateCommunityMember($communityMemberId: String!, $input: UserUpdateCommunityMemberInput!) {
+    updated: userUpdateCommunityMember(communityMemberId: $communityMemberId, input: $input) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const UserDeleteCommunityMemberDocument = gql`
+  mutation userDeleteCommunityMember($communityMemberId: String!) {
+    deleted: userDeleteCommunityMember(communityMemberId: $communityMemberId)
+  }
+`
+export const AdminFindManyCommunityMemberDocument = gql`
+  query adminFindManyCommunityMember($input: AdminFindManyCommunityMemberInput!) {
+    paging: adminFindManyCommunityMember(input: $input) {
+      data {
+        ...CommunityMemberDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOneCommunityMemberDocument = gql`
+  query adminFindOneCommunityMember($communityMemberId: String!) {
+    item: adminFindOneCommunityMember(communityMemberId: $communityMemberId) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const AdminCreateCommunityMemberDocument = gql`
+  mutation adminCreateCommunityMember($input: AdminCreateCommunityMemberInput!) {
+    created: adminCreateCommunityMember(input: $input) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const AdminUpdateCommunityMemberDocument = gql`
+  mutation adminUpdateCommunityMember($communityMemberId: String!, $input: AdminUpdateCommunityMemberInput!) {
+    updated: adminUpdateCommunityMember(communityMemberId: $communityMemberId, input: $input) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const AdminDeleteCommunityMemberDocument = gql`
+  mutation adminDeleteCommunityMember($communityMemberId: String!) {
+    deleted: adminDeleteCommunityMember(communityMemberId: $communityMemberId)
+  }
+`
+export const UserFindManyCommunityDocument = gql`
+  query userFindManyCommunity($input: UserFindManyCommunityInput!) {
+    paging: userFindManyCommunity(input: $input) {
+      data {
+        ...CommunityDetails
+        viewUrl
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneCommunityDocument = gql`
+  query userFindOneCommunity($slug: String!) {
+    item: userFindOneCommunity(slug: $slug) {
+      ...CommunityDetails
+      viewUrl
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const UserCreateCommunityDocument = gql`
+  mutation userCreateCommunity($input: UserCreateCommunityInput!) {
+    created: userCreateCommunity(input: $input) {
+      ...CommunityDetails
+      viewUrl
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const UserUpdateCommunityDocument = gql`
+  mutation userUpdateCommunity($communityId: String!, $input: UserUpdateCommunityInput!) {
+    updated: userUpdateCommunity(communityId: $communityId, input: $input) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const UserDeleteCommunityDocument = gql`
+  mutation userDeleteCommunity($communityId: String!) {
+    deleted: userDeleteCommunity(communityId: $communityId)
+  }
+`
+export const AdminFindManyCommunityDocument = gql`
+  query adminFindManyCommunity($input: AdminFindManyCommunityInput!) {
+    paging: adminFindManyCommunity(input: $input) {
+      data {
+        ...CommunityDetails
+        viewUrl
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOneCommunityDocument = gql`
+  query adminFindOneCommunity($communityId: String!) {
+    item: adminFindOneCommunity(communityId: $communityId) {
+      ...CommunityDetails
+      viewUrl
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const AdminUpdateCommunityDocument = gql`
+  mutation adminUpdateCommunity($communityId: String!, $input: AdminUpdateCommunityInput!) {
+    updated: adminUpdateCommunity(communityId: $communityId, input: $input) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const AdminDeleteCommunityDocument = gql`
+  mutation adminDeleteCommunity($communityId: String!) {
+    deleted: adminDeleteCommunity(communityId: $communityId)
+  }
+`
+export const AnonFindManyCommunityDocument = gql`
+  query anonFindManyCommunity($input: AnonFindManyCommunityInput!) {
+    paging: anonFindManyCommunity(input: $input) {
+      data {
+        ...CommunityDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AnonFindOneCommunityDocument = gql`
+  query anonFindOneCommunity($slug: String!) {
+    item: anonFindOneCommunity(slug: $slug) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
 `
 export const UptimeDocument = gql`
   query uptime {
@@ -1548,6 +2531,27 @@ const LoginDocumentString = print(LoginDocument)
 const LogoutDocumentString = print(LogoutDocument)
 const RegisterDocumentString = print(RegisterDocument)
 const MeDocumentString = print(MeDocument)
+const UserFindManyCommunityMemberDocumentString = print(UserFindManyCommunityMemberDocument)
+const UserFindOneCommunityMemberDocumentString = print(UserFindOneCommunityMemberDocument)
+const UserCreateCommunityMemberDocumentString = print(UserCreateCommunityMemberDocument)
+const UserUpdateCommunityMemberDocumentString = print(UserUpdateCommunityMemberDocument)
+const UserDeleteCommunityMemberDocumentString = print(UserDeleteCommunityMemberDocument)
+const AdminFindManyCommunityMemberDocumentString = print(AdminFindManyCommunityMemberDocument)
+const AdminFindOneCommunityMemberDocumentString = print(AdminFindOneCommunityMemberDocument)
+const AdminCreateCommunityMemberDocumentString = print(AdminCreateCommunityMemberDocument)
+const AdminUpdateCommunityMemberDocumentString = print(AdminUpdateCommunityMemberDocument)
+const AdminDeleteCommunityMemberDocumentString = print(AdminDeleteCommunityMemberDocument)
+const UserFindManyCommunityDocumentString = print(UserFindManyCommunityDocument)
+const UserFindOneCommunityDocumentString = print(UserFindOneCommunityDocument)
+const UserCreateCommunityDocumentString = print(UserCreateCommunityDocument)
+const UserUpdateCommunityDocumentString = print(UserUpdateCommunityDocument)
+const UserDeleteCommunityDocumentString = print(UserDeleteCommunityDocument)
+const AdminFindManyCommunityDocumentString = print(AdminFindManyCommunityDocument)
+const AdminFindOneCommunityDocumentString = print(AdminFindOneCommunityDocument)
+const AdminUpdateCommunityDocumentString = print(AdminUpdateCommunityDocument)
+const AdminDeleteCommunityDocumentString = print(AdminDeleteCommunityDocument)
+const AnonFindManyCommunityDocumentString = print(AnonFindManyCommunityDocument)
+const AnonFindOneCommunityDocumentString = print(AnonFindOneCommunityDocument)
 const UptimeDocumentString = print(UptimeDocument)
 const AppConfigDocumentString = print(AppConfigDocument)
 const AdminFindManyIdentityDocumentString = print(AdminFindManyIdentityDocument)
@@ -1639,6 +2643,447 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         (wrappedRequestHeaders) =>
           client.rawRequest<MeQuery>(MeDocumentString, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
         'me',
+        'query',
+        variables,
+      )
+    },
+    userFindManyCommunityMember(
+      variables: UserFindManyCommunityMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyCommunityMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyCommunityMemberQuery>(UserFindManyCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyCommunityMember',
+        'query',
+        variables,
+      )
+    },
+    userFindOneCommunityMember(
+      variables: UserFindOneCommunityMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneCommunityMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneCommunityMemberQuery>(UserFindOneCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneCommunityMember',
+        'query',
+        variables,
+      )
+    },
+    userCreateCommunityMember(
+      variables: UserCreateCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateCommunityMemberMutation>(UserCreateCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    userUpdateCommunityMember(
+      variables: UserUpdateCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserUpdateCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserUpdateCommunityMemberMutation>(UserUpdateCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userUpdateCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteCommunityMember(
+      variables: UserDeleteCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteCommunityMemberMutation>(UserDeleteCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminFindManyCommunityMember(
+      variables: AdminFindManyCommunityMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyCommunityMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyCommunityMemberQuery>(AdminFindManyCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyCommunityMember',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneCommunityMember(
+      variables: AdminFindOneCommunityMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneCommunityMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneCommunityMemberQuery>(AdminFindOneCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneCommunityMember',
+        'query',
+        variables,
+      )
+    },
+    adminCreateCommunityMember(
+      variables: AdminCreateCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreateCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreateCommunityMemberMutation>(AdminCreateCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreateCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdateCommunityMember(
+      variables: AdminUpdateCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateCommunityMemberMutation>(AdminUpdateCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteCommunityMember(
+      variables: AdminDeleteCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteCommunityMemberMutation>(AdminDeleteCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    userFindManyCommunity(
+      variables: UserFindManyCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyCommunityQuery>(UserFindManyCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyCommunity',
+        'query',
+        variables,
+      )
+    },
+    userFindOneCommunity(
+      variables: UserFindOneCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneCommunityQuery>(UserFindOneCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneCommunity',
+        'query',
+        variables,
+      )
+    },
+    userCreateCommunity(
+      variables: UserCreateCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateCommunityMutation>(UserCreateCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    userUpdateCommunity(
+      variables: UserUpdateCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserUpdateCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserUpdateCommunityMutation>(UserUpdateCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userUpdateCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteCommunity(
+      variables: UserDeleteCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteCommunityMutation>(UserDeleteCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    adminFindManyCommunity(
+      variables: AdminFindManyCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyCommunityQuery>(AdminFindManyCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyCommunity',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneCommunity(
+      variables: AdminFindOneCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneCommunityQuery>(AdminFindOneCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneCommunity',
+        'query',
+        variables,
+      )
+    },
+    adminUpdateCommunity(
+      variables: AdminUpdateCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateCommunityMutation>(AdminUpdateCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteCommunity(
+      variables: AdminDeleteCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteCommunityMutation>(AdminDeleteCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    anonFindManyCommunity(
+      variables: AnonFindManyCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AnonFindManyCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AnonFindManyCommunityQuery>(AnonFindManyCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'anonFindManyCommunity',
+        'query',
+        variables,
+      )
+    },
+    anonFindOneCommunity(
+      variables: AnonFindOneCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AnonFindOneCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AnonFindOneCommunityQuery>(AnonFindOneCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'anonFindOneCommunity',
         'query',
         variables,
       )
@@ -2275,11 +3720,21 @@ export const isDefinedNonNullAny = (v: any): v is definedNonNullAny => v !== und
 
 export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny(v))
 
+export const CommunityMemberRoleSchema = z.nativeEnum(CommunityMemberRole)
+
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
 
 export const UserRoleSchema = z.nativeEnum(UserRole)
 
 export const UserStatusSchema = z.nativeEnum(UserStatus)
+
+export function AdminCreateCommunityMemberInputSchema(): z.ZodObject<Properties<AdminCreateCommunityMemberInput>> {
+  return z.object({
+    communityId: z.string(),
+    role: CommunityMemberRoleSchema.nullish(),
+    userId: z.string(),
+  })
+}
 
 export function AdminCreateIdentityInputSchema(): z.ZodObject<Properties<AdminCreateIdentityInput>> {
   return z.object({
@@ -2303,6 +3758,24 @@ export function AdminCreateUserInputSchema(): z.ZodObject<Properties<AdminCreate
   return z.object({
     password: z.string().nullish(),
     username: z.string(),
+  })
+}
+
+export function AdminFindManyCommunityInputSchema(): z.ZodObject<Properties<AdminFindManyCommunityInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function AdminFindManyCommunityMemberInputSchema(): z.ZodObject<Properties<AdminFindManyCommunityMemberInput>> {
+  return z.object({
+    communityId: z.string(),
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    role: CommunityMemberRoleSchema.nullish(),
+    search: z.string().nullish(),
   })
 }
 
@@ -2331,6 +3804,20 @@ export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFind
   })
 }
 
+export function AdminUpdateCommunityInputSchema(): z.ZodObject<Properties<AdminUpdateCommunityInput>> {
+  return z.object({
+    description: z.string().nullish(),
+    imageUrl: z.string().nullish(),
+    name: z.string().nullish(),
+  })
+}
+
+export function AdminUpdateCommunityMemberInputSchema(): z.ZodObject<Properties<AdminUpdateCommunityMemberInput>> {
+  return z.object({
+    role: CommunityMemberRoleSchema.nullish(),
+  })
+}
+
 export function AdminUpdateMintInputSchema(): z.ZodObject<Properties<AdminUpdateMintInput>> {
   return z.object({
     decimals: z.number().nullish(),
@@ -2349,6 +3836,14 @@ export function AdminUpdateUserInputSchema(): z.ZodObject<Properties<AdminUpdate
     role: UserRoleSchema.nullish(),
     status: UserStatusSchema.nullish(),
     username: z.string().nullish(),
+  })
+}
+
+export function AnonFindManyCommunityInputSchema(): z.ZodObject<Properties<AnonFindManyCommunityInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
   })
 }
 
@@ -2380,6 +3875,22 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
   })
 }
 
+export function UserCreateCommunityInputSchema(): z.ZodObject<Properties<UserCreateCommunityInput>> {
+  return z.object({
+    description: z.string(),
+    imageUrl: z.string().nullish(),
+    name: z.string(),
+  })
+}
+
+export function UserCreateCommunityMemberInputSchema(): z.ZodObject<Properties<UserCreateCommunityMemberInput>> {
+  return z.object({
+    communityId: z.string(),
+    role: CommunityMemberRoleSchema.nullish(),
+    userId: z.string(),
+  })
+}
+
 export function UserCreateMintInputSchema(): z.ZodObject<Properties<UserCreateMintInput>> {
   return z.object({
     decimals: z.number().nullish(),
@@ -2387,6 +3898,24 @@ export function UserCreateMintInputSchema(): z.ZodObject<Properties<UserCreateMi
     name: z.string(),
     secretKey: z.string().nullish(),
     symbol: z.string(),
+  })
+}
+
+export function UserFindManyCommunityInputSchema(): z.ZodObject<Properties<UserFindManyCommunityInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function UserFindManyCommunityMemberInputSchema(): z.ZodObject<Properties<UserFindManyCommunityMemberInput>> {
+  return z.object({
+    communityId: z.string(),
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    role: CommunityMemberRoleSchema.nullish(),
+    search: z.string().nullish(),
   })
 }
 
@@ -2409,6 +3938,20 @@ export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindMa
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
+  })
+}
+
+export function UserUpdateCommunityInputSchema(): z.ZodObject<Properties<UserUpdateCommunityInput>> {
+  return z.object({
+    description: z.string().nullish(),
+    imageUrl: z.string().nullish(),
+    name: z.string().nullish(),
+  })
+}
+
+export function UserUpdateCommunityMemberInputSchema(): z.ZodObject<Properties<UserUpdateCommunityMemberInput>> {
+  return z.object({
+    role: CommunityMemberRoleSchema.nullish(),
   })
 }
 

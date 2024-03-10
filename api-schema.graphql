@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AdminCreateCommunityMemberInput {
+  communityId: String!
+  role: CommunityMemberRole
+  userId: String!
+}
+
 input AdminCreateIdentityInput {
   ownerId: String!
   provider: IdentityProvider!
@@ -19,6 +25,20 @@ input AdminCreateMintInput {
 input AdminCreateUserInput {
   password: String
   username: String!
+}
+
+input AdminFindManyCommunityInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input AdminFindManyCommunityMemberInput {
+  communityId: String!
+  limit: Int = 10
+  page: Int = 1
+  role: CommunityMemberRole
+  search: String
 }
 
 input AdminFindManyIdentityInput {
@@ -40,6 +60,16 @@ input AdminFindManyUserInput {
   status: UserStatus
 }
 
+input AdminUpdateCommunityInput {
+  description: String
+  imageUrl: String
+  name: String
+}
+
+input AdminUpdateCommunityMemberInput {
+  role: CommunityMemberRole
+}
+
 input AdminUpdateMintInput {
   decimals: Float
   imageUrl: String
@@ -57,6 +87,12 @@ input AdminUpdateUserInput {
   username: String
 }
 
+input AnonFindManyCommunityInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
 type AppConfig {
   authDiscordEnabled: Boolean!
   authGithubEnabled: Boolean!
@@ -65,6 +101,43 @@ type AppConfig {
   authRegisterEnabled: Boolean!
   authSolanaEnabled: Boolean!
   authTwitterEnabled: Boolean!
+}
+
+type Community {
+  createdAt: DateTime
+  description: String!
+  id: String!
+  imageUrl: String
+  name: String!
+  publicUrl: String
+  slug: String!
+  updatedAt: DateTime
+  viewUrl: String
+}
+
+type CommunityMember {
+  communityId: String!
+  createdAt: DateTime
+  id: String!
+  role: CommunityMemberRole!
+  updatedAt: DateTime
+  user: User
+  userId: String!
+}
+
+type CommunityMemberPaging {
+  data: [CommunityMember!]!
+  meta: PagingMeta!
+}
+
+enum CommunityMemberRole {
+  Admin
+  Member
+}
+
+type CommunityPaging {
+  data: [Community!]!
+  meta: PagingMeta!
 }
 
 """
@@ -140,22 +213,33 @@ type MintPaging {
 }
 
 type Mutation {
+  adminCreateCommunityMember(input: AdminCreateCommunityMemberInput!): CommunityMember
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreateMint(input: AdminCreateMintInput!): Mint
   adminCreateUser(input: AdminCreateUserInput!): User
+  adminDeleteCommunity(communityId: String!): Boolean
+  adminDeleteCommunityMember(communityMemberId: String!): Boolean
   adminDeleteIdentity(identityId: String!): Boolean
   adminDeleteMint(mintId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
+  adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
+  adminUpdateCommunityMember(communityMemberId: String!, input: AdminUpdateCommunityMemberInput!): CommunityMember
   adminUpdateMint(input: AdminUpdateMintInput!, mintId: String!): Mint
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
+  userCreateCommunity(input: UserCreateCommunityInput!): Community
+  userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
   userCreateMint(input: UserCreateMintInput!): Mint
+  userDeleteCommunity(communityId: String!): Boolean
+  userDeleteCommunityMember(communityMemberId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
   userDeleteMint(mintId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userUpdateCommunity(communityId: String!, input: UserUpdateCommunityInput!): Community
+  userUpdateCommunityMember(communityMemberId: String!, input: UserUpdateCommunityMemberInput!): CommunityMember
   userUpdateMint(input: UserUpdateMintInput!, mintId: String!): Mint
   userUpdateUser(input: UserUpdateUserInput!): User
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
@@ -172,18 +256,28 @@ type PagingMeta {
 }
 
 type Query {
+  adminFindManyCommunity(input: AdminFindManyCommunityInput!): CommunityPaging!
+  adminFindManyCommunityMember(input: AdminFindManyCommunityMemberInput!): CommunityMemberPaging!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
   adminFindManyMint(input: AdminFindManyMintInput!): MintPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
+  adminFindOneCommunity(communityId: String!): Community
+  adminFindOneCommunityMember(communityMemberId: String!): CommunityMember
   adminFindOneMint(mintId: String!): Mint
   adminFindOneUser(userId: String!): User
+  anonFindManyCommunity(input: AnonFindManyCommunityInput!): CommunityPaging!
+  anonFindOneCommunity(slug: String!): Community
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
   me: User
   uptime: Float!
+  userFindManyCommunity(input: UserFindManyCommunityInput!): CommunityPaging!
+  userFindManyCommunityMember(input: UserFindManyCommunityMemberInput!): CommunityMemberPaging!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
   userFindManyMint(input: UserFindManyMintInput!): MintPaging!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
+  userFindOneCommunity(slug: String!): Community
+  userFindOneCommunityMember(communityMemberId: String!): CommunityMember
   userFindOneMint(mintId: String!): Mint
   userFindOneUser(username: String!): User
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
@@ -213,12 +307,38 @@ type User {
   username: String
 }
 
+input UserCreateCommunityInput {
+  description: String!
+  imageUrl: String
+  name: String!
+}
+
+input UserCreateCommunityMemberInput {
+  communityId: String!
+  role: CommunityMemberRole
+  userId: String!
+}
+
 input UserCreateMintInput {
   decimals: Float
   imageUrl: String
   name: String!
   secretKey: String
   symbol: String!
+}
+
+input UserFindManyCommunityInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input UserFindManyCommunityMemberInput {
+  communityId: String!
+  limit: Int = 10
+  page: Int = 1
+  role: CommunityMemberRole
+  search: String
 }
 
 input UserFindManyIdentityInput {
@@ -251,6 +371,16 @@ enum UserStatus {
   Active
   Created
   Inactive
+}
+
+input UserUpdateCommunityInput {
+  description: String
+  imageUrl: String
+  name: String
+}
+
+input UserUpdateCommunityMemberInput {
+  role: CommunityMemberRole
 }
 
 input UserUpdateMintInput {

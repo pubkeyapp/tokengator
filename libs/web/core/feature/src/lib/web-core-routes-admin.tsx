@@ -1,15 +1,16 @@
-import { IconSettings } from '@tabler/icons-react'
-import { DevAdminRoutes } from '@tokengator-mint/web-dev-feature'
-import { AdminUserFeature } from '@tokengator-mint/web-user-feature'
 import { UiContainer, UiDashboardGrid, UiDashboardItem, UiNotFound } from '@pubkey-ui/core'
-import { IconUsers } from '@tabler/icons-react'
-import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
+import { IconSettings, IconUsers, IconUsersGroup } from '@tabler/icons-react'
+import { AdminCommunityFeature } from '@tokengator-mint/web-community-feature'
+import { DevAdminRoutes } from '@tokengator-mint/web-dev-feature'
 import { AdminMintFeature } from '@tokengator-mint/web-mint-feature'
+import { AdminUserFeature } from '@tokengator-mint/web-user-feature'
+import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
 const links: UiDashboardItem[] = [
   // Admin Dashboard Links are added by the web-crud generator
-  { label: 'Users', icon: IconUsers, to: '/admin/users' },
+  { label: 'Communities', icon: IconUsersGroup, to: '/admin/communities' },
   { label: 'Mints', icon: IconSettings, to: '/admin/mints' },
+  { label: 'Users', icon: IconUsers, to: '/admin/users' },
 ]
 
 const routes: RouteObject[] = [
@@ -17,6 +18,7 @@ const routes: RouteObject[] = [
   { path: 'development/*', element: <DevAdminRoutes /> },
   { path: 'users/*', element: <AdminUserFeature /> },
   { path: '/mints/*', element: <AdminMintFeature /> },
+  { path: '/communities/*', element: <AdminCommunityFeature /> },
 ]
 
 export default function WebCoreRoutesAdmin() {

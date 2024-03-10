@@ -7,6 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Community {
+  id          String            @id @default(cuid())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  name        String
+  slug        String            @unique
+  description String
+  imageUrl    String?
+  members     CommunityMember[]
+}
+
+model CommunityMember {
+  id          String              @id @default(cuid())
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  role        CommunityMemberRole @default(Member)
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  community   Community           @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId String
+}
+
 model Identity {
   id           String              @id @default(cuid())
   createdAt    DateTime            @default(now())
@@ -52,17 +74,23 @@ model Mint {
 }
 
 model User {
-  id         String     @id @default(cuid())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  avatarUrl  String?
-  developer  Boolean    @default(false)
-  name       String?
-  password   String? /// @encrypted
-  role       UserRole   @default(User)
-  status     UserStatus @default(Created)
-  username   String     @unique
-  identities Identity[]
+  id          String            @id @default(cuid())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  avatarUrl   String?
+  developer   Boolean           @default(false)
+  name        String?
+  password    String? /// @encrypted
+  role        UserRole          @default(User)
+  status      UserStatus        @default(Created)
+  username    String            @unique
+  communities CommunityMember[]
+  identities  Identity[]
+}
+
+enum CommunityMemberRole {
+  Admin
+  Member
 }
 
 enum IdentityProvider {

@@ -1,12 +1,12 @@
 import { Button, Group } from '@mantine/core'
-import { UiPageLimit, UiSearchField } from '@tokengator-mint/web-core-ui'
+import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiSearchField } from '@tokengator-mint/web-core-ui'
 import { useUserFindManyMint } from '@tokengator-mint/web-mint-data-access'
 import { MintUiGrid } from '@tokengator-mint/web-mint-ui'
-import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 
 export function UserMintListFeature() {
-  const { deleteMint, items, pagination, query, setSearch } = useUserFindManyMint({
+  const { items, pagination, query, setSearch } = useUserFindManyMint({
     limit: 12,
   })
 

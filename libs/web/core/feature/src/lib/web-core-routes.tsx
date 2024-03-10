@@ -1,16 +1,17 @@
-import { AuthLoginFeature, AuthRegisterFeature } from '@tokengator-mint/web-auth-feature'
-import { HomeFeature } from '@tokengator-mint/web-home-feature'
 import { UiNotFound } from '@pubkey-ui/core'
+import { AuthLoginFeature, AuthRegisterFeature } from '@tokengator-mint/web-auth-feature'
+import { webHomeRoutes } from '@tokengator-mint/web-home-feature'
 import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useGuardedRoutes } from './use-guarded-routes'
+import { webCoreRoutesAnon } from './web-core-routes-anon'
 
 export const LazyAdminFeature = lazy(() => import('./web-core-routes-admin'))
 export const LazyUserFeature = lazy(() => import('./web-core-routes-user'))
 
 export function WebCoreRoutes() {
   return useGuardedRoutes({
-    index: '/dashboard',
+    index: '/home',
     admin: [
       // Here you can add routes that are only accessible by admins under the /admin/* path
       // Visit /admin/custom-admin-page to see this route
@@ -30,7 +31,8 @@ export function WebCoreRoutes() {
       { path: '/login', element: <AuthLoginFeature /> },
       { path: '/register', element: <AuthRegisterFeature /> },
       // Homepage
-      { path: '/*', element: <HomeFeature /> },
+      ...webCoreRoutesAnon,
+      ...webHomeRoutes,
       // Routes for the 404 page
       { path: '/404', element: <UiNotFound /> },
       { path: '*', element: <Navigate to="/404" replace /> },

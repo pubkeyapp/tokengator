@@ -1,6 +1,6 @@
+import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 import { useUserFindOneMint } from '@tokengator-mint/web-mint-data-access'
 import { MintUiInfo } from '@tokengator-mint/web-mint-ui'
-import { UiCard, UiDebug, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function UserMintDetailInfoTab({ mintId }: { mintId: string }) {
   const { item, query } = useUserFindOneMint({ mintId })
