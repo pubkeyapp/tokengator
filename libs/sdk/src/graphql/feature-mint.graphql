@@ -26,10 +26,18 @@ query userFindOneMint($mintId: String!) {
   }
 }
 
+query userGetMintAccount($mintId: String!) {
+  item: userGetMintAccount(mintId: $mintId)
+}
+
 mutation userCreateMint($input: UserCreateMintInput!) {
   created: userCreateMint(input: $input) {
     ...MintDetails
   }
+}
+
+mutation userMintToIdentity($mintId: String!, $identityId: String!) {
+  minted: userMintToIdentity(mintId: $mintId, identityId: $identityId)
 }
 
 mutation userUpdateMint($mintId: String!, $input: UserUpdateMintInput!) {
@@ -55,12 +63,6 @@ query adminFindManyMint($input: AdminFindManyMintInput!) {
 
 query adminFindOneMint($mintId: String!) {
   item: adminFindOneMint(mintId: $mintId) {
-    ...MintDetails
-  }
-}
-
-mutation adminCreateMint($input: AdminCreateMintInput!) {
-  created: adminCreateMint(input: $input) {
     ...MintDetails
   }
 }

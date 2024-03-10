@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { IdentityProvider } from '@prisma/client'
+import { Keypair } from '@solana/web3.js'
 import { CookieOptions } from 'express-serve-static-core'
 import { AppConfig } from '../entity/app-config.entity'
 import { ApiCoreConfig } from './configuration'
@@ -228,6 +229,18 @@ export class ApiCoreConfigService {
 
   get sessionSecret() {
     return this.service.get<string>('sessionSecret') as string
+  }
+
+  get solanaEndpoint() {
+    return this.service.get<string>('solanaEndpoint') as string
+  }
+
+  get solanaFeePayer(): Keypair {
+    return this.service.get<Keypair>('solanaFeePayer') as Keypair
+  }
+
+  get solanaFeePayerMinimalBalance(): number {
+    return this.service.get<number>('solanaFeePayerMinimalBalance') as number
   }
 
   get webUrl(): string {

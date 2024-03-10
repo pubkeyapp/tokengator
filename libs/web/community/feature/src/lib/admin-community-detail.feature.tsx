@@ -3,6 +3,7 @@ import { UiBack, UiDebugModal, UiError, UiLoader, UiPage, UiTabRoutes } from '@p
 import { useAdminFindOneCommunity } from '@tokengator-mint/web-community-data-access'
 import { AdminCommunityMemberFeature } from '@tokengator-mint/web-community-member-feature'
 import { CommunityUiItem } from '@tokengator-mint/web-community-ui'
+import { AdminMintFeature } from '@tokengator-mint/web-mint-feature'
 import { useParams } from 'react-router-dom'
 import { AdminCommunityDetailInfoTab } from './admin-community-detail-info.tab'
 import { AdminCommunityDetailSettingsTab } from './admin-community-detail-settings.tab'
@@ -35,6 +36,7 @@ export function AdminCommunityDetailFeature() {
             label: 'Info',
             element: <AdminCommunityDetailInfoTab communityId={communityId} />,
           },
+          { path: 'mints', label: 'Mints', element: <AdminMintFeature communityId={communityId} /> },
           { path: 'members', label: 'Members', element: <AdminCommunityMemberFeature communityId={communityId} /> },
           {
             path: 'settings',

@@ -1,30 +1,24 @@
 import { Button, Group } from '@mantine/core'
-import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { UiSearchField } from '@tokengator-mint/web-core-ui'
 import { useUserFindManyMint } from '@tokengator-mint/web-mint-data-access'
 import { MintUiGrid } from '@tokengator-mint/web-mint-ui'
 import { Link } from 'react-router-dom'
 
-export function UserMintListFeature() {
+export function UserMintListFeature({ communityId }: { communityId: string }) {
   const { items, pagination, query, setSearch } = useUserFindManyMint({
+    communityId,
     limit: 12,
   })
 
   return (
-    <UiPage
-      title="Mints"
-      leftAction={<UiBack />}
-      rightAction={
-        <Group>
-          <UiDebugModal data={items} />
-          <Button component={Link} to="create">
-            Create
-          </Button>
-        </Group>
-      }
-    >
+    <UiStack>
       <Group>
         <UiSearchField placeholder="Search mint" setSearch={setSearch} />
+        <UiDebugModal data={items} />
+        <Button component={Link} to="create">
+          Create
+        </Button>
       </Group>
 
       {query.isLoading ? (
@@ -42,6 +36,6 @@ export function UserMintListFeature() {
       ) : (
         <UiInfo message="No mints found" />
       )}
-    </UiPage>
+    </UiStack>
   )
 }

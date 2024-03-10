@@ -1,25 +1,18 @@
-import { Resolver } from '@nestjs/graphql'
-import { ApiMintService } from '@tokengator-mint/api-mint-data-access'
-import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
-import { Mutation, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
 import {
-  AdminCreateMintInput,
   AdminFindManyMintInput,
+  AdminUpdateMintInput,
+  ApiMintService,
   Mint,
   MintPaging,
-  AdminUpdateMintInput,
 } from '@tokengator-mint/api-mint-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)
 export class ApiMintAdminResolver {
   constructor(private readonly service: ApiMintService) {}
-
-  @Mutation(() => Mint, { nullable: true })
-  adminCreateMint(@Args('input') input: AdminCreateMintInput) {
-    return this.service.admin.createMint(input)
-  }
 
   @Mutation(() => Boolean, { nullable: true })
   adminDeleteMint(@Args('mintId') mintId: string) {

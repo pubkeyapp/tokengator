@@ -4,6 +4,7 @@ import { UserCreateMintInput } from '@tokengator-mint/sdk'
 
 export function UserMintUiCreateForm({ submit }: { submit: (res: UserCreateMintInput) => Promise<boolean> }) {
   const model: UserCreateMintInput = {
+    communityId: '',
     name: '',
     symbol: '',
     decimals: 0,

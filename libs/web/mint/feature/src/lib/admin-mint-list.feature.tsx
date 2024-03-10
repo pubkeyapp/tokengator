@@ -1,12 +1,12 @@
-import { Button, Group } from '@mantine/core'
+import { Group } from '@mantine/core'
+import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { UiPageLimit, UiSearchField } from '@tokengator-mint/web-core-ui'
 import { useAdminFindManyMint } from '@tokengator-mint/web-mint-data-access'
 import { AdminMintUiTable } from '@tokengator-mint/web-mint-ui'
-import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { Link } from 'react-router-dom'
 
-export function AdminMintListFeature() {
+export function AdminMintListFeature({ communityId }: { communityId: string }) {
   const { deleteMint, items, pagination, query, setSearch } = useAdminFindManyMint({
+    communityId,
     limit: 10,
   })
 
@@ -17,9 +17,6 @@ export function AdminMintListFeature() {
       rightAction={
         <Group>
           <UiDebugModal data={items} />
-          <Button component={Link} to="create">
-            Create
-          </Button>
         </Group>
       }
     >

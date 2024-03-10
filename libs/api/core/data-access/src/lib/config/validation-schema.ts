@@ -1,3 +1,4 @@
+import { clusterApiUrl } from '@solana/web3.js'
 import * as Joi from 'joi'
 
 export const validationSchema = Joi.object({
@@ -43,5 +44,8 @@ export const validationSchema = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
   PORT: Joi.number().default(3000),
   SESSION_SECRET: Joi.string().required(),
+  SOLANA_ENDPOINT: Joi.string().required().default(clusterApiUrl('devnet')),
+  SOLANA_FEE_PAYER_SECRET_KEY: Joi.string().required(),
+  SOLANA_FEE_PAYER_MINIMAL_BALANCE: Joi.number().default(1),
   SYNC_DRY_RUN: Joi.boolean().default(false),
 })

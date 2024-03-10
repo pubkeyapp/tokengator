@@ -1,4 +1,6 @@
 // Remove trailing slashes from the URLs to avoid double slashes
+import { Keypair } from '@solana/web3.js'
+
 const API_URL = getUrl('API_URL') as string
 
 if (!API_URL) {
@@ -57,6 +59,9 @@ export interface ApiCoreConfig {
   jwtSecret: string
   port: number
   sessionSecret: string
+  solanaEndpoint: string
+  solanaFeePayer: Keypair
+  solanaFeePayerMinimalBalance: number
   webUrl: string
 }
 
@@ -93,6 +98,11 @@ export function configuration(): ApiCoreConfig {
     jwtSecret: process.env['JWT_SECRET'] as string,
     port: parseInt(process.env['PORT'] as string, 10) || 3000,
     sessionSecret: process.env['SESSION_SECRET'] as string,
+    solanaEndpoint: process.env['SOLANA_ENDPOINT'] as string,
+    solanaFeePayer: Keypair.fromSecretKey(
+      Uint8Array.from(JSON.parse(process.env['SOLANA_FEE_PAYER_SECRET_KEY'] as string)),
+    ),
+    solanaFeePayerMinimalBalance: parseFloat(process.env['SOLANA_FEE_PAYER_MINIMAL_BALANCE'] as string) || 1,
     webUrl: WEB_URL,
   }
 }

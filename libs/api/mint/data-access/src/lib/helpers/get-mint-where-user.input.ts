@@ -2,7 +2,9 @@ import { Prisma } from '@prisma/client'
 import { UserFindManyMintInput } from '../dto/user-find-many-mint.input'
 
 export function getMintWhereUserInput(input: UserFindManyMintInput): Prisma.MintWhereInput {
-  const where: Prisma.MintWhereInput = {}
+  const where: Prisma.MintWhereInput = {
+    communityId: input.communityId,
+  }
 
   if (input.search) {
     where.OR = [

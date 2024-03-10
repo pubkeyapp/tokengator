@@ -1,15 +1,15 @@
-import { Resolver } from '@nestjs/graphql'
-import { ApiMintService } from '@tokengator-mint/api-mint-data-access'
-import { ApiAuthGraphQLUserGuard } from '@tokengator-mint/api-auth-data-access'
-import { Mutation, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { ApiAuthGraphQLUserGuard, CtxUserId } from '@tokengator-mint/api-auth-data-access'
 import {
-  UserCreateMintInput,
-  UserFindManyMintInput,
+  ApiMintService,
   Mint,
   MintPaging,
+  UserCreateMintInput,
+  UserFindManyMintInput,
   UserUpdateMintInput,
 } from '@tokengator-mint/api-mint-data-access'
+import { GraphQLJSON } from 'graphql-scalars'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)
@@ -24,6 +24,20 @@ export class ApiMintUserResolver {
   @Mutation(() => Boolean, { nullable: true })
   userDeleteMint(@Args('mintId') mintId: string) {
     return this.service.user.deleteMint(mintId)
+  }
+
+  @Mutation(() => GraphQLJSON, { nullable: true })
+  userMintToIdentity(
+    @CtxUserId() userId: string,
+    @Args('mintId') mintId: string,
+    @Args('identityId') identityId: string,
+  ) {
+    return this.service.user.mintToIdentity(userId, mintId, identityId)
+  }
+
+  @Query(() => GraphQLJSON, { nullable: true })
+  userGetMintAccount(@Args('mintId') mintId: string) {
+    return this.service.user.getMintAccount(mintId)
   }
 
   @Query(() => MintPaging)

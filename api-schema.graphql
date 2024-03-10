@@ -14,14 +14,6 @@ input AdminCreateIdentityInput {
   providerId: String!
 }
 
-input AdminCreateMintInput {
-  decimals: Float
-  imageUrl: String
-  name: String!
-  secretKey: String
-  symbol: String!
-}
-
 input AdminCreateUserInput {
   password: String
   username: String!
@@ -47,6 +39,7 @@ input AdminFindManyIdentityInput {
 }
 
 input AdminFindManyMintInput {
+  communityId: String!
   limit: Int = 10
   page: Int = 1
   search: String
@@ -215,7 +208,6 @@ type MintPaging {
 type Mutation {
   adminCreateCommunityMember(input: AdminCreateCommunityMemberInput!): CommunityMember
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
-  adminCreateMint(input: AdminCreateMintInput!): Mint
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteCommunity(communityId: String!): Boolean
   adminDeleteCommunityMember(communityMemberId: String!): Boolean
@@ -238,6 +230,7 @@ type Mutation {
   userDeleteIdentity(identityId: String!): Boolean
   userDeleteMint(mintId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userMintToIdentity(identityId: String!, mintId: String!): JSON
   userUpdateCommunity(communityId: String!, input: UserUpdateCommunityInput!): Community
   userUpdateCommunityMember(communityMemberId: String!, input: UserUpdateCommunityMemberInput!): CommunityMember
   userUpdateMint(input: UserUpdateMintInput!, mintId: String!): Mint
@@ -280,6 +273,7 @@ type Query {
   userFindOneCommunityMember(communityMemberId: String!): CommunityMember
   userFindOneMint(mintId: String!): Mint
   userFindOneUser(username: String!): User
+  userGetMintAccount(mintId: String!): JSON
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
 
@@ -320,6 +314,7 @@ input UserCreateCommunityMemberInput {
 }
 
 input UserCreateMintInput {
+  communityId: String!
   decimals: Float
   imageUrl: String
   name: String!
@@ -346,6 +341,7 @@ input UserFindManyIdentityInput {
 }
 
 input UserFindManyMintInput {
+  communityId: String!
   limit: Int = 10
   page: Int = 1
   search: String

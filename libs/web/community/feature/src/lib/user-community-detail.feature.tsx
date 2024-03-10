@@ -1,9 +1,10 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiError, type UiGridRoute, UiGridRoutes, UiLoader, UiPage } from '@pubkey-ui/core'
-import { IconDashboard, IconSettings, IconUsers } from '@tabler/icons-react'
+import { IconCoinFilled, IconDashboard, IconSettings, IconUsers } from '@tabler/icons-react'
 import { useUserFindOneCommunity } from '@tokengator-mint/web-community-data-access'
 import { UserCommunityMemberFeature } from '@tokengator-mint/web-community-member-feature'
 import { CommunityUiItem } from '@tokengator-mint/web-community-ui'
+import { UserMintFeature } from '@tokengator-mint/web-mint-feature'
 import { useParams } from 'react-router-dom'
 import { UserCommunityDetailDashboardTab } from './user-community-detail-dashboard-tab'
 import { UserCommunityDetailSettingsTab } from './user-community-detail-settings.tab'
@@ -26,6 +27,12 @@ export function UserCommunityDetailFeature() {
       label: 'Dashboard',
       element: <UserCommunityDetailDashboardTab community={item} />,
       leftSection: <IconDashboard size={20} />,
+    },
+    {
+      path: 'mints',
+      label: 'Mints',
+      element: <UserMintFeature communityId={communityId} />,
+      leftSection: <IconCoinFilled size={20} />,
     },
     {
       path: 'members',

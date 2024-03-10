@@ -1,16 +1,16 @@
-import { UserCreateMintInput, UserFindManyMintInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
+import { UserCreateMintInput, UserFindManyMintInput } from '@tokengator-mint/sdk'
+import { useSdk } from '@tokengator-mint/web-core-data-access'
 import { useState } from 'react'
 
-export function useUserFindManyMint(props?: Partial<UserFindManyMintInput>) {
+export function useUserFindManyMint(props: Partial<UserFindManyMintInput> & { communityId: string }) {
   const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
-  const input: UserFindManyMintInput = { page, limit, search }
+  const input: UserFindManyMintInput = { page, limit, search, communityId: props.communityId }
   const query = useQuery({
     queryKey: ['user', 'find-many-mint', input],
     queryFn: () => sdk.userFindManyMint({ input }).then((res) => res.data),
@@ -31,7 +31,7 @@ export function useUserFindManyMint(props?: Partial<UserFindManyMintInput>) {
     setSearch,
     createMint: (input: UserCreateMintInput) =>
       sdk
-        .userCreateMint({ input })
+        .userCreateMint({ input: { ...input, communityId: props.communityId } })
         .then((res) => res.data)
         .then((res) => {
           if (res.created) {

@@ -2,7 +2,6 @@ import { UiContainer, UiDashboardGrid, UiDashboardItem, UiNotFound } from '@pubk
 import { IconSettings, IconUsers, IconUsersGroup } from '@tabler/icons-react'
 import { AdminCommunityFeature } from '@tokengator-mint/web-community-feature'
 import { DevAdminRoutes } from '@tokengator-mint/web-dev-feature'
-import { AdminMintFeature } from '@tokengator-mint/web-mint-feature'
 import { AdminUserFeature } from '@tokengator-mint/web-user-feature'
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
@@ -17,7 +16,6 @@ const routes: RouteObject[] = [
   // Admin Dashboard Routes are added by the web-crud generator
   { path: 'development/*', element: <DevAdminRoutes /> },
   { path: 'users/*', element: <AdminUserFeature /> },
-  { path: '/mints/*', element: <AdminMintFeature /> },
   { path: '/communities/*', element: <AdminCommunityFeature /> },
 ]
 

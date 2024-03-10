@@ -6,6 +6,8 @@ import session from 'express-session'
 import { exec } from 'node:child_process'
 import { AppModule } from './app/app.module'
 
+patchBigintToJSON()
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const core = app.get(ApiCoreService)
@@ -34,3 +36,9 @@ async function bootstrap() {
 }
 
 bootstrap()
+
+function patchBigintToJSON() {
+  ;(BigInt.prototype as unknown as { toJSON: () => string }).toJSON = function () {
+    return this.toString()
+  }
+}

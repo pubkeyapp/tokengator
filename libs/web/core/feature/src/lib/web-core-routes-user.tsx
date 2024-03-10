@@ -1,7 +1,6 @@
 import { UiContainer, UiDashboardGrid, UiDashboardItem } from '@pubkey-ui/core'
 import { IconSettings, IconUsers, IconUsersGroup } from '@tabler/icons-react'
 import { UserCommunityFeature } from '@tokengator-mint/web-community-feature'
-import { UserMintFeature } from '@tokengator-mint/web-mint-feature'
 import { SettingsFeature } from '@tokengator-mint/web-settings-feature'
 import { SolanaFeature } from '@tokengator-mint/web-solana-feature'
 import { UserFeature } from '@tokengator-mint/web-user-feature'
@@ -20,7 +19,6 @@ const routes: RouteObject[] = [
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
   { path: '/u/*', element: <UserFeature /> },
-  { path: '/mints/*', element: <UserMintFeature /> },
   { path: '/c/*', element: <UserCommunityFeature /> },
 ]
 

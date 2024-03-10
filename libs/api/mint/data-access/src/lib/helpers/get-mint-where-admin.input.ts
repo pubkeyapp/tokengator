@@ -2,7 +2,9 @@ import { Prisma } from '@prisma/client'
 import { AdminFindManyMintInput } from '../dto/admin-find-many-mint.input'
 
 export function getMintWhereAdminInput(input: AdminFindManyMintInput): Prisma.MintWhereInput {
-  const where: Prisma.MintWhereInput = {}
+  const where: Prisma.MintWhereInput = {
+    communityId: input.communityId,
+  }
 
   if (input.search) {
     where.OR = [
