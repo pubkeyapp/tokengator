@@ -39,6 +39,18 @@ model IdentityChallenge {
   providerId String
 }
 
+model Mint {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  symbol    String
+  decimals  Int      @default(0)
+  imageUrl  String?
+  publicKey String
+  secretKey String
+}
+
 model User {
   id         String     @id @default(cuid())
   createdAt  DateTime   @default(now())

@@ -30,6 +30,14 @@ export type AdminCreateIdentityInput = {
   providerId: Scalars['String']['input']
 }
 
+export type AdminCreateMintInput = {
+  decimals?: InputMaybe<Scalars['Float']['input']>
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name: Scalars['String']['input']
+  secretKey?: InputMaybe<Scalars['String']['input']>
+  symbol: Scalars['String']['input']
+}
+
 export type AdminCreateUserInput = {
   password?: InputMaybe<Scalars['String']['input']>
   username: Scalars['String']['input']
@@ -40,12 +48,26 @@ export type AdminFindManyIdentityInput = {
   provider?: InputMaybe<IdentityProvider>
 }
 
+export type AdminFindManyMintInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type AdminFindManyUserInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   role?: InputMaybe<UserRole>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<UserStatus>
+}
+
+export type AdminUpdateMintInput = {
+  decimals?: InputMaybe<Scalars['Float']['input']>
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  secretKey?: InputMaybe<Scalars['String']['input']>
+  symbol?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminUpdateUserInput = {
@@ -116,25 +138,53 @@ export type LoginInput = {
   username: Scalars['String']['input']
 }
 
+export type Mint = {
+  __typename?: 'Mint'
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  decimals: Scalars['Float']['output']
+  id: Scalars['String']['output']
+  imageUrl?: Maybe<Scalars['String']['output']>
+  name: Scalars['String']['output']
+  publicKey: Scalars['String']['output']
+  symbol: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+}
+
+export type MintPaging = {
+  __typename?: 'MintPaging'
+  data: Array<Mint>
+  meta: PagingMeta
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   adminCreateIdentity?: Maybe<Identity>
+  adminCreateMint?: Maybe<Mint>
   adminCreateUser?: Maybe<User>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
+  adminDeleteMint?: Maybe<Scalars['Boolean']['output']>
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
+  adminUpdateMint?: Maybe<Mint>
   adminUpdateUser?: Maybe<User>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
+  userCreateMint?: Maybe<Mint>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
+  userDeleteMint?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
+  userUpdateMint?: Maybe<Mint>
   userUpdateUser?: Maybe<User>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
 }
 
 export type MutationAdminCreateIdentityArgs = {
   input: AdminCreateIdentityInput
+}
+
+export type MutationAdminCreateMintArgs = {
+  input: AdminCreateMintInput
 }
 
 export type MutationAdminCreateUserArgs = {
@@ -145,8 +195,17 @@ export type MutationAdminDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
+export type MutationAdminDeleteMintArgs = {
+  mintId: Scalars['String']['input']
+}
+
 export type MutationAdminDeleteUserArgs = {
   userId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateMintArgs = {
+  input: AdminUpdateMintInput
+  mintId: Scalars['String']['input']
 }
 
 export type MutationAdminUpdateUserArgs = {
@@ -166,12 +225,25 @@ export type MutationRegisterArgs = {
   input: RegisterInput
 }
 
+export type MutationUserCreateMintArgs = {
+  input: UserCreateMintInput
+}
+
 export type MutationUserDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
+export type MutationUserDeleteMintArgs = {
+  mintId: Scalars['String']['input']
+}
+
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
+}
+
+export type MutationUserUpdateMintArgs = {
+  input: UserUpdateMintInput
+  mintId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateUserArgs = {
@@ -196,14 +268,18 @@ export type PagingMeta = {
 export type Query = {
   __typename?: 'Query'
   adminFindManyIdentity?: Maybe<Array<Identity>>
+  adminFindManyMint: MintPaging
   adminFindManyUser: UserPaging
+  adminFindOneMint?: Maybe<Mint>
   adminFindOneUser?: Maybe<User>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
   me?: Maybe<User>
   uptime: Scalars['Float']['output']
   userFindManyIdentity?: Maybe<Array<Identity>>
+  userFindManyMint: MintPaging
   userFindManyUser: UserPaging
+  userFindOneMint?: Maybe<Mint>
   userFindOneUser?: Maybe<User>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
 }
@@ -212,8 +288,16 @@ export type QueryAdminFindManyIdentityArgs = {
   input: AdminFindManyIdentityInput
 }
 
+export type QueryAdminFindManyMintArgs = {
+  input: AdminFindManyMintInput
+}
+
 export type QueryAdminFindManyUserArgs = {
   input: AdminFindManyUserInput
+}
+
+export type QueryAdminFindOneMintArgs = {
+  mintId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneUserArgs = {
@@ -228,8 +312,16 @@ export type QueryUserFindManyIdentityArgs = {
   input: UserFindManyIdentityInput
 }
 
+export type QueryUserFindManyMintArgs = {
+  input: UserFindManyMintInput
+}
+
 export type QueryUserFindManyUserArgs = {
   input: UserFindManyUserInput
+}
+
+export type QueryUserFindOneMintArgs = {
+  mintId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneUserArgs = {
@@ -265,8 +357,22 @@ export type User = {
   username?: Maybe<Scalars['String']['output']>
 }
 
+export type UserCreateMintInput = {
+  decimals?: InputMaybe<Scalars['Float']['input']>
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name: Scalars['String']['input']
+  secretKey?: InputMaybe<Scalars['String']['input']>
+  symbol: Scalars['String']['input']
+}
+
 export type UserFindManyIdentityInput = {
   username: Scalars['String']['input']
+}
+
+export type UserFindManyMintInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserFindManyUserInput = {
@@ -290,6 +396,14 @@ export enum UserStatus {
   Active = 'Active',
   Created = 'Created',
   Inactive = 'Inactive',
+}
+
+export type UserUpdateMintInput = {
+  decimals?: InputMaybe<Scalars['Float']['input']>
+  imageUrl?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  secretKey?: InputMaybe<Scalars['String']['input']>
+  symbol?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserUpdateUserInput = {
@@ -647,6 +761,210 @@ export type AnonVerifyIdentityChallengeMutation = {
   } | null
 }
 
+export type MintDetailsFragment = {
+  __typename?: 'Mint'
+  createdAt?: Date | null
+  id: string
+  name: string
+  symbol: string
+  decimals: number
+  imageUrl?: string | null
+  publicKey: string
+  updatedAt?: Date | null
+}
+
+export type UserFindManyMintQueryVariables = Exact<{
+  input: UserFindManyMintInput
+}>
+
+export type UserFindManyMintQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'MintPaging'
+    data: Array<{
+      __typename?: 'Mint'
+      createdAt?: Date | null
+      id: string
+      name: string
+      symbol: string
+      decimals: number
+      imageUrl?: string | null
+      publicKey: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneMintQueryVariables = Exact<{
+  mintId: Scalars['String']['input']
+}>
+
+export type UserFindOneMintQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Mint'
+    createdAt?: Date | null
+    id: string
+    name: string
+    symbol: string
+    decimals: number
+    imageUrl?: string | null
+    publicKey: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserCreateMintMutationVariables = Exact<{
+  input: UserCreateMintInput
+}>
+
+export type UserCreateMintMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Mint'
+    createdAt?: Date | null
+    id: string
+    name: string
+    symbol: string
+    decimals: number
+    imageUrl?: string | null
+    publicKey: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserUpdateMintMutationVariables = Exact<{
+  mintId: Scalars['String']['input']
+  input: UserUpdateMintInput
+}>
+
+export type UserUpdateMintMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Mint'
+    createdAt?: Date | null
+    id: string
+    name: string
+    symbol: string
+    decimals: number
+    imageUrl?: string | null
+    publicKey: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserDeleteMintMutationVariables = Exact<{
+  mintId: Scalars['String']['input']
+}>
+
+export type UserDeleteMintMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminFindManyMintQueryVariables = Exact<{
+  input: AdminFindManyMintInput
+}>
+
+export type AdminFindManyMintQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'MintPaging'
+    data: Array<{
+      __typename?: 'Mint'
+      createdAt?: Date | null
+      id: string
+      name: string
+      symbol: string
+      decimals: number
+      imageUrl?: string | null
+      publicKey: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOneMintQueryVariables = Exact<{
+  mintId: Scalars['String']['input']
+}>
+
+export type AdminFindOneMintQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Mint'
+    createdAt?: Date | null
+    id: string
+    name: string
+    symbol: string
+    decimals: number
+    imageUrl?: string | null
+    publicKey: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminCreateMintMutationVariables = Exact<{
+  input: AdminCreateMintInput
+}>
+
+export type AdminCreateMintMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Mint'
+    createdAt?: Date | null
+    id: string
+    name: string
+    symbol: string
+    decimals: number
+    imageUrl?: string | null
+    publicKey: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdateMintMutationVariables = Exact<{
+  mintId: Scalars['String']['input']
+  input: AdminUpdateMintInput
+}>
+
+export type AdminUpdateMintMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Mint'
+    createdAt?: Date | null
+    id: string
+    name: string
+    symbol: string
+    decimals: number
+    imageUrl?: string | null
+    publicKey: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeleteMintMutationVariables = Exact<{
+  mintId: Scalars['String']['input']
+}>
+
+export type AdminDeleteMintMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
 export type UserDetailsFragment = {
   __typename?: 'User'
   avatarUrl?: string | null
@@ -904,6 +1222,18 @@ export const IdentityChallengeDetailsFragmentDoc = gql`
     verified
   }
 `
+export const MintDetailsFragmentDoc = gql`
+  fragment MintDetails on Mint {
+    createdAt
+    id
+    name
+    symbol
+    decimals
+    imageUrl
+    publicKey
+    updatedAt
+  }
+`
 export const UserDetailsFragmentDoc = gql`
   fragment UserDetails on User {
     avatarUrl
@@ -1042,6 +1372,92 @@ export const AnonVerifyIdentityChallengeDocument = gql`
   }
   ${IdentityChallengeDetailsFragmentDoc}
 `
+export const UserFindManyMintDocument = gql`
+  query userFindManyMint($input: UserFindManyMintInput!) {
+    paging: userFindManyMint(input: $input) {
+      data {
+        ...MintDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${MintDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneMintDocument = gql`
+  query userFindOneMint($mintId: String!) {
+    item: userFindOneMint(mintId: $mintId) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+export const UserCreateMintDocument = gql`
+  mutation userCreateMint($input: UserCreateMintInput!) {
+    created: userCreateMint(input: $input) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+export const UserUpdateMintDocument = gql`
+  mutation userUpdateMint($mintId: String!, $input: UserUpdateMintInput!) {
+    updated: userUpdateMint(mintId: $mintId, input: $input) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+export const UserDeleteMintDocument = gql`
+  mutation userDeleteMint($mintId: String!) {
+    deleted: userDeleteMint(mintId: $mintId)
+  }
+`
+export const AdminFindManyMintDocument = gql`
+  query adminFindManyMint($input: AdminFindManyMintInput!) {
+    paging: adminFindManyMint(input: $input) {
+      data {
+        ...MintDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${MintDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOneMintDocument = gql`
+  query adminFindOneMint($mintId: String!) {
+    item: adminFindOneMint(mintId: $mintId) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+export const AdminCreateMintDocument = gql`
+  mutation adminCreateMint($input: AdminCreateMintInput!) {
+    created: adminCreateMint(input: $input) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+export const AdminUpdateMintDocument = gql`
+  mutation adminUpdateMint($mintId: String!, $input: AdminUpdateMintInput!) {
+    updated: adminUpdateMint(mintId: $mintId, input: $input) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+export const AdminDeleteMintDocument = gql`
+  mutation adminDeleteMint($mintId: String!) {
+    deleted: adminDeleteMint(mintId: $mintId)
+  }
+`
 export const AdminCreateUserDocument = gql`
   mutation adminCreateUser($input: AdminCreateUserInput!) {
     created: adminCreateUser(input: $input) {
@@ -1144,6 +1560,16 @@ const UserVerifyIdentityChallengeDocumentString = print(UserVerifyIdentityChalle
 const UserLinkIdentityDocumentString = print(UserLinkIdentityDocument)
 const AnonRequestIdentityChallengeDocumentString = print(AnonRequestIdentityChallengeDocument)
 const AnonVerifyIdentityChallengeDocumentString = print(AnonVerifyIdentityChallengeDocument)
+const UserFindManyMintDocumentString = print(UserFindManyMintDocument)
+const UserFindOneMintDocumentString = print(UserFindOneMintDocument)
+const UserCreateMintDocumentString = print(UserCreateMintDocument)
+const UserUpdateMintDocumentString = print(UserUpdateMintDocument)
+const UserDeleteMintDocumentString = print(UserDeleteMintDocument)
+const AdminFindManyMintDocumentString = print(AdminFindManyMintDocument)
+const AdminFindOneMintDocumentString = print(AdminFindOneMintDocument)
+const AdminCreateMintDocumentString = print(AdminCreateMintDocument)
+const AdminUpdateMintDocumentString = print(AdminUpdateMintDocument)
+const AdminDeleteMintDocumentString = print(AdminDeleteMintDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -1457,6 +1883,216 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    userFindManyMint(
+      variables: UserFindManyMintQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyMintQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyMintQuery>(UserFindManyMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyMint',
+        'query',
+        variables,
+      )
+    },
+    userFindOneMint(
+      variables: UserFindOneMintQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneMintQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneMintQuery>(UserFindOneMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneMint',
+        'query',
+        variables,
+      )
+    },
+    userCreateMint(
+      variables: UserCreateMintMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateMintMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateMintMutation>(UserCreateMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateMint',
+        'mutation',
+        variables,
+      )
+    },
+    userUpdateMint(
+      variables: UserUpdateMintMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserUpdateMintMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserUpdateMintMutation>(UserUpdateMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userUpdateMint',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteMint(
+      variables: UserDeleteMintMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteMintMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteMintMutation>(UserDeleteMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteMint',
+        'mutation',
+        variables,
+      )
+    },
+    adminFindManyMint(
+      variables: AdminFindManyMintQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyMintQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyMintQuery>(AdminFindManyMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyMint',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneMint(
+      variables: AdminFindOneMintQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneMintQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneMintQuery>(AdminFindOneMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneMint',
+        'query',
+        variables,
+      )
+    },
+    adminCreateMint(
+      variables: AdminCreateMintMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreateMintMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreateMintMutation>(AdminCreateMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreateMint',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdateMint(
+      variables: AdminUpdateMintMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateMintMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateMintMutation>(AdminUpdateMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateMint',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteMint(
+      variables: AdminDeleteMintMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteMintMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteMintMutation>(AdminDeleteMintDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteMint',
+        'mutation',
+        variables,
+      )
+    },
     adminCreateUser(
       variables: AdminCreateUserMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -1653,6 +2289,16 @@ export function AdminCreateIdentityInputSchema(): z.ZodObject<Properties<AdminCr
   })
 }
 
+export function AdminCreateMintInputSchema(): z.ZodObject<Properties<AdminCreateMintInput>> {
+  return z.object({
+    decimals: z.number().nullish(),
+    imageUrl: z.string().nullish(),
+    name: z.string(),
+    secretKey: z.string().nullish(),
+    symbol: z.string(),
+  })
+}
+
 export function AdminCreateUserInputSchema(): z.ZodObject<Properties<AdminCreateUserInput>> {
   return z.object({
     password: z.string().nullish(),
@@ -1667,6 +2313,14 @@ export function AdminFindManyIdentityInputSchema(): z.ZodObject<Properties<Admin
   })
 }
 
+export function AdminFindManyMintInputSchema(): z.ZodObject<Properties<AdminFindManyMintInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
 export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFindManyUserInput>> {
   return z.object({
     limit: z.number().nullish(),
@@ -1674,6 +2328,16 @@ export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFind
     role: UserRoleSchema.nullish(),
     search: z.string().nullish(),
     status: UserStatusSchema.nullish(),
+  })
+}
+
+export function AdminUpdateMintInputSchema(): z.ZodObject<Properties<AdminUpdateMintInput>> {
+  return z.object({
+    decimals: z.number().nullish(),
+    imageUrl: z.string().nullish(),
+    name: z.string().nullish(),
+    secretKey: z.string().nullish(),
+    symbol: z.string().nullish(),
   })
 }
 
@@ -1716,9 +2380,27 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
   })
 }
 
+export function UserCreateMintInputSchema(): z.ZodObject<Properties<UserCreateMintInput>> {
+  return z.object({
+    decimals: z.number().nullish(),
+    imageUrl: z.string().nullish(),
+    name: z.string(),
+    secretKey: z.string().nullish(),
+    symbol: z.string(),
+  })
+}
+
 export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFindManyIdentityInput>> {
   return z.object({
     username: z.string(),
+  })
+}
+
+export function UserFindManyMintInputSchema(): z.ZodObject<Properties<UserFindManyMintInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
   })
 }
 
@@ -1727,6 +2409,16 @@ export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindMa
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
+  })
+}
+
+export function UserUpdateMintInputSchema(): z.ZodObject<Properties<UserUpdateMintInput>> {
+  return z.object({
+    decimals: z.number().nullish(),
+    imageUrl: z.string().nullish(),
+    name: z.string().nullish(),
+    secretKey: z.string().nullish(),
+    symbol: z.string().nullish(),
   })
 }
 

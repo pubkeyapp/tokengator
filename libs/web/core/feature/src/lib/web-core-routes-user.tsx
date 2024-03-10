@@ -4,12 +4,14 @@ import { UserFeature } from '@tokengator-mint/web-user-feature'
 import { UiContainer, UiDashboardGrid, UiDashboardItem } from '@pubkey-ui/core'
 import { IconCurrencySolana, IconSettings, IconUsers } from '@tabler/icons-react'
 import { RouteObject, useRoutes } from 'react-router-dom'
+import { UserMintFeature } from '@tokengator-mint/web-mint-feature'
 
 const links: UiDashboardItem[] = [
   // User Dashboard Links are added by the web-crud generator
   { label: 'Settings', icon: IconSettings, to: '/settings' },
   { label: 'Solana', icon: IconCurrencySolana, to: '/solana' },
   { label: 'Users', icon: IconUsers, to: '/u' },
+  { label: 'Mints', icon: IconSettings, to: '/mints' },
 ]
 
 const routes: RouteObject[] = [
@@ -18,6 +20,7 @@ const routes: RouteObject[] = [
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
   { path: '/u/*', element: <UserFeature /> },
+  { path: '/mints/*', element: <UserMintFeature /> },
 ]
 
 export default function WebCoreRoutesUser() {

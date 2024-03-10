@@ -8,6 +8,14 @@ input AdminCreateIdentityInput {
   providerId: String!
 }
 
+input AdminCreateMintInput {
+  decimals: Float
+  imageUrl: String
+  name: String!
+  secretKey: String
+  symbol: String!
+}
+
 input AdminCreateUserInput {
   password: String
   username: String!
@@ -18,12 +26,26 @@ input AdminFindManyIdentityInput {
   provider: IdentityProvider
 }
 
+input AdminFindManyMintInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
 input AdminFindManyUserInput {
   limit: Int = 10
   page: Int = 1
   role: UserRole
   search: String
   status: UserStatus
+}
+
+input AdminUpdateMintInput {
+  decimals: Float
+  imageUrl: String
+  name: String
+  secretKey: String
+  symbol: String
 }
 
 input AdminUpdateUserInput {
@@ -101,18 +123,40 @@ input LoginInput {
   username: String!
 }
 
+type Mint {
+  createdAt: DateTime
+  decimals: Float!
+  id: String!
+  imageUrl: String
+  name: String!
+  publicKey: String!
+  symbol: String!
+  updatedAt: DateTime
+}
+
+type MintPaging {
+  data: [Mint!]!
+  meta: PagingMeta!
+}
+
 type Mutation {
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
+  adminCreateMint(input: AdminCreateMintInput!): Mint
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteIdentity(identityId: String!): Boolean
+  adminDeleteMint(mintId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
+  adminUpdateMint(input: AdminUpdateMintInput!, mintId: String!): Mint
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
+  userCreateMint(input: UserCreateMintInput!): Mint
   userDeleteIdentity(identityId: String!): Boolean
+  userDeleteMint(mintId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userUpdateMint(input: UserUpdateMintInput!, mintId: String!): Mint
   userUpdateUser(input: UserUpdateUserInput!): User
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
@@ -129,14 +173,18 @@ type PagingMeta {
 
 type Query {
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
+  adminFindManyMint(input: AdminFindManyMintInput!): MintPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
+  adminFindOneMint(mintId: String!): Mint
   adminFindOneUser(userId: String!): User
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
   me: User
   uptime: Float!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
+  userFindManyMint(input: UserFindManyMintInput!): MintPaging!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
+  userFindOneMint(mintId: String!): Mint
   userFindOneUser(username: String!): User
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
@@ -165,8 +213,22 @@ type User {
   username: String
 }
 
+input UserCreateMintInput {
+  decimals: Float
+  imageUrl: String
+  name: String!
+  secretKey: String
+  symbol: String!
+}
+
 input UserFindManyIdentityInput {
   username: String!
+}
+
+input UserFindManyMintInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
 }
 
 input UserFindManyUserInput {
@@ -189,6 +251,14 @@ enum UserStatus {
   Active
   Created
   Inactive
+}
+
+input UserUpdateMintInput {
+  decimals: Float
+  imageUrl: String
+  name: String
+  secretKey: String
+  symbol: String
 }
 
 input UserUpdateUserInput {
