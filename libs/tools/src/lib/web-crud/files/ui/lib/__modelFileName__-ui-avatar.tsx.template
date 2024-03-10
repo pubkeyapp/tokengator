@@ -1,0 +1,10 @@
+import { <%= model.className %> } from '@<%= npmScope %>/sdk'
+import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
+
+export type <%= model.className %>UiAvatarProps = UiAvatarProps & {
+  <%= model.propertyName %>?: <%= model.className %>
+}
+
+export function <%= model.className %>UiAvatar({ <%= model.propertyName %>, ...props }: <%= model.className %>UiAvatarProps) {
+  return <UiAvatar url={undefined} name={<%= model.propertyName %>?.<%= label.propertyName %>} {...props} />
+}

@@ -1,0 +1,55 @@
+name: E2E
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  API_URL: http://localhost:3000/api
+  CLOAK_KEYCHAIN: 'v1.aesgcm256.6e1ba298.pf2UU5kKDxFWNgA6.VoV2c9xUARRchBZiY6iHlCc5'
+  CLOAK_MASTER_KEY: 'k1.aesgcm256.cs8BOCfbvuH-WwZDwqZ47zcLw0K8OlUGFW1JaXLAd78='
+  DATABASE_URL: postgresql://tokengator-mint:tokengator-mint@localhost:5432/tokengator-mint?schema=public
+  DATABASE_PROVISION: true
+  HOST: 127.0.0.1
+  JWT_SECRET: 1dfe5003518560c6362eab48f8220edf8708bbc67efbd4ed8cdf621965e938ee
+  PORT: 3000
+  SESSION_SECRET: 1dfe5003518560c6362eab48f8220edf8708bbc67efbd4ed8cdf621965e938ee
+
+jobs:
+  main-e2e:
+    runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: tokengator-mint
+          POSTGRES_PASSWORD: tokengator-mint
+          POSTGRES_DB: tokengator-mint
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/checkout@v3
+        name: Checkout [main]
+        with:
+          fetch-depth: 0
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: pnpm install --frozen-lockfile --prefer-frozen-lockfile
+      - run: pnpm prisma generate
+      - run: pnpm prisma db push --skip-generate
+      - run: pnpm nx run-many --target=build --all --parallel --skip-nx-cache --verbose
+      - run: pnpm nx e2e api-e2e --skip-nx-cache --verbose

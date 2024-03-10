@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:15-alpine
+    # command: [ "postgres", "-c", "log_statement=all", "-c", "log_destination=stderr" ]
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: tokengator-mint
+      POSTGRES_USER: tokengator-mint
+      POSTGRES_PASSWORD: tokengator-mint
+    volumes:
+      - ./tmp/postgres:/var/lib/postgresql/data

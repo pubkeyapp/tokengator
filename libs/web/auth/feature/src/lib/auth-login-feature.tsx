@@ -1,0 +1,71 @@
+import { Button, Divider, Group } from '@mantine/core'
+import { LoginInput } from '@tokengator-mint/sdk'
+import { useAuth } from '@tokengator-mint/web-auth-data-access'
+import { AuthUiForm, AuthUiShell } from '@tokengator-mint/web-auth-ui'
+import { useAppConfig } from '@tokengator-mint/web-core-data-access'
+import { UiLoader, UiStack } from '@pubkey-ui/core'
+import { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+export default function AuthLoginFeature() {
+  const { appConfig, authEnabled, enabledProviders } = useAppConfig()
+  const { login, logout, refresh, user } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [loading, setLoading] = useState(false)
+
+  const redirect = location.state?.from?.pathname || '/dashboard'
+
+  async function loginHandler(input: LoginInput) {
+    setLoading(true)
+    return login(input).then((res) => {
+      if (res) {
+        navigate(redirect)
+      }
+      setLoading(false)
+      return !!res
+    })
+  }
+
+  if (!appConfig) {
+    return <UiLoader />
+  }
+
+  const { authPasswordEnabled, authRegisterEnabled } = appConfig
+
+  return (
+    <AuthUiShell
+      authEnabled={authEnabled}
+      enabledProviders={enabledProviders}
+      refresh={() =>
+        refresh().then((res) => {
+          if (res) {
+            navigate(redirect)
+            return true
+          }
+          return false
+        })
+      }
+      logout={logout}
+      user={user}
+      navigate={() => navigate(redirect)}
+      loading={loading}
+    >
+      {authPasswordEnabled ? (
+        <UiStack>
+          <Divider label="Sign in with username and password" labelPosition="center" mt="lg" />
+          <AuthUiForm submit={loginHandler}>
+            <Group justify="space-between">
+              <Button disabled={loading ?? !authRegisterEnabled} component={Link} to="/register" variant="default">
+                Register
+              </Button>
+              <Button loading={loading} type="submit">
+                Login
+              </Button>
+            </Group>
+          </AuthUiForm>
+        </UiStack>
+      ) : null}
+    </AuthUiShell>
+  )
+}
