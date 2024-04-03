@@ -35,7 +35,7 @@ function getCommunityMint({
 
 const items: ProvisionCommunityMintInput[] = [
   {
-    name: `Dean's List Citizenship`,
+    name: 'Citizenship',
     symbol: 'DLCI',
     metadata: [
       ['Community', "Dean's List"],
@@ -48,7 +48,7 @@ const items: ProvisionCommunityMintInput[] = [
     uri: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/developer-portal/metadata.json',
   },
   {
-    name: `Dean's List Residency`,
+    name: 'Residency',
     symbol: 'DLRE',
     metadata: [
       ['Community', "Dean's List"],
@@ -61,7 +61,7 @@ const items: ProvisionCommunityMintInput[] = [
     uri: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/developer-portal/metadata.json',
   },
   {
-    name: `Dean's List Business Visa`,
+    name: 'Business Visa',
     symbol: 'DLBV',
     metadata: [
       ['Community', "Dean's List"],
@@ -74,7 +74,7 @@ const items: ProvisionCommunityMintInput[] = [
     uri: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/developer-portal/metadata.json',
   },
   {
-    name: `Dean's List Personal Visa`,
+    name: 'Personal Visa',
     symbol: 'DLPV',
     metadata: [
       ['Community', "Dean's List"],

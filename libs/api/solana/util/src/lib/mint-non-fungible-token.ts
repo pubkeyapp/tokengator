@@ -88,17 +88,6 @@ export async function mintNonFungibleToken({
     console.log(`Authority removed:`)
     console.log(`   ${generateExplorerUrl(removeAuthTxId)}`)
 
-    // 4. Increment Points
-    const incrementPointsTxId = await incrementPoints({
-      connection,
-      payer,
-      authority,
-      mint,
-      pointsToAdd: 10,
-    })
-    console.log(`Points incremented:`)
-    console.log(`   ${generateExplorerUrl(incrementPointsTxId)}`)
-
     // Log New NFT
     console.log(`New NFT:`)
     console.log(`   ${generateExplorerUrl(mint.toBase58(), true)}`)
@@ -110,7 +99,6 @@ export async function mintNonFungibleToken({
       mintSig,
       cleanMetaTxId,
       removeAuthTxId,
-      incrementPointsTxId,
     }
   } catch (err) {
     console.error(err)
