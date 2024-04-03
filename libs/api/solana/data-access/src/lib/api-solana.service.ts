@@ -6,6 +6,8 @@ import { TokenMetadata } from '@solana/spl-token-metadata'
 import { AccountInfo, Connection, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ApiCoreService, CORE_APP_STARTED } from '@tokengator-mint/api-core-data-access'
 
+export type SolanaAccountInfo = AccountInfo<ParsedAccountData>
+
 @Injectable()
 export class ApiSolanaService {
   private readonly logger = new Logger(ApiSolanaService.name)
@@ -32,10 +34,10 @@ export class ApiSolanaService {
     return balance
   }
 
-  async getAccount(publicKey: PublicKey | string): Promise<AccountInfo<ParsedAccountData> | null> {
+  async getAccount(publicKey: PublicKey | string): Promise<SolanaAccountInfo | null> {
     return this.connection
       .getParsedAccountInfo(new PublicKey(publicKey))
-      .then((res) => (res.value ? (res.value as AccountInfo<ParsedAccountData>) : null))
+      .then((res) => (res.value ? (res.value as SolanaAccountInfo) : null))
   }
   async getMint(publicKey: PublicKey | string, programId: PublicKey = TOKEN_2022_PROGRAM_ID) {
     return getMint(this.connection, new PublicKey(publicKey), 'confirmed', programId)
