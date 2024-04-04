@@ -1,9 +1,3 @@
-fragment CurrencyDetails on Currency {
-  decimals
-  mint
-  name
-  symbol
-}
 fragment PriceDetails on Price {
   createdAt
   id

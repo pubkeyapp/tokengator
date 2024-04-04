@@ -362,6 +362,7 @@ type Query {
   anonFindOneCommunity(slug: String!): Community
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
+  currencies: [Currency!]!
   me: User
   solanaGetBalance(account: String!): String
   solanaGetTokenAccounts(account: String!): JSON

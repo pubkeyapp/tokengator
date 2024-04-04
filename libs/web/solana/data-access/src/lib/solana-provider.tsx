@@ -10,12 +10,15 @@ import {
 } from '@solana/wallet-adapter-react'
 import { ReactNode, useCallback, useMemo } from 'react'
 import { ClusterProvider, useCluster } from './cluster-provider'
+import { SolanaLabelProvider } from './solana-label-provider'
 
 export function SolanaClusterProvider({ autoConnect, children }: { autoConnect?: boolean; children: ReactNode }) {
   return (
-    <ClusterProvider>
-      <SolanaProvider autoConnect={autoConnect}>{children}</SolanaProvider>
-    </ClusterProvider>
+    <SolanaLabelProvider>
+      <ClusterProvider>
+        <SolanaProvider autoConnect={autoConnect}>{children}</SolanaProvider>
+      </ClusterProvider>
+    </SolanaLabelProvider>
   )
 }
 

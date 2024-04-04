@@ -3,14 +3,14 @@ import { UiError, UiInfo, UiStack } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
-import { ellipsify, Wallet } from '@tokengator-mint/sdk'
-import { useSolanaGetTokenAccounts } from '@tokengator-mint/web-solana-data-access'
+import { Wallet } from '@tokengator-mint/sdk'
+import { useSolanaGetTokenAccounts, useSolanaLabel } from '@tokengator-mint/web-solana-data-access'
 import { SolanaUiExplorerLink } from '@tokengator-mint/web-solana-ui'
 import { useMemo, useState } from 'react'
 
 export function WalletUiSolTokenAccounts({ wallet }: { wallet: Wallet }) {
   const query = useSolanaGetTokenAccounts({ account: wallet.publicKey })
-
+  const { getLabel } = useSolanaLabel()
   const [showAll, setShowAll] = useState(false)
   const client = useQueryClient()
   const items: { account: AccountInfo<ParsedAccountData>; pubkey: PublicKey }[] = useMemo(() => {
@@ -71,14 +71,14 @@ export function WalletUiSolTokenAccounts({ wallet }: { wallet: Wallet }) {
                         <Table.Td>
                           <SolanaUiExplorerLink
                             ff="monospace"
-                            label={ellipsify(pubkey.toString())}
+                            label={getLabel(pubkey.toString())}
                             path={`account/${pubkey.toString()}`}
                           />
                         </Table.Td>
                         <Table.Td>
                           <SolanaUiExplorerLink
                             ff="monospace"
-                            label={ellipsify(account.data.parsed.info.mint)}
+                            label={getLabel(account.data.parsed.info.mint)}
                             path={`account/${account.data.parsed.info.mint.toString()}`}
                           />
                         </Table.Td>

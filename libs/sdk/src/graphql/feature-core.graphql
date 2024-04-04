@@ -8,6 +8,13 @@ fragment AppConfigDetails on AppConfig {
   authTwitterEnabled
 }
 
+fragment CurrencyDetails on Currency {
+  decimals
+  mint
+  name
+  symbol
+}
+
 fragment PagingMetaDetails on PagingMeta {
   currentPage
   isFirstPage
@@ -25,5 +32,11 @@ query uptime {
 query appConfig {
   config: appConfig {
     ...AppConfigDetails
+  }
+}
+
+query currencies {
+  items: currencies {
+    ...CurrencyDetails
   }
 }

@@ -566,6 +566,7 @@ export type Query = {
   anonFindOneCommunity?: Maybe<Community>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
+  currencies: Array<Currency>
   me?: Maybe<User>
   solanaGetBalance?: Maybe<Scalars['String']['output']>
   solanaGetTokenAccounts?: Maybe<Scalars['JSON']['output']>
@@ -1544,6 +1545,14 @@ export type AppConfigDetailsFragment = {
   authTwitterEnabled: boolean
 }
 
+export type CurrencyDetailsFragment = {
+  __typename?: 'Currency'
+  decimals: number
+  mint: string
+  name: string
+  symbol: string
+}
+
 export type PagingMetaDetailsFragment = {
   __typename?: 'PagingMeta'
   currentPage: number
@@ -1573,6 +1582,13 @@ export type AppConfigQuery = {
     authSolanaEnabled: boolean
     authTwitterEnabled: boolean
   }
+}
+
+export type CurrenciesQueryVariables = Exact<{ [key: string]: never }>
+
+export type CurrenciesQuery = {
+  __typename?: 'Query'
+  items: Array<{ __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string }>
 }
 
 export type IdentityDetailsFragment = {
@@ -2143,14 +2159,6 @@ export type UserFindOnePresetQuery = {
     description?: string | null
     updatedAt?: Date | null
   } | null
-}
-
-export type CurrencyDetailsFragment = {
-  __typename?: 'Currency'
-  decimals: number
-  mint: string
-  name: string
-  symbol: string
 }
 
 export type PriceDetailsFragment = {
@@ -3073,6 +3081,14 @@ export const AppConfigDocument = gql`
   }
   ${AppConfigDetailsFragmentDoc}
 `
+export const CurrenciesDocument = gql`
+  query currencies {
+    items: currencies {
+      ...CurrencyDetails
+    }
+  }
+  ${CurrencyDetailsFragmentDoc}
+`
 export const AdminFindManyIdentityDocument = gql`
   query adminFindManyIdentity($input: AdminFindManyIdentityInput!) {
     items: adminFindManyIdentity(input: $input) {
@@ -3567,6 +3583,7 @@ const AnonFindManyCommunityDocumentString = print(AnonFindManyCommunityDocument)
 const AnonFindOneCommunityDocumentString = print(AnonFindOneCommunityDocument)
 const UptimeDocumentString = print(UptimeDocument)
 const AppConfigDocumentString = print(AppConfigDocument)
+const CurrenciesDocumentString = print(CurrenciesDocument)
 const AdminFindManyIdentityDocumentString = print(AdminFindManyIdentityDocument)
 const AdminCreateIdentityDocumentString = print(AdminCreateIdentityDocument)
 const AdminDeleteIdentityDocumentString = print(AdminDeleteIdentityDocument)
@@ -4154,6 +4171,21 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'appConfig',
+        'query',
+        variables,
+      )
+    },
+    currencies(
+      variables?: CurrenciesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{ data: CurrenciesQuery; errors?: GraphQLError[]; extensions?: any; headers: Headers; status: number }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<CurrenciesQuery>(CurrenciesDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'currencies',
         'query',
         variables,
       )
