@@ -17,7 +17,6 @@ export function useAdminFindManyPrice(props: Partial<PriceAdminFindManyInput> & 
   return {
     items,
     query,
-
     createPrice: (input: PriceAdminCreateInput) =>
       sdk
         .adminCreatePrice({ input: { ...input, presetId: props.presetId } })

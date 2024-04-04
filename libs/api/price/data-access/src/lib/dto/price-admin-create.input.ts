@@ -5,11 +5,7 @@ export class PriceAdminCreateInput {
   @Field()
   name!: string
   @Field()
-  mint!: string
-  @Field()
   price!: string
-  @Field()
-  currency!: string
   @Field()
   presetId!: string
   @Field(() => Int)

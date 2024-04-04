@@ -26,6 +26,10 @@ export class ApiPriceDataAdminService {
     })
   }
 
+  async findOnePrice(presetId: string) {
+    return this.data.findOne(presetId)
+  }
+
   async updatePrice(priceId: string, input: PriceAdminUpdateInput) {
     return this.data.update(priceId, input)
   }

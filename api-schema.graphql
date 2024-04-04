@@ -133,6 +133,14 @@ type CommunityPaging {
   meta: PagingMeta!
 }
 
+type Currency {
+  decimals: Int!
+  id: String
+  mint: String!
+  name: String!
+  symbol: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -293,10 +301,10 @@ type Price {
   active: Boolean!
   assets: Int!
   createdAt: DateTime
-  currency: String!
+  currency: Currency
+  currencyId: String
   days: Int!
   id: String!
-  mint: String!
   name: String!
   preset: Preset
   presetId: String!
@@ -306,9 +314,7 @@ type Price {
 
 input PriceAdminCreateInput {
   assets: Int!
-  currency: String!
   days: Int!
-  mint: String!
   name: String!
   presetId: String!
   price: String!
@@ -321,9 +327,7 @@ input PriceAdminFindManyInput {
 input PriceAdminUpdateInput {
   active: Boolean
   assets: Int!
-  currency: String
   days: Int!
-  mint: String
   name: String
   price: String
 }
@@ -344,6 +348,7 @@ type Query {
   adminFindOneCommunityMember(communityMemberId: String!): CommunityMember
   adminFindOneMint(mintId: String!): Mint
   adminFindOnePreset(presetId: String!): Preset
+  adminFindOnePrice(priceId: String!): Price
   adminFindOneUser(userId: String!): User
   anonFindManyCommunity(input: AnonFindManyCommunityInput!): CommunityPaging!
   anonFindOneCommunity(slug: String!): Community

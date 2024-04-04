@@ -160,6 +160,15 @@ export type CommunityPaging = {
   meta: PagingMeta
 }
 
+export type Currency = {
+  __typename?: 'Currency'
+  decimals: Scalars['Int']['output']
+  id?: Maybe<Scalars['String']['output']>
+  mint: Scalars['String']['output']
+  name: Scalars['String']['output']
+  symbol: Scalars['String']['output']
+}
+
 export type Identity = {
   __typename?: 'Identity'
   challenges?: Maybe<Array<IdentityChallenge>>
@@ -469,10 +478,10 @@ export type Price = {
   active: Scalars['Boolean']['output']
   assets: Scalars['Int']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
-  currency: Scalars['String']['output']
+  currency?: Maybe<Currency>
+  currencyId?: Maybe<Scalars['String']['output']>
   days: Scalars['Int']['output']
   id: Scalars['String']['output']
-  mint: Scalars['String']['output']
   name: Scalars['String']['output']
   preset?: Maybe<Preset>
   presetId: Scalars['String']['output']
@@ -482,9 +491,7 @@ export type Price = {
 
 export type PriceAdminCreateInput = {
   assets: Scalars['Int']['input']
-  currency: Scalars['String']['input']
   days: Scalars['Int']['input']
-  mint: Scalars['String']['input']
   name: Scalars['String']['input']
   presetId: Scalars['String']['input']
   price: Scalars['String']['input']
@@ -497,9 +504,7 @@ export type PriceAdminFindManyInput = {
 export type PriceAdminUpdateInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>
   assets: Scalars['Int']['input']
-  currency?: InputMaybe<Scalars['String']['input']>
   days: Scalars['Int']['input']
-  mint?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
   price?: InputMaybe<Scalars['String']['input']>
 }
@@ -521,6 +526,7 @@ export type Query = {
   adminFindOneCommunityMember?: Maybe<CommunityMember>
   adminFindOneMint?: Maybe<Mint>
   adminFindOnePreset?: Maybe<Preset>
+  adminFindOnePrice?: Maybe<Price>
   adminFindOneUser?: Maybe<User>
   anonFindManyCommunity: CommunityPaging
   anonFindOneCommunity?: Maybe<Community>
@@ -586,6 +592,10 @@ export type QueryAdminFindOneMintArgs = {
 
 export type QueryAdminFindOnePresetArgs = {
   presetId: Scalars['String']['input']
+}
+
+export type QueryAdminFindOnePriceArgs = {
+  priceId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneUserArgs = {
@@ -2020,19 +2030,26 @@ export type UserFindOnePresetQuery = {
   } | null
 }
 
+export type CurrencyDetailsFragment = {
+  __typename?: 'Currency'
+  decimals: number
+  mint: string
+  name: string
+  symbol: string
+}
+
 export type PriceDetailsFragment = {
   __typename?: 'Price'
   createdAt?: Date | null
   id: string
   name: string
-  mint: string
   price: string
-  currency: string
   active: boolean
   days: number
   assets: number
   presetId: string
   updatedAt?: Date | null
+  currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
 }
 
 export type AdminFindManyPriceQueryVariables = Exact<{
@@ -2046,15 +2063,35 @@ export type AdminFindManyPriceQuery = {
     createdAt?: Date | null
     id: string
     name: string
-    mint: string
     price: string
-    currency: string
     active: boolean
     days: number
     assets: number
     presetId: string
     updatedAt?: Date | null
+    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
   }>
+}
+
+export type AdminFindOnePriceQueryVariables = Exact<{
+  priceId: Scalars['String']['input']
+}>
+
+export type AdminFindOnePriceQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Price'
+    createdAt?: Date | null
+    id: string
+    name: string
+    price: string
+    active: boolean
+    days: number
+    assets: number
+    presetId: string
+    updatedAt?: Date | null
+    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+  } | null
 }
 
 export type AdminCreatePriceMutationVariables = Exact<{
@@ -2068,14 +2105,13 @@ export type AdminCreatePriceMutation = {
     createdAt?: Date | null
     id: string
     name: string
-    mint: string
     price: string
-    currency: string
     active: boolean
     days: number
     assets: number
     presetId: string
     updatedAt?: Date | null
+    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
   } | null
 }
 
@@ -2091,14 +2127,13 @@ export type AdminUpdatePriceMutation = {
     createdAt?: Date | null
     id: string
     name: string
-    mint: string
     price: string
-    currency: string
     active: boolean
     days: number
     assets: number
     presetId: string
     updatedAt?: Date | null
+    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
   } | null
 }
 
@@ -2119,14 +2154,13 @@ export type UserFindManyPriceQuery = {
     createdAt?: Date | null
     id: string
     name: string
-    mint: string
     price: string
-    currency: string
     active: boolean
     days: number
     assets: number
     presetId: string
     updatedAt?: Date | null
+    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
   }>
 }
 
@@ -2448,20 +2482,30 @@ export const PresetDetailsFragmentDoc = gql`
     updatedAt
   }
 `
+export const CurrencyDetailsFragmentDoc = gql`
+  fragment CurrencyDetails on Currency {
+    decimals
+    mint
+    name
+    symbol
+  }
+`
 export const PriceDetailsFragmentDoc = gql`
   fragment PriceDetails on Price {
     createdAt
     id
     name
-    mint
     price
-    currency
+    currency {
+      ...CurrencyDetails
+    }
     active
     days
     assets
     presetId
     updatedAt
   }
+  ${CurrencyDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {
@@ -2943,6 +2987,14 @@ export const AdminFindManyPriceDocument = gql`
   }
   ${PriceDetailsFragmentDoc}
 `
+export const AdminFindOnePriceDocument = gql`
+  query adminFindOnePrice($priceId: String!) {
+    item: adminFindOnePrice(priceId: $priceId) {
+      ...PriceDetails
+    }
+  }
+  ${PriceDetailsFragmentDoc}
+`
 export const AdminCreatePriceDocument = gql`
   mutation adminCreatePrice($input: PriceAdminCreateInput!) {
     created: adminCreatePrice(input: $input) {
@@ -3114,6 +3166,7 @@ const AdminDeletePresetDocumentString = print(AdminDeletePresetDocument)
 const UserFindManyPresetDocumentString = print(UserFindManyPresetDocument)
 const UserFindOnePresetDocumentString = print(UserFindOnePresetDocument)
 const AdminFindManyPriceDocumentString = print(AdminFindManyPriceDocument)
+const AdminFindOnePriceDocumentString = print(AdminFindOnePriceDocument)
 const AdminCreatePriceDocumentString = print(AdminCreatePriceDocument)
 const AdminUpdatePriceDocumentString = print(AdminUpdatePriceDocument)
 const AdminDeletePriceDocumentString = print(AdminDeletePriceDocument)
@@ -4271,6 +4324,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    adminFindOnePrice(
+      variables: AdminFindOnePriceQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOnePriceQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOnePriceQuery>(AdminFindOnePriceDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOnePrice',
+        'query',
+        variables,
+      )
+    },
     adminCreatePrice(
       variables: AdminCreatePriceMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -4702,9 +4776,7 @@ export function PresetUserFindManyInputSchema(): z.ZodObject<Properties<PresetUs
 export function PriceAdminCreateInputSchema(): z.ZodObject<Properties<PriceAdminCreateInput>> {
   return z.object({
     assets: z.number(),
-    currency: z.string(),
     days: z.number(),
-    mint: z.string(),
     name: z.string(),
     presetId: z.string(),
     price: z.string(),
@@ -4721,9 +4793,7 @@ export function PriceAdminUpdateInputSchema(): z.ZodObject<Properties<PriceAdmin
   return z.object({
     active: z.boolean().nullish(),
     assets: z.number(),
-    currency: z.string().nullish(),
     days: z.number(),
-    mint: z.string().nullish(),
     name: z.string().nullish(),
     price: z.string().nullish(),
   })

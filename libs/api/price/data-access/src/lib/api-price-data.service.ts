@@ -7,8 +7,8 @@ import { Price } from './entity/price.entity'
 export class ApiPriceDataService {
   constructor(private readonly core: ApiCoreService) {}
 
-  async create(input: Prisma.PriceUncheckedCreateInput) {
-    return this.core.data.price.create({ data: input })
+  async create(input: Omit<Prisma.PriceUncheckedCreateInput, 'currencyId'>) {
+    return this.core.data.price.create({ data: { ...input, currencyId: 'USDC' } })
   }
 
   async delete(priceId: string) {
@@ -18,7 +18,7 @@ export class ApiPriceDataService {
   }
 
   async findMany({ ...input }: Prisma.PriceFindManyArgs & PagingInputFields): Promise<Price[]> {
-    return this.core.data.price.findMany(input)
+    return this.core.data.price.findMany({ ...input, include: { currency: true } })
   }
 
   async findOne(priceId: string) {

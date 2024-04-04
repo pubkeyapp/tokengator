@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-import { MINT_USDC } from '@tokengator-mint/api-solana-util'
 
 export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
@@ -8,8 +7,8 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     prices: {
       create: [
         //
-        monthlyUsd('50', 100),
-        yearlyUsd('500', 100),
+        monthlyUsd('50.00', 100),
+        yearlyUsd('500.00', 100),
       ],
     },
   },
@@ -19,8 +18,8 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     prices: {
       create: [
         //
-        monthlyUsd('100', 100),
-        yearlyUsd('1000', 100),
+        monthlyUsd('100.00', 100),
+        yearlyUsd('1000.00', 100),
       ],
     },
   },
@@ -30,8 +29,8 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     prices: {
       create: [
         //
-        monthlyUsd('39', 100),
-        yearlyUsd('390', 100),
+        monthlyUsd('39.00', 100),
+        yearlyUsd('390.00', 100),
       ],
     },
   },
@@ -41,8 +40,8 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     prices: {
       create: [
         //
-        monthlyUsd('39', 100),
-        yearlyUsd('390', 100),
+        monthlyUsd('39.00', 100),
+        yearlyUsd('390.00', 100),
       ],
     },
   },
@@ -52,8 +51,7 @@ function monthlyUsd(price: string, assets: number): Prisma.PriceCreateWithoutPre
   return {
     name: 'Monthly',
     days: 30,
-    mint: MINT_USDC.address,
-    currency: MINT_USDC.name,
+    currency: { connect: { symbol: 'USDC' } },
     price,
     assets,
   }
@@ -63,8 +61,7 @@ function yearlyUsd(price: string, assets: number): Prisma.PriceCreateWithoutPres
   return {
     name: 'Yearly',
     days: 365,
-    mint: MINT_USDC.address,
-    currency: MINT_USDC.name,
+    currency: { connect: { symbol: 'USDC' } },
     price,
     assets,
   }

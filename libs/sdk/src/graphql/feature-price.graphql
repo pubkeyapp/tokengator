@@ -1,10 +1,17 @@
+fragment CurrencyDetails on Currency {
+  decimals
+  mint
+  name
+  symbol
+}
 fragment PriceDetails on Price {
   createdAt
   id
   name
-  mint
   price
-  currency
+  currency {
+    ...CurrencyDetails
+  }
   active
   days
   assets
@@ -14,6 +21,12 @@ fragment PriceDetails on Price {
 
 query adminFindManyPrice($input: PriceAdminFindManyInput!) {
   items: adminFindManyPrice(input: $input) {
+    ...PriceDetails
+  }
+}
+
+query adminFindOnePrice($priceId: String!) {
+  item: adminFindOnePrice(priceId: $priceId) {
     ...PriceDetails
   }
 }

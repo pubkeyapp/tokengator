@@ -1,11 +1,8 @@
-export const MINT_USDC = {
-  name: 'USDC',
-  address: '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU',
-  decimals: 6,
-}
+import { Prisma } from '@prisma/client'
 
-export const MINT_SOL = {
-  name: 'SOL',
-  address: 'So11111111111111111111111111111111111111112',
-  decimals: 9,
+export const MINT_USDC: Prisma.CurrencyCreateInput = {
+  name: 'USDC',
+  symbol: 'USDC',
+  mint: '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU',
+  decimals: 6,
 }

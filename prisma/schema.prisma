@@ -30,6 +30,15 @@ model CommunityMember {
   communityId String
 }
 
+model Currency {
+  id       String  @id @default(cuid())
+  name     String
+  mint     String
+  symbol   String  @unique
+  decimals Int
+  prices   Price[]
+}
+
 model Identity {
   id           String              @id @default(cuid())
   createdAt    DateTime            @default(now())
@@ -88,18 +97,18 @@ model Preset {
 }
 
 model Price {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  preset    Preset   @relation(fields: [presetId], references: [id], onDelete: Cascade)
-  presetId  String
-  name      String
-  mint      String
-  days      Int
-  assets    Int
-  price     String
-  currency  String
-  active    Boolean  @default(true)
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  preset     Preset   @relation(fields: [presetId], references: [id], onDelete: Cascade)
+  presetId   String
+  name       String
+  days       Int
+  assets     Int
+  price      String
+  currency   Currency @relation(fields: [currencyId], references: [id])
+  currencyId String
+  active     Boolean  @default(true)
 }
 
 model User {

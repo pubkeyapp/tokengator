@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { Preset } from '@tokengator-mint/api-preset-data-access'
+import { Currency } from './currency.entity'
 
 @ObjectType()
 export class Price {
@@ -12,11 +13,11 @@ export class Price {
   @Field()
   name!: string
   @Field()
-  mint!: string
-  @Field()
   price!: string
-  @Field()
-  currency!: string
+  @Field(() => Currency, { nullable: true })
+  currency?: Currency
+  @Field({ nullable: true })
+  currencyId!: string | null
   @Field()
   active!: boolean
   @Field(() => Int)

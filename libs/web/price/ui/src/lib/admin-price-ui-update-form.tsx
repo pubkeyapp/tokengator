@@ -1,4 +1,4 @@
-import { Button, Group, TextInput } from '@mantine/core'
+import { Button, Checkbox, Group, NumberInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
 import { Price, PriceAdminUpdateInput } from '@tokengator-mint/sdk'
@@ -12,24 +12,22 @@ export function AdminPriceUiUpdateForm({
 }) {
   const form = useForm<PriceAdminUpdateInput>({
     initialValues: {
-      name: price.name ?? '',
-      mint: price.mint ?? '',
-      price: price.price ?? '',
-      currency: price.currency ?? '',
-      active: price.active ?? false,
-      assets: price.assets ?? 0,
-      days: price.days ?? 0,
+      active: price.active,
+      assets: price.assets,
+      days: price.days,
+      name: price.name,
+      price: price.price,
     },
   })
 
   return (
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
-        <TextInput name="name" label="name" {...form.getInputProps('name')} />
-        <TextInput name="mint" label="mint" {...form.getInputProps('mint')} />
-        <TextInput name="price" label="price" {...form.getInputProps('price')} />
-        <TextInput name="currency" label="currency" {...form.getInputProps('currency')} />
-        <TextInput name="active" label="active" {...form.getInputProps('active')} />
+        <TextInput name="name" label="Name" {...form.getInputProps('name')} />
+        <TextInput name="price" label="Price" {...form.getInputProps('price')} />
+        <NumberInput name="days" label="Days" {...form.getInputProps('days')} />
+        <NumberInput name="assets" label="Assets" {...form.getInputProps('assets')} />
+        <Checkbox name="active" label="Active" {...form.getInputProps('active', { type: 'checkbox' })} />
         <Group justify="right">
           <Button type="submit">Save</Button>
         </Group>

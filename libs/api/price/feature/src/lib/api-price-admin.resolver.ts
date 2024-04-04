@@ -29,6 +29,11 @@ export class ApiPriceAdminResolver {
     return this.service.admin.findManyPrice(input)
   }
 
+  @Query(() => Price, { nullable: true })
+  adminFindOnePrice(@Args('priceId') priceId: string) {
+    return this.service.admin.findOnePrice(priceId)
+  }
+
   @Mutation(() => Price, { nullable: true })
   adminUpdatePrice(@Args('priceId') priceId: string, @Args('input') input: PriceAdminUpdateInput) {
     return this.service.admin.updatePrice(priceId, input)
