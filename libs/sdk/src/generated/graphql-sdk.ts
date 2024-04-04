@@ -265,6 +265,7 @@ export type Mutation = {
   userCreateCommunity?: Maybe<Community>
   userCreateCommunityMember?: Maybe<CommunityMember>
   userCreateMint?: Maybe<Mint>
+  userCreateMintFromPreset?: Maybe<Scalars['String']['output']>
   userCreateWallet?: Maybe<Wallet>
   userDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   userDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
@@ -394,6 +395,11 @@ export type MutationUserCreateCommunityMemberArgs = {
 
 export type MutationUserCreateMintArgs = {
   input: UserCreateMintInput
+}
+
+export type MutationUserCreateMintFromPresetArgs = {
+  communityId: Scalars['String']['input']
+  presetId: Scalars['String']['input']
 }
 
 export type MutationUserCreateWalletArgs = {
@@ -2161,6 +2167,13 @@ export type UserFindOnePresetQuery = {
   } | null
 }
 
+export type UserCreateMintFromPresetMutationVariables = Exact<{
+  presetId: Scalars['String']['input']
+  communityId: Scalars['String']['input']
+}>
+
+export type UserCreateMintFromPresetMutation = { __typename?: 'Mutation'; minted?: string | null }
+
 export type PriceDetailsFragment = {
   __typename?: 'Price'
   createdAt?: Date | null
@@ -3324,6 +3337,11 @@ export const UserFindOnePresetDocument = gql`
   }
   ${PresetDetailsFragmentDoc}
 `
+export const UserCreateMintFromPresetDocument = gql`
+  mutation userCreateMintFromPreset($presetId: String!, $communityId: String!) {
+    minted: userCreateMintFromPreset(presetId: $presetId, communityId: $communityId)
+  }
+`
 export const AdminFindManyPriceDocument = gql`
   query adminFindManyPrice($input: PriceAdminFindManyInput!) {
     items: adminFindManyPrice(input: $input) {
@@ -3612,6 +3630,7 @@ const AdminUpdatePresetDocumentString = print(AdminUpdatePresetDocument)
 const AdminDeletePresetDocumentString = print(AdminDeletePresetDocument)
 const UserFindManyPresetDocumentString = print(UserFindManyPresetDocument)
 const UserFindOnePresetDocumentString = print(UserFindOnePresetDocument)
+const UserCreateMintFromPresetDocumentString = print(UserCreateMintFromPresetDocument)
 const AdminFindManyPriceDocumentString = print(AdminFindManyPriceDocument)
 const AdminFindOnePriceDocumentString = print(AdminFindOnePriceDocument)
 const AdminCreatePriceDocumentString = print(AdminCreatePriceDocument)
@@ -4775,6 +4794,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
           }),
         'userFindOnePreset',
         'query',
+        variables,
+      )
+    },
+    userCreateMintFromPreset(
+      variables: UserCreateMintFromPresetMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateMintFromPresetMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateMintFromPresetMutation>(UserCreateMintFromPresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateMintFromPreset',
+        'mutation',
         variables,
       )
     },

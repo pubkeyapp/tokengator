@@ -242,6 +242,7 @@ type Mutation {
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
   userCreateMint(input: UserCreateMintInput!): Mint
+  userCreateMintFromPreset(communityId: String!, presetId: String!): String
   userCreateWallet(input: WalletUserCreateInput!): Wallet
   userDeleteCommunity(communityId: String!): Boolean
   userDeleteCommunityMember(communityMemberId: String!): Boolean

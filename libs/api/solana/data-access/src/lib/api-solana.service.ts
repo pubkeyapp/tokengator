@@ -1,9 +1,11 @@
+import { AnchorProvider } from '@coral-xyz/anchor'
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { Cron, CronExpression } from '@nestjs/schedule'
+import { AnchorKeypairWallet } from '@pubkey-program-library/sdk'
 import { getMint, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { TokenMetadata } from '@solana/spl-token-metadata'
-import { AccountInfo, Connection, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
+import { AccountInfo, Connection, Keypair, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ApiCoreService, CORE_APP_STARTED } from '@tokengator-mint/api-core-data-access'
 
 export type SolanaAccountInfo = AccountInfo<ParsedAccountData>
@@ -74,5 +76,9 @@ export class ApiSolanaService {
 
   async getTransactions(account: string) {
     return this.connection.getConfirmedSignaturesForAddress2(new PublicKey(account), { limit: 50 })
+  }
+
+  getAnchorProvider(keypair = Keypair.generate()) {
+    return new AnchorProvider(this.connection, new AnchorKeypairWallet(keypair), AnchorProvider.defaultOptions())
   }
 }

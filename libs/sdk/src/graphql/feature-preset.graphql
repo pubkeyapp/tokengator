@@ -56,3 +56,7 @@ query userFindOnePreset($presetId: String!) {
     ...PresetDetails
   }
 }
+
+mutation userCreateMintFromPreset($presetId: String!, $communityId: String!) {
+  minted: userCreateMintFromPreset(presetId: $presetId, communityId: $communityId)
+}
