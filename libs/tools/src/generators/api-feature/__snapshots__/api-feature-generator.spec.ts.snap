@@ -4,53 +4,51 @@ exports[`api-feature generator should generate the feature libraries with crud f
 "export * from './lib/api-test.data-access.module';
 export * from './lib/api-test.service';
 export * from './lib/entity/test.entity';
-export * from './lib/dto/admin-create-test.input';
-export * from './lib/dto/admin-find-many-test.input';
-export * from './lib/dto/admin-update-test.input';
-export * from './lib/dto/user-create-test.input';
-export * from './lib/dto/user-find-many-test.input';
-export * from './lib/dto/user-update-test.input';
+export * from './lib/dto/test-admin-create.input';
+export * from './lib/dto/test-admin-find-many.input';
+export * from './lib/dto/test-admin-update.input';
+export * from './lib/dto/test-user-create.input';
+export * from './lib/dto/test-user-find-many.input';
+export * from './lib/dto/test-user-update.input';
 "
 `;
 
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  4`] = `
 "import { Injectable } from '@nestjs/common';
-import { ApiCoreService } from '@proj/api-core-data-access';
-import { AdminCreateTestInput } from './dto/admin-create-test.input';
-import { AdminFindManyTestInput } from './dto/admin-find-many-test.input';
-import { AdminUpdateTestInput } from './dto/admin-update-test.input';
+import { TestAdminCreateInput } from './dto/test-admin-create.input';
+import { TestAdminFindManyInput } from './dto/test-admin-find-many.input';
+import { TestAdminUpdateInput } from './dto/test-admin-update.input';
 import { TestPaging } from './entity/test.entity';
 import { getTestWhereAdminInput } from './helpers/get-test-where-admin.input';
+import { ApiTestDataService } from './api-test-data.service';
 
 @Injectable()
 export class ApiTestDataAdminService {
-  constructor(private readonly core: ApiCoreService) {}
+  constructor(private readonly data: ApiTestDataService) {}
 
-  async createTest(input: AdminCreateTestInput) {
-    return this.core.data.test.create({ data: input });
+  async createTest(input: TestAdminCreateInput) {
+    return this.data.create(input);
   }
 
   async deleteTest(testId: string) {
-    const deleted = await this.core.data.test.delete({ where: { id: testId } });
-    return !!deleted;
+    return this.data.delete(testId);
   }
 
-  async findManyTest(input: AdminFindManyTestInput): Promise<TestPaging> {
-    return this.core.data.test
-      .paginate({
-        orderBy: { createdAt: 'desc' },
-        where: getTestWhereAdminInput(input),
-      })
-      .withPages({ limit: input.limit, page: input.page })
-      .then(([data, meta]) => ({ data, meta }));
+  async findManyTest(input: TestAdminFindManyInput): Promise<TestPaging> {
+    return this.data.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: getTestWhereAdminInput(input),
+      limit: input.limit,
+      page: input.page,
+    });
   }
 
   async findOneTest(testId: string) {
-    return this.core.data.test.findUnique({ where: { id: testId } });
+    return this.data.findOne(testId);
   }
 
-  async updateTest(testId: string, input: AdminUpdateTestInput) {
-    return this.core.data.test.update({ where: { id: testId }, data: input });
+  async updateTest(testId: string, input: TestAdminUpdateInput) {
+    return this.data.update(testId, input);
   }
 }
 "
@@ -58,71 +56,125 @@ export class ApiTestDataAdminService {
 
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  5`] = `
 "import { Injectable } from '@nestjs/common';
-import { ApiCoreService } from '@proj/api-core-data-access';
-import { UserCreateTestInput } from './dto/user-create-test.input';
-import { UserFindManyTestInput } from './dto/user-find-many-test.input';
-import { UserUpdateTestInput } from './dto/user-update-test.input';
+import { TestUserCreateInput } from './dto/test-user-create.input';
+import { TestUserFindManyInput } from './dto/test-user-find-many.input';
+import { TestUserUpdateInput } from './dto/test-user-update.input';
 import { TestPaging } from './entity/test.entity';
 import { getTestWhereUserInput } from './helpers/get-test-where-user.input';
+import { ApiTestDataService } from './api-test-data.service';
 
 @Injectable()
 export class ApiTestDataUserService {
-  constructor(private readonly core: ApiCoreService) {}
+  constructor(private readonly data: ApiTestDataService) {}
 
-  async createTest(input: UserCreateTestInput) {
-    return this.core.data.test.create({ data: input });
+  async createTest(input: TestUserCreateInput) {
+    return this.data.create(input);
   }
 
   async deleteTest(testId: string) {
-    const deleted = await this.core.data.test.delete({ where: { id: testId } });
-    return !!deleted;
+    return this.data.delete(testId);
   }
 
-  async findManyTest(input: UserFindManyTestInput): Promise<TestPaging> {
-    return this.core.data.test
-      .paginate({
-        orderBy: { createdAt: 'desc' },
-        where: getTestWhereUserInput(input),
-      })
-      .withPages({ limit: input.limit, page: input.page })
-      .then(([data, meta]) => ({ data, meta }));
+  async findManyTest(input: TestUserFindManyInput): Promise<TestPaging> {
+    return this.data.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: getTestWhereUserInput(input),
+      limit: input.limit,
+      page: input.page,
+    });
   }
 
   async findOneTest(testId: string) {
-    return this.core.data.test.findUnique({ where: { id: testId } });
+    return this.data.findOne(testId);
   }
 
-  async updateTest(testId: string, input: UserUpdateTestInput) {
-    return this.core.data.test.update({ where: { id: testId }, data: input });
+  async updateTest(testId: string, input: TestUserUpdateInput) {
+    return this.data.update(testId, input);
   }
 }
 "
 `;
 
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  6`] = `
+"import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { ApiCoreService, PagingInputFields } from '@proj/api-core-data-access';
+import { TestPaging } from './entity/test.entity';
+
+@Injectable()
+export class ApiTestDataService {
+  constructor(private readonly core: ApiCoreService) {}
+
+  async create(input: Prisma.TestUncheckedCreateInput) {
+    return this.core.data.test.create({ data: input });
+  }
+
+  async delete(testId: string) {
+    await this.findOne(testId);
+    const deleted = await this.core.data.test.delete({ where: { id: testId } });
+    return !!deleted;
+  }
+
+  async findMany({
+    limit = 10,
+    page = 1,
+    ...input
+  }: Prisma.TestFindManyArgs & PagingInputFields): Promise<TestPaging> {
+    return this.core.data.test
+      .paginate(input)
+      .withPages({ limit, page })
+      .then(([data, meta]) => ({ data, meta }));
+  }
+
+  async findOne(testId: string) {
+    const found = await this.core.data.test.findUnique({
+      where: { id: testId },
+    });
+    if (!found) {
+      throw new Error('Test not found');
+    }
+    return found;
+  }
+
+  async update(testId: string, input: Prisma.TestUpdateInput) {
+    return this.core.data.test.update({ where: { id: testId }, data: input });
+  }
+}
+"
+`;
+
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  7`] = `
 "import { Module } from '@nestjs/common';
 import { ApiCoreDataAccessModule } from '@proj/api-core-data-access';
 import { ApiTestService } from './api-test.service';
+import { ApiTestDataService } from './api-test-data.service';
 import { ApiTestDataAdminService } from './api-test-data-admin.service';
 import { ApiTestDataUserService } from './api-test-data-user.service';
 
 @Module({
   imports: [ApiCoreDataAccessModule],
-  providers: [ApiTestService, ApiTestDataAdminService, ApiTestDataUserService],
+  providers: [
+    ApiTestService,
+    ApiTestDataService,
+    ApiTestDataAdminService,
+    ApiTestDataUserService,
+  ],
   exports: [ApiTestService],
 })
 export class ApiTestDataAccessModule {}
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  7`] = `
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  8`] = `
 "import { Injectable } from '@nestjs/common';
+import { ApiTestDataService } from './api-test-data.service';
 import { ApiTestDataAdminService } from './api-test-data-admin.service';
 import { ApiTestDataUserService } from './api-test-data-user.service';
 
 @Injectable()
 export class ApiTestService {
   constructor(
+    readonly data: ApiTestDataService,
     readonly admin: ApiTestDataAdminService,
     readonly user: ApiTestDataUserService
   ) {}
@@ -130,36 +182,25 @@ export class ApiTestService {
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  8`] = `
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  9`] = `
 "import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class AdminCreateTestInput {
+export class TestAdminCreateInput {
   @Field()
   name!: string;
 }
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  9`] = `
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  10`] = `
 "import { Field, InputType } from '@nestjs/graphql';
 import { PagingInput } from '@proj/api-core-data-access';
 
 @InputType()
-export class AdminFindManyTestInput extends PagingInput() {
+export class TestAdminFindManyInput extends PagingInput() {
   @Field({ nullable: true })
   search?: string;
-}
-"
-`;
-
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  10`] = `
-"import { Field, InputType } from '@nestjs/graphql';
-
-@InputType()
-export class AdminUpdateTestInput {
-  @Field({ nullable: true })
-  name?: string;
 }
 "
 `;
@@ -168,37 +209,48 @@ exports[`api-feature generator should generate the feature libraries with crud f
 "import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class UserCreateTestInput {
-  @Field()
-  name!: string;
-}
-"
-`;
-
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  12`] = `
-"import { Field, InputType } from '@nestjs/graphql';
-import { PagingInput } from '@proj/api-core-data-access';
-
-@InputType()
-export class UserFindManyTestInput extends PagingInput() {
-  @Field({ nullable: true })
-  search?: string;
-}
-"
-`;
-
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  13`] = `
-"import { Field, InputType } from '@nestjs/graphql';
-
-@InputType()
-export class UserUpdateTestInput {
+export class TestAdminUpdateInput {
   @Field({ nullable: true })
   name?: string;
 }
 "
 `;
 
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  12`] = `
+"import { Field, InputType } from '@nestjs/graphql';
+
+@InputType()
+export class TestUserCreateInput {
+  @Field()
+  name!: string;
+}
+"
+`;
+
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  13`] = `
+"import { Field, InputType } from '@nestjs/graphql';
+import { PagingInput } from '@proj/api-core-data-access';
+
+@InputType()
+export class TestUserFindManyInput extends PagingInput() {
+  @Field({ nullable: true })
+  search?: string;
+}
+"
+`;
+
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  14`] = `
+"import { Field, InputType } from '@nestjs/graphql';
+
+@InputType()
+export class TestUserUpdateInput {
+  @Field({ nullable: true })
+  name?: string;
+}
+"
+`;
+
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  15`] = `
 "import { Field, ObjectType } from '@nestjs/graphql';
 import { PagingResponse } from '@proj/api-core-data-access';
 
@@ -220,33 +272,12 @@ export class TestPaging extends PagingResponse<Test>(Test) {}
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  15`] = `
-"import { Prisma } from '@prisma/client';
-import { AdminFindManyTestInput } from '../dto/admin-find-many-test.input';
-
-export function getTestWhereAdminInput(
-  input: AdminFindManyTestInput
-): Prisma.TestWhereInput {
-  const where: Prisma.TestWhereInput = {};
-
-  if (input.search) {
-    where.OR = [
-      { id: { contains: input.search, mode: 'insensitive' } },
-      { name: { contains: input.search, mode: 'insensitive' } },
-    ];
-  }
-
-  return where;
-}
-"
-`;
-
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  16`] = `
 "import { Prisma } from '@prisma/client';
-import { UserFindManyTestInput } from '../dto/user-find-many-test.input';
+import { TestAdminFindManyInput } from '../dto/test-admin-find-many.input';
 
-export function getTestWhereUserInput(
-  input: UserFindManyTestInput
+export function getTestWhereAdminInput(
+  input: TestAdminFindManyInput
 ): Prisma.TestWhereInput {
   const where: Prisma.TestWhereInput = {};
 
@@ -263,22 +294,43 @@ export function getTestWhereUserInput(
 `;
 
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  17`] = `
-"export * from './lib/api-test.feature.module';
+"import { Prisma } from '@prisma/client';
+import { TestUserFindManyInput } from '../dto/test-user-find-many.input';
+
+export function getTestWhereUserInput(
+  input: TestUserFindManyInput
+): Prisma.TestWhereInput {
+  const where: Prisma.TestWhereInput = {};
+
+  if (input.search) {
+    where.OR = [
+      { id: { contains: input.search, mode: 'insensitive' } },
+      { name: { contains: input.search, mode: 'insensitive' } },
+    ];
+  }
+
+  return where;
+}
 "
 `;
 
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  18`] = `
+"export * from './lib/api-test.feature.module';
+"
+`;
+
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  19`] = `
 "import { Resolver } from '@nestjs/graphql';
 import { ApiTestService } from '@proj/api-test-data-access';
 import { ApiAuthGraphQLAdminGuard } from '@proj/api-auth-data-access';
 import { Mutation, Query, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import {
-  AdminCreateTestInput,
-  AdminFindManyTestInput,
+  TestAdminCreateInput,
+  TestAdminFindManyInput,
   Test,
   TestPaging,
-  AdminUpdateTestInput,
+  TestAdminUpdateInput,
 } from '@proj/api-test-data-access';
 
 @Resolver()
@@ -287,7 +339,7 @@ export class ApiTestAdminResolver {
   constructor(private readonly service: ApiTestService) {}
 
   @Mutation(() => Test, { nullable: true })
-  adminCreateTest(@Args('input') input: AdminCreateTestInput) {
+  adminCreateTest(@Args('input') input: TestAdminCreateInput) {
     return this.service.admin.createTest(input);
   }
 
@@ -297,7 +349,7 @@ export class ApiTestAdminResolver {
   }
 
   @Query(() => TestPaging)
-  adminFindManyTest(@Args('input') input: AdminFindManyTestInput) {
+  adminFindManyTest(@Args('input') input: TestAdminFindManyInput) {
     return this.service.admin.findManyTest(input);
   }
 
@@ -309,7 +361,7 @@ export class ApiTestAdminResolver {
   @Mutation(() => Test, { nullable: true })
   adminUpdateTest(
     @Args('testId') testId: string,
-    @Args('input') input: AdminUpdateTestInput
+    @Args('input') input: TestAdminUpdateInput
   ) {
     return this.service.admin.updateTest(testId, input);
   }
@@ -317,18 +369,18 @@ export class ApiTestAdminResolver {
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  19`] = `
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  20`] = `
 "import { Resolver } from '@nestjs/graphql';
 import { ApiTestService } from '@proj/api-test-data-access';
 import { ApiAuthGraphQLUserGuard } from '@proj/api-auth-data-access';
 import { Mutation, Query, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import {
-  UserCreateTestInput,
-  UserFindManyTestInput,
+  TestUserCreateInput,
+  TestUserFindManyInput,
   Test,
   TestPaging,
-  UserUpdateTestInput,
+  TestUserUpdateInput,
 } from '@proj/api-test-data-access';
 
 @Resolver()
@@ -337,7 +389,7 @@ export class ApiTestUserResolver {
   constructor(private readonly service: ApiTestService) {}
 
   @Mutation(() => Test, { nullable: true })
-  userCreateTest(@Args('input') input: UserCreateTestInput) {
+  userCreateTest(@Args('input') input: TestUserCreateInput) {
     return this.service.user.createTest(input);
   }
 
@@ -347,7 +399,7 @@ export class ApiTestUserResolver {
   }
 
   @Query(() => TestPaging)
-  userFindManyTest(@Args('input') input: UserFindManyTestInput) {
+  userFindManyTest(@Args('input') input: TestUserFindManyInput) {
     return this.service.user.findManyTest(input);
   }
 
@@ -359,7 +411,7 @@ export class ApiTestUserResolver {
   @Mutation(() => Test, { nullable: true })
   userUpdateTest(
     @Args('testId') testId: string,
-    @Args('input') input: UserUpdateTestInput
+    @Args('input') input: TestUserUpdateInput
   ) {
     return this.service.user.updateTest(testId, input);
   }
@@ -367,7 +419,7 @@ export class ApiTestUserResolver {
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  20`] = `
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  21`] = `
 "import { Module } from '@nestjs/common';
 import { ApiTestDataAccessModule } from '@proj/api-test-data-access';
 import { ApiTestResolver } from './api-test.resolver';
@@ -382,7 +434,7 @@ export class ApiTestFeatureModule {}
 "
 `;
 
-exports[`api-feature generator should generate the feature libraries with crud for admin and user  21`] = `
+exports[`api-feature generator should generate the feature libraries with crud for admin and user  22`] = `
 "import { Resolver } from '@nestjs/graphql';
 import { ApiTestService } from '@proj/api-test-data-access';
 import { Test } from '@proj/api-test-data-access';
@@ -397,7 +449,6 @@ export class ApiTestResolver {
 exports[`api-feature generator should generate the minimal feature libraries 3`] = `
 "export * from './lib/api-test.data-access.module';
 export * from './lib/api-test.service';
-export * from './lib/entity/test.entity';
 "
 `;
 

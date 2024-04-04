@@ -1,0 +1,16 @@
+import { Field, InputType } from '@nestjs/graphql'
+import { PagingInput } from '@<%= npmScope %>/<%= app.fileName %>-core-data-access'
+
+@InputType()
+export class <%= model.className %><%= actor.className %>FindManyInput extends PagingInput() {
+<% if(!parent && ownerId && actor.className === 'Admin'){ %>
+  @Field()
+  <%= ownerId %>!: string
+<% } %>
+<% if(parent){ %>
+  @Field()
+  <%= parentId %>!: string
+<% } %>
+  @Field({ nullable: true })
+  search?: string
+}

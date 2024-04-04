@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "WebFeature",
+  "$id": "WebFeatureGeneratorSchema",
   "title": "",
   "type": "object",
   "properties": {
@@ -12,6 +12,18 @@
         "$source": "argv",
         "index": 0
       }
+    },
+    "modelOwnerId": {
+      "type": "string",
+      "description": "The id field linked to the User model for this feature. Generally 'userId' or 'ownerId'."
+    },
+    "modelParentId": {
+      "type": "string",
+      "description": "The id field of the parent model for this feature."
+    },
+    "modelParent": {
+      "type": "string",
+      "description": "The name of the parent model for this feature."
     },
     "app": {
       "type": "string",
@@ -37,10 +49,10 @@
       "description": "Do not create a feature library for this feature.",
       "default": false
     },
-    "skipUtil": {
+    "skipUi": {
       "type": "boolean",
-      "description": "Do not create a util library for this feature.",
-      "default": true
+      "description": "Do not create a ui library for this feature.",
+      "default": false
     }
   },
   "required": ["model"]

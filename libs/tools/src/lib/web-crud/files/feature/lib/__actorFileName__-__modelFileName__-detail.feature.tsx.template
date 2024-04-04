@@ -1,11 +1,12 @@
 import { Group } from '@mantine/core'
-import { UiBack, UiDebugModal, UiError, UiLoader, UiPage, UiTabRoutes } from '@pubkey-ui/core'
+import { UiBack, UiDebugModal, UiError, UiLoader, <% if(ownerId && actor.className === 'Admin'){ %>UiStack<% } else { %>UiPage<% } %>, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { use<%= actor.className %>FindOne<%= model.className %> } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-data-access'
+import { <%= model.className %>UiItem } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-ui'
 import { useParams } from 'react-router-dom'
 import { <%= actor.className %><%= model.className %>DetailInfoTab } from './<%= actor.propertyName %>-<%= model.fileName %>-detail-info.tab'
 import { <%= actor.className %><%= model.className %>DetailSettingsTab } from './<%= actor.propertyName %>-<%= model.fileName %>-detail-settings.tab'
 
-export function <%= actor.className %><%= model.className %>DetailFeature() {
+export default function <%= actor.className %><%= model.className %>DetailFeature() {
   const { <%= model.propertyName %>Id } = useParams<{ <%= model.propertyName %>Id: string }>() as { <%= model.propertyName %>Id: string }
   const { item, query } = use<%= actor.className %>FindOne<%= model.className %>({ <%= model.propertyName %>Id })
 
@@ -16,9 +17,30 @@ export function <%= actor.className %><%= model.className %>DetailFeature() {
     return <UiError message="<%= model.className %> not found." />
   }
 
+  const tabs: UiTabRoute[] = [
+    {
+      path: 'info',
+      label: 'Info',
+      element: <<%= actor.className %><%= model.className %>DetailInfoTab <%= model.propertyName %>Id={<%= model.propertyName %>Id} />,
+    },
+    {
+      path: 'settings',
+      label: 'Settings',
+      element: <<%= actor.className %><%= model.className %>DetailSettingsTab <%= model.propertyName %>Id={<%= model.propertyName %>Id} />,
+    },
+  ]
+
   return (
+    <% if(ownerId && actor.className === 'Admin'){ %>
+      <UiStack>
+        <Group>
+          <UiBack />
+          <<%= model.className %>UiItem <%= model.propertyName %>={item} />
+          <UiDebugModal data={item} />
+        </Group>
+    <% } else { %>
     <UiPage
-      title={<Group>{item.<%= label.propertyName %>}</Group> }
+      title={<<%= model.className %>UiItem <%= model.propertyName %>={item} />}
       leftAction={<UiBack />}
       rightAction={
         <Group>
@@ -26,20 +48,12 @@ export function <%= actor.className %><%= model.className %>DetailFeature() {
         </Group>
       }
     >
-      <UiTabRoutes
-        tabs={[
-          {
-            path: 'info',
-            label: 'Info',
-            element: <<%= actor.className %><%= model.className %>DetailInfoTab <%= model.propertyName %>Id={<%= model.propertyName %>Id} />,
-          },
-          {
-            path: 'settings',
-            label: 'Settings',
-            element: <<%= actor.className %><%= model.className %>DetailSettingsTab <%= model.propertyName %>Id={<%= model.propertyName %>Id} />,
-          },
-        ]}
-      />
+    <% } %>
+      <UiTabRoutes tabs={tabs} />
+    <% if(ownerId && actor.className === 'Admin'){ %>
+    </UiStack>
+    <% } else { %>
     </UiPage>
+    <% } %>
   )
 }
