@@ -1,0 +1,10 @@
+query solanaGetBalance($account: String!) {
+  balance: solanaGetBalance(account: $account)
+}
+query solanaGetTokenAccounts($account: String!) {
+  items: solanaGetTokenAccounts(account: $account)
+}
+
+query solanaGetTransactions($account: String!) {
+  items: solanaGetTransactions(account: $account)
+}

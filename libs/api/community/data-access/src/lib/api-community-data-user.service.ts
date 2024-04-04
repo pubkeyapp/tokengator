@@ -20,7 +20,7 @@ export class ApiCommunityDataUserService {
 
   async findManyCommunity(input: UserFindManyCommunityInput): Promise<CommunityPaging> {
     return this.data.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: getCommunityWhereUserInput(input),
       limit: input.limit,
       page: input.page,

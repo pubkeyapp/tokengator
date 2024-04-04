@@ -15,7 +15,7 @@ export class ApiCommunityDataAdminService {
 
   async findManyCommunity(input: AdminFindManyCommunityInput): Promise<CommunityPaging> {
     return this.data.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: getCommunityWhereAdminInput(input),
       limit: input.limit,
       page: input.page,

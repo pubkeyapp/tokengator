@@ -4,6 +4,7 @@ fragment WalletDetails on Wallet {
   name
   publicKey
   updatedAt
+  communityId
 }
 
 query adminFindManyWallet($input: WalletAdminFindManyInput!) {

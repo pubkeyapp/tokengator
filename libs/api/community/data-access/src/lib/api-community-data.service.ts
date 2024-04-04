@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { CommunityMemberRole, Prisma } from '@prisma/client'
+import { Keypair } from '@solana/web3.js'
 import { ApiCoreService, PagingInputFields, slugifyId } from '@tokengator-mint/api-core-data-access'
 import { CommunityPaging } from './entity/community.entity'
 
@@ -7,11 +8,21 @@ import { CommunityPaging } from './entity/community.entity'
 export class ApiCommunityDataService {
   constructor(private readonly core: ApiCoreService) {}
   async create(data: Omit<Prisma.CommunityUncheckedCreateInput, 'slug'>, userId?: string) {
+    const kp = Keypair.generate()
     return this.core.data.community.create({
       data: {
         ...data,
         slug: slugifyId(data.name).toLowerCase(),
         members: userId ? { create: [{ userId, role: CommunityMemberRole.Admin }] } : data.members,
+        wallets: data.wallets
+          ? data.wallets
+          : {
+              create: {
+                name: 'Fee Payer',
+                publicKey: kp.publicKey.toBase58(),
+                secretKey: JSON.stringify(Array.from(kp.secretKey)),
+              },
+            },
       },
     })
   }

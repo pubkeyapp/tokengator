@@ -567,6 +567,9 @@ export type Query = {
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
   me?: Maybe<User>
+  solanaGetBalance?: Maybe<Scalars['String']['output']>
+  solanaGetTokenAccounts?: Maybe<Scalars['JSON']['output']>
+  solanaGetTransactions?: Maybe<Scalars['JSON']['output']>
   uptime: Scalars['Float']['output']
   userFindManyCommunity: CommunityPaging
   userFindManyCommunityMember: CommunityMemberPaging
@@ -656,6 +659,18 @@ export type QueryAnonFindOneCommunityArgs = {
 
 export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
+}
+
+export type QuerySolanaGetBalanceArgs = {
+  account: Scalars['String']['input']
+}
+
+export type QuerySolanaGetTokenAccountsArgs = {
+  account: Scalars['String']['input']
+}
+
+export type QuerySolanaGetTransactionsArgs = {
+  account: Scalars['String']['input']
 }
 
 export type QueryUserFindManyCommunityArgs = {
@@ -850,6 +865,7 @@ export type VerifyIdentityChallengeInput = {
 
 export type Wallet = {
   __typename?: 'Wallet'
+  communityId?: Maybe<Scalars['String']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
   name: Scalars['String']['output']
@@ -2263,6 +2279,24 @@ export type UserFindManyPriceQuery = {
   }>
 }
 
+export type SolanaGetBalanceQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type SolanaGetBalanceQuery = { __typename?: 'Query'; balance?: string | null }
+
+export type SolanaGetTokenAccountsQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type SolanaGetTokenAccountsQuery = { __typename?: 'Query'; items?: any | null }
+
+export type SolanaGetTransactionsQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type SolanaGetTransactionsQuery = { __typename?: 'Query'; items?: any | null }
+
 export type UserDetailsFragment = {
   __typename?: 'User'
   avatarUrl?: string | null
@@ -2477,6 +2511,7 @@ export type WalletDetailsFragment = {
   name: string
   publicKey: string
   updatedAt?: Date | null
+  communityId?: string | null
 }
 
 export type AdminFindManyWalletQueryVariables = Exact<{
@@ -2494,6 +2529,7 @@ export type AdminFindManyWalletQuery = {
       name: string
       publicKey: string
       updatedAt?: Date | null
+      communityId?: string | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -2521,6 +2557,7 @@ export type AdminFindOneWalletQuery = {
     name: string
     publicKey: string
     updatedAt?: Date | null
+    communityId?: string | null
   } | null
 }
 
@@ -2537,6 +2574,7 @@ export type AdminCreateWalletMutation = {
     name: string
     publicKey: string
     updatedAt?: Date | null
+    communityId?: string | null
   } | null
 }
 
@@ -2554,6 +2592,7 @@ export type AdminUpdateWalletMutation = {
     name: string
     publicKey: string
     updatedAt?: Date | null
+    communityId?: string | null
   } | null
 }
 
@@ -2578,6 +2617,7 @@ export type UserFindManyWalletQuery = {
       name: string
       publicKey: string
       updatedAt?: Date | null
+      communityId?: string | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -2605,6 +2645,7 @@ export type UserFindOneWalletQuery = {
     name: string
     publicKey: string
     updatedAt?: Date | null
+    communityId?: string | null
   } | null
 }
 
@@ -2621,6 +2662,7 @@ export type UserCreateWalletMutation = {
     name: string
     publicKey: string
     updatedAt?: Date | null
+    communityId?: string | null
   } | null
 }
 
@@ -2638,6 +2680,7 @@ export type UserUpdateWalletMutation = {
     name: string
     publicKey: string
     updatedAt?: Date | null
+    communityId?: string | null
   } | null
 }
 
@@ -2790,6 +2833,7 @@ export const WalletDetailsFragmentDoc = gql`
     name
     publicKey
     updatedAt
+    communityId
   }
 `
 export const LoginDocument = gql`
@@ -3309,6 +3353,21 @@ export const UserFindManyPriceDocument = gql`
   }
   ${PriceDetailsFragmentDoc}
 `
+export const SolanaGetBalanceDocument = gql`
+  query solanaGetBalance($account: String!) {
+    balance: solanaGetBalance(account: $account)
+  }
+`
+export const SolanaGetTokenAccountsDocument = gql`
+  query solanaGetTokenAccounts($account: String!) {
+    items: solanaGetTokenAccounts(account: $account)
+  }
+`
+export const SolanaGetTransactionsDocument = gql`
+  query solanaGetTransactions($account: String!) {
+    items: solanaGetTransactions(account: $account)
+  }
+`
 export const AdminCreateUserDocument = gql`
   mutation adminCreateUser($input: AdminCreateUserInput!) {
     created: adminCreateUser(input: $input) {
@@ -3542,6 +3601,9 @@ const AdminCreatePriceDocumentString = print(AdminCreatePriceDocument)
 const AdminUpdatePriceDocumentString = print(AdminUpdatePriceDocument)
 const AdminDeletePriceDocumentString = print(AdminDeletePriceDocument)
 const UserFindManyPriceDocumentString = print(UserFindManyPriceDocument)
+const SolanaGetBalanceDocumentString = print(SolanaGetBalanceDocument)
+const SolanaGetTokenAccountsDocumentString = print(SolanaGetTokenAccountsDocument)
+const SolanaGetTransactionsDocumentString = print(SolanaGetTransactionsDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -4806,6 +4868,69 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userFindManyPrice',
+        'query',
+        variables,
+      )
+    },
+    solanaGetBalance(
+      variables: SolanaGetBalanceQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: SolanaGetBalanceQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<SolanaGetBalanceQuery>(SolanaGetBalanceDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'solanaGetBalance',
+        'query',
+        variables,
+      )
+    },
+    solanaGetTokenAccounts(
+      variables: SolanaGetTokenAccountsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: SolanaGetTokenAccountsQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<SolanaGetTokenAccountsQuery>(SolanaGetTokenAccountsDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'solanaGetTokenAccounts',
+        'query',
+        variables,
+      )
+    },
+    solanaGetTransactions(
+      variables: SolanaGetTransactionsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: SolanaGetTransactionsQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<SolanaGetTransactionsQuery>(SolanaGetTransactionsDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'solanaGetTransactions',
         'query',
         variables,
       )

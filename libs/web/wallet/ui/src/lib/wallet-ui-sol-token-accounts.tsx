@@ -1,20 +1,19 @@
 import { ActionIcon, Button, Group, Loader, Table, Text } from '@mantine/core'
 import { UiError, UiInfo, UiStack } from '@pubkey-ui/core'
-import { PublicKey } from '@solana/web3.js'
+import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
-import { ellipsify } from '@tokengator-mint/sdk'
-import { useGetTokenAccounts } from '@tokengator-mint/web-solana-data-access'
+import { ellipsify, Wallet } from '@tokengator-mint/sdk'
+import { useSolanaGetTokenAccounts } from '@tokengator-mint/web-solana-data-access'
+import { SolanaUiExplorerLink } from '@tokengator-mint/web-solana-ui'
 import { useMemo, useState } from 'react'
-import { SolanaUiAccountTokenBalance } from './solana-ui-account-token-balance'
 
-import { SolanaUiExplorerLink } from './solana-ui-explorer-link'
+export function WalletUiSolTokenAccounts({ wallet }: { wallet: Wallet }) {
+  const query = useSolanaGetTokenAccounts({ account: wallet.publicKey })
 
-export function SolanaUiAccountTokens({ address }: { address: PublicKey }) {
   const [showAll, setShowAll] = useState(false)
-  const query = useGetTokenAccounts({ address })
   const client = useQueryClient()
-  const items = useMemo(() => {
+  const items: { account: AccountInfo<ParsedAccountData>; pubkey: PublicKey }[] = useMemo(() => {
     if (showAll) return query.data
     return query.data?.slice(0, 5)
   }, [query.data, showAll])
@@ -33,7 +32,7 @@ export function SolanaUiAccountTokens({ address }: { address: PublicKey }) {
                 onClick={async () => {
                   await query.refetch()
                   await client.invalidateQueries({
-                    queryKey: ['solanaGetBalance'],
+                    queryKey: ['getTokenAccountBalance'],
                   })
                 }}
               >
@@ -83,9 +82,7 @@ export function SolanaUiAccountTokens({ address }: { address: PublicKey }) {
                             path={`account/${account.data.parsed.info.mint.toString()}`}
                           />
                         </Table.Td>
-                        <Table.Td align="right">
-                          <SolanaUiAccountTokenBalance ff="monospace" address={pubkey} />
-                        </Table.Td>
+                        <Table.Td align="right">{account.data.parsed.info.tokenAmount.uiAmount} </Table.Td>
                       </Table.Tr>
                     ))}
 

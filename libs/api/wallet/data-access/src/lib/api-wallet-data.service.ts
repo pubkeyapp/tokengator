@@ -21,6 +21,7 @@ export class ApiWalletDataService {
         secretKey: JSON.stringify(Array.from(kp.secretKey)),
         name,
         publicKey,
+        communityId: input.communityId,
       },
     })
   }

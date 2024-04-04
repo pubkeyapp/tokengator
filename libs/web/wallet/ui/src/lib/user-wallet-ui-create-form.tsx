@@ -14,7 +14,12 @@ export function UserWalletUiCreateForm({ submit }: { submit: (res: WalletUserCre
   return (
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
-        <TextInput name="secretKey" label="secretKey" {...form.getInputProps('secretKey')} />
+        <TextInput
+          name="secretKey"
+          label="Secret"
+          description="Add the byte array of the secret key. Leave empty to generate a new key."
+          {...form.getInputProps('secretKey')}
+        />
         <Group justify="right">
           <Button type="submit">Save</Button>
         </Group>

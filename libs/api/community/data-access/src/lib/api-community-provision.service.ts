@@ -129,6 +129,21 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
       ],
     },
   },
+  {
+    name: 'COLOSSEUM',
+    description: `Powering online Solana hackathons, accelerating winners & investing in breakout crypto startups.🏟️`,
+    imageUrl: 'https://pbs.twimg.com/profile_images/1684566200662233092/BZzDPr5q_400x400.jpg',
+    wallets: {
+      create: [
+        {
+          name: 'Fee Payer',
+          publicKey: 'CLSMpWGGvmjh9qFoLtANu2gts3frcrNr2J4XEPoFvQi2',
+          secretKey:
+            '[172,236,240,133,3,153,43,108,116,65,138,10,92,241,146,193,31,113,94,213,116,167,89,137,204,233,119,92,232,8,216,9,168,107,67,216,45,228,124,94,213,148,190,81,30,168,9,180,158,112,154,224,189,227,6,7,19,25,18,103,56,132,85,111]',
+        },
+      ],
+    },
+  },
 ]
 
 @Injectable()
@@ -146,7 +161,7 @@ export class ApiCommunityProvisionService {
   }
 
   private async provisionCommunities() {
-    await Promise.all(provisionCommunities.map((user) => this.provisionCommunity(user)))
+    await Promise.all(provisionCommunities.map((item) => this.provisionCommunity(item)))
   }
 
   private async provisionCommunity(input: ProvisionCommunityInput) {

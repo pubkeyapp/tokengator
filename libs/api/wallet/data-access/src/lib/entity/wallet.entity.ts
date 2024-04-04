@@ -13,6 +13,8 @@ export class Wallet {
   name!: string
   @Field()
   publicKey!: string
+  @Field({ nullable: true })
+  communityId?: string | null
 }
 
 @ObjectType()

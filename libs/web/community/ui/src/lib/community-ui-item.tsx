@@ -1,5 +1,5 @@
 import { AvatarProps, Group, type GroupProps, Stack, Text } from '@mantine/core'
-import { UiAnchor, type UiAnchorProps } from '@pubkey-ui/core'
+import { UiAnchor, type UiAnchorProps, UiStack } from '@pubkey-ui/core'
 import { Community } from '@tokengator-mint/sdk'
 import { CommunityUiAvatar } from './community-ui-avatar'
 
@@ -19,18 +19,20 @@ export function CommunityUiItem({
   if (!community) return null
 
   return (
-    <UiAnchor to={to ?? undefined} underline="never" {...anchorProps}>
-      <Group gap="sm" {...groupProps}>
-        <CommunityUiAvatar community={community} {...avatarProps} />
-        <Stack gap={0}>
-          <Text size="lg" fw={500}>
-            {community?.name}
-          </Text>
-          <Text c="dimmed" size="xs">
-            {community?.description}
-          </Text>
-        </Stack>
-      </Group>
-    </UiAnchor>
+    <UiStack>
+      <UiAnchor to={to ?? undefined} underline="never" {...anchorProps}>
+        <Group gap="sm" {...groupProps}>
+          <CommunityUiAvatar community={community} {...avatarProps} />
+          <Stack gap={0}>
+            <Text size="lg" fw={500}>
+              {community?.name}
+            </Text>
+          </Stack>
+        </Group>
+      </UiAnchor>
+      <Text c="dimmed" size="xs">
+        {community?.description}
+      </Text>
+    </UiStack>
   )
 }

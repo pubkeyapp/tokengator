@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { getMint, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
+import { getMint, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { TokenMetadata } from '@solana/spl-token-metadata'
 import { AccountInfo, Connection, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ApiCoreService, CORE_APP_STARTED } from '@tokengator-mint/api-core-data-access'
@@ -58,5 +58,21 @@ export class ApiSolanaService {
     }
 
     return metadata.state
+  }
+
+  async getBalance(account: string) {
+    return this.connection.getBalance(new PublicKey(account))
+  }
+
+  async getTokenAccounts(account: string) {
+    const [tokenAccounts, token2022Accounts] = await Promise.all([
+      this.connection.getParsedTokenAccountsByOwner(new PublicKey(account), { programId: TOKEN_PROGRAM_ID }),
+      this.connection.getParsedTokenAccountsByOwner(new PublicKey(account), { programId: TOKEN_2022_PROGRAM_ID }),
+    ])
+    return [...tokenAccounts.value, ...token2022Accounts.value]
+  }
+
+  async getTransactions(account: string) {
+    return this.connection.getConfirmedSignaturesForAddress2(new PublicKey(account), { limit: 50 })
   }
 }

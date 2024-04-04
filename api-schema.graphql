@@ -363,6 +363,9 @@ type Query {
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
   me: User
+  solanaGetBalance(account: String!): String
+  solanaGetTokenAccounts(account: String!): JSON
+  solanaGetTransactions(account: String!): JSON
   uptime: Float!
   userFindManyCommunity(input: UserFindManyCommunityInput!): CommunityPaging!
   userFindManyCommunityMember(input: UserFindManyCommunityMemberInput!): CommunityMemberPaging!
@@ -507,6 +510,7 @@ input VerifyIdentityChallengeInput {
 }
 
 type Wallet {
+  communityId: String
   createdAt: DateTime
   id: String!
   name: String!

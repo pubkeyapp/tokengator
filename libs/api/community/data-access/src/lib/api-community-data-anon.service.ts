@@ -10,7 +10,7 @@ export class ApiCommunityDataAnonService {
 
   async findManyCommunity(input: AnonFindManyCommunityInput): Promise<CommunityPaging> {
     return this.data.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: getCommunityWhereAnonInput(input),
       limit: input.limit,
       page: input.page,
