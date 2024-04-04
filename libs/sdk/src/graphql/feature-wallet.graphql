@@ -1,0 +1,73 @@
+fragment WalletDetails on Wallet {
+  createdAt
+  id
+  name
+  publicKey
+  updatedAt
+}
+
+query adminFindManyWallet($input: WalletAdminFindManyInput!) {
+  paging: adminFindManyWallet(input: $input) {
+    data {
+      ...WalletDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminFindOneWallet($walletId: String!) {
+  item: adminFindOneWallet(walletId: $walletId) {
+    ...WalletDetails
+  }
+}
+
+mutation adminCreateWallet($input: WalletAdminCreateInput!) {
+  created: adminCreateWallet(input: $input) {
+    ...WalletDetails
+  }
+}
+
+mutation adminUpdateWallet($walletId: String!, $input: WalletAdminUpdateInput!) {
+  updated: adminUpdateWallet(walletId: $walletId, input: $input) {
+    ...WalletDetails
+  }
+}
+
+mutation adminDeleteWallet($walletId: String!) {
+  deleted: adminDeleteWallet(walletId: $walletId)
+}
+
+query userFindManyWallet($input: WalletUserFindManyInput!) {
+  paging: userFindManyWallet(input: $input) {
+    data {
+      ...WalletDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query userFindOneWallet($walletId: String!) {
+  item: userFindOneWallet(walletId: $walletId) {
+    ...WalletDetails
+  }
+}
+
+mutation userCreateWallet($input: WalletUserCreateInput!) {
+  created: userCreateWallet(input: $input) {
+    ...WalletDetails
+  }
+}
+
+mutation userUpdateWallet($walletId: String!, $input: WalletUserUpdateInput!) {
+  updated: userUpdateWallet(walletId: $walletId, input: $input) {
+    ...WalletDetails
+  }
+}
+
+mutation userDeleteWallet($walletId: String!) {
+  deleted: userDeleteWallet(walletId: $walletId)
+}

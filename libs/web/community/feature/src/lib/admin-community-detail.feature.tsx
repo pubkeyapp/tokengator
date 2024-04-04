@@ -4,6 +4,7 @@ import { useAdminFindOneCommunity } from '@tokengator-mint/web-community-data-ac
 import { AdminCommunityMemberFeature } from '@tokengator-mint/web-community-member-feature'
 import { CommunityUiItem } from '@tokengator-mint/web-community-ui'
 import { AdminMintFeature } from '@tokengator-mint/web-mint-feature'
+import { AdminWalletFeature } from '@tokengator-mint/web-wallet-feature'
 import { useParams } from 'react-router-dom'
 import { AdminCommunityDetailInfoTab } from './admin-community-detail-info.tab'
 import { AdminCommunityDetailSettingsTab } from './admin-community-detail-settings.tab'
@@ -38,6 +39,7 @@ export function AdminCommunityDetailFeature() {
           },
           { path: 'mints', label: 'Mints', element: <AdminMintFeature communityId={communityId} /> },
           { path: 'members', label: 'Members', element: <AdminCommunityMemberFeature communityId={communityId} /> },
+          { path: 'wallets', label: 'Wallets', element: <AdminWalletFeature communityId={communityId} /> },
           {
             path: 'settings',
             label: 'Settings',

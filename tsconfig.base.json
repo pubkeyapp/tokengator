@@ -40,6 +40,8 @@
       "@tokengator-mint/api-solana-util": ["libs/api/solana/util/src/index.ts"],
       "@tokengator-mint/api-user-data-access": ["libs/api/user/data-access/src/index.ts"],
       "@tokengator-mint/api-user-feature": ["libs/api/user/feature/src/index.ts"],
+      "@tokengator-mint/api-wallet-data-access": ["libs/api/wallet/data-access/src/index.ts"],
+      "@tokengator-mint/api-wallet-feature": ["libs/api/wallet/feature/src/index.ts"],
       "@tokengator-mint/sdk": ["libs/sdk/src/index.ts"],
       "@tokengator-mint/tools": ["libs/tools/src/index.ts"],
       "@tokengator-mint/web-auth-data-access": ["libs/web/auth/data-access/src/index.ts"],
@@ -73,7 +75,10 @@
       "@tokengator-mint/web-solana-ui": ["libs/web/solana/ui/src/index.ts"],
       "@tokengator-mint/web-user-data-access": ["libs/web/user/data-access/src/index.ts"],
       "@tokengator-mint/web-user-feature": ["libs/web/user/feature/src/index.ts"],
-      "@tokengator-mint/web-user-ui": ["libs/web/user/ui/src/index.ts"]
+      "@tokengator-mint/web-user-ui": ["libs/web/user/ui/src/index.ts"],
+      "@tokengator-mint/web-wallet-data-access": ["libs/web/wallet/data-access/src/index.ts"],
+      "@tokengator-mint/web-wallet-feature": ["libs/web/wallet/feature/src/index.ts"],
+      "@tokengator-mint/web-wallet-ui": ["libs/web/wallet/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

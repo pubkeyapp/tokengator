@@ -219,6 +219,7 @@ type Mutation {
   adminCreatePreset(input: PresetAdminCreateInput!): Preset
   adminCreatePrice(input: PriceAdminCreateInput!): Price
   adminCreateUser(input: AdminCreateUserInput!): User
+  adminCreateWallet(input: WalletAdminCreateInput!): Wallet
   adminDeleteCommunity(communityId: String!): Boolean
   adminDeleteCommunityMember(communityMemberId: String!): Boolean
   adminDeleteIdentity(identityId: String!): Boolean
@@ -226,12 +227,14 @@ type Mutation {
   adminDeletePreset(presetId: String!): Boolean
   adminDeletePrice(priceId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
+  adminDeleteWallet(walletId: String!): Boolean
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateCommunityMember(communityMemberId: String!, input: AdminUpdateCommunityMemberInput!): CommunityMember
   adminUpdateMint(input: AdminUpdateMintInput!, mintId: String!): Mint
   adminUpdatePreset(input: PresetAdminUpdateInput!, presetId: String!): Preset
   adminUpdatePrice(input: PriceAdminUpdateInput!, priceId: String!): Price
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
+  adminUpdateWallet(input: WalletAdminUpdateInput!, walletId: String!): Wallet
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
@@ -239,16 +242,19 @@ type Mutation {
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
   userCreateMint(input: UserCreateMintInput!): Mint
+  userCreateWallet(input: WalletUserCreateInput!): Wallet
   userDeleteCommunity(communityId: String!): Boolean
   userDeleteCommunityMember(communityMemberId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
   userDeleteMint(mintId: String!): Boolean
+  userDeleteWallet(walletId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
   userMintToIdentity(identityId: String!, mintId: String!): JSON
   userUpdateCommunity(communityId: String!, input: UserUpdateCommunityInput!): Community
   userUpdateCommunityMember(communityMemberId: String!, input: UserUpdateCommunityMemberInput!): CommunityMember
   userUpdateMint(input: UserUpdateMintInput!, mintId: String!): Mint
   userUpdateUser(input: UserUpdateUserInput!): User
+  userUpdateWallet(input: WalletUserUpdateInput!, walletId: String!): Wallet
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
 
@@ -344,12 +350,14 @@ type Query {
   adminFindManyPreset(input: PresetAdminFindManyInput!): PresetPaging!
   adminFindManyPrice(input: PriceAdminFindManyInput!): [Price!]!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
+  adminFindManyWallet(input: WalletAdminFindManyInput!): WalletPaging!
   adminFindOneCommunity(communityId: String!): Community
   adminFindOneCommunityMember(communityMemberId: String!): CommunityMember
   adminFindOneMint(mintId: String!): Mint
   adminFindOnePreset(presetId: String!): Preset
   adminFindOnePrice(priceId: String!): Price
   adminFindOneUser(userId: String!): User
+  adminFindOneWallet(walletId: String!): Wallet
   anonFindManyCommunity(input: AnonFindManyCommunityInput!): CommunityPaging!
   anonFindOneCommunity(slug: String!): Community
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
@@ -363,11 +371,13 @@ type Query {
   userFindManyPreset(input: PresetUserFindManyInput!): PresetPaging!
   userFindManyPrice(input: PriceUserFindManyInput!): [Price!]!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
+  userFindManyWallet(input: WalletUserFindManyInput!): WalletPaging!
   userFindOneCommunity(slug: String!): Community
   userFindOneCommunityMember(communityMemberId: String!): CommunityMember
   userFindOneMint(mintId: String!): Mint
   userFindOnePreset(presetId: String!): Preset
   userFindOneUser(username: String!): User
+  userFindOneWallet(walletId: String!): Wallet
   userGetMintAccount(mintId: String!): JSON
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
@@ -494,4 +504,49 @@ input VerifyIdentityChallengeInput {
   providerId: String!
   signature: String!
   useLedger: Boolean = false
+}
+
+type Wallet {
+  createdAt: DateTime
+  id: String!
+  name: String!
+  publicKey: String!
+  updatedAt: DateTime
+}
+
+input WalletAdminCreateInput {
+  communityId: String!
+  secretKey: String
+}
+
+input WalletAdminFindManyInput {
+  communityId: String!
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input WalletAdminUpdateInput {
+  name: String
+}
+
+type WalletPaging {
+  data: [Wallet!]!
+  meta: PagingMeta!
+}
+
+input WalletUserCreateInput {
+  communityId: String!
+  secretKey: String
+}
+
+input WalletUserFindManyInput {
+  communityId: String!
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input WalletUserUpdateInput {
+  name: String
 }

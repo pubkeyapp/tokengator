@@ -33,7 +33,7 @@ function getCommunityMint({
   }
 }
 
-const items: ProvisionCommunityMintInput[] = [
+const deanslistItems: ProvisionCommunityMintInput[] = [
   {
     name: 'Citizenship',
     symbol: 'DLCI',
@@ -99,7 +99,35 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
         { userId: 'deanmachine', role: CommunityMemberRole.Admin },
       ],
     },
-    mints: { create: items.map(getCommunityMint) },
+    wallets: {
+      create: [
+        {
+          name: 'Fee Payer',
+          publicKey: 'DLDxrkwTR3EvmZGWZ4DobcnQ8RANT8KvcpnLxdQnRVF9',
+          secretKey:
+            '[208,91,162,44,42,142,129,176,159,210,93,219,116,198,243,41,198,62,79,229,11,214,156,146,183,65,37,112,91,156,104,166,183,56,239,149,134,14,20,234,100,138,46,38,75,50,172,37,167,239,15,246,249,31,123,155,158,208,166,17,188,35,111,148]',
+        },
+      ],
+    },
+    mints: { create: deanslistItems.map(getCommunityMint) },
+  },
+  {
+    name: 'PubKey',
+    description: 'The PubKey Community',
+    imageUrl: 'https://avatars.githubusercontent.com/u/125477168?v=4',
+    members: {
+      create: [{ userId: 'beeman', role: CommunityMemberRole.Admin }],
+    },
+    wallets: {
+      create: [
+        {
+          name: 'Fee Payer',
+          publicKey: 'PUBKX8Sv9tnQ9aJ85HqJUdmYJuy7VKoukYeNhXd7jYc',
+          secretKey:
+            '[166,235,136,99,90,201,134,87,79,70,57,226,248,4,209,10,59,173,53,196,41,37,191,187,220,103,97,142,154,137,244,235,5,193,130,10,92,178,160,158,239,84,253,48,150,59,48,130,37,177,165,83,131,175,247,42,156,20,230,138,188,229,120,129]',
+        },
+      ],
+    },
   },
 ]
 
