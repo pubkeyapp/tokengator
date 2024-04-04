@@ -1,0 +1,58 @@
+fragment PresetDetails on Preset {
+  createdAt
+  id
+  name
+  description
+
+  updatedAt
+}
+
+query adminFindManyPreset($input: PresetAdminFindManyInput!) {
+  paging: adminFindManyPreset(input: $input) {
+    data {
+      ...PresetDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminFindOnePreset($presetId: String!) {
+  item: adminFindOnePreset(presetId: $presetId) {
+    ...PresetDetails
+  }
+}
+
+mutation adminCreatePreset($input: PresetAdminCreateInput!) {
+  created: adminCreatePreset(input: $input) {
+    ...PresetDetails
+  }
+}
+
+mutation adminUpdatePreset($presetId: String!, $input: PresetAdminUpdateInput!) {
+  updated: adminUpdatePreset(presetId: $presetId, input: $input) {
+    ...PresetDetails
+  }
+}
+
+mutation adminDeletePreset($presetId: String!) {
+  deleted: adminDeletePreset(presetId: $presetId)
+}
+
+query userFindManyPreset($input: PresetUserFindManyInput!) {
+  paging: userFindManyPreset(input: $input) {
+    data {
+      ...PresetDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query userFindOnePreset($presetId: String!) {
+  item: userFindOnePreset(presetId: $presetId) {
+    ...PresetDetails
+  }
+}

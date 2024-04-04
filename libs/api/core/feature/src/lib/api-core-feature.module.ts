@@ -10,6 +10,7 @@ import { ApiCommunityFeatureModule } from '@tokengator-mint/api-community-featur
 import { ApiCommunityMemberFeatureModule } from '@tokengator-mint/api-community-member-feature'
 import { ApiSolanaFeatureModule } from '@tokengator-mint/api-solana-feature'
 import { ApiMetadataFeatureModule } from '@tokengator-mint/api-metadata-feature'
+import { ApiPresetFeatureModule } from '@tokengator-mint/api-preset-feature'
 
 const imports = [
   // The api-feature generator will add the imports here
@@ -22,6 +23,7 @@ const imports = [
   ApiCommunityMemberFeatureModule,
   ApiSolanaFeatureModule,
   ApiMetadataFeatureModule,
+  ApiPresetFeatureModule,
 ]
 
 @Module({

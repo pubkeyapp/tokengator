@@ -78,6 +78,14 @@ model Mint {
   communityId String
 }
 
+model Preset {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+}
+
 model User {
   id          String            @id @default(cuid())
   createdAt   DateTime          @default(now())

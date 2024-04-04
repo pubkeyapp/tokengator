@@ -230,15 +230,18 @@ export type Mutation = {
   __typename?: 'Mutation'
   adminCreateCommunityMember?: Maybe<CommunityMember>
   adminCreateIdentity?: Maybe<Identity>
+  adminCreatePreset?: Maybe<Preset>
   adminCreateUser?: Maybe<User>
   adminDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteMint?: Maybe<Scalars['Boolean']['output']>
+  adminDeletePreset?: Maybe<Scalars['Boolean']['output']>
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
   adminUpdateCommunity?: Maybe<Community>
   adminUpdateCommunityMember?: Maybe<CommunityMember>
   adminUpdateMint?: Maybe<Mint>
+  adminUpdatePreset?: Maybe<Preset>
   adminUpdateUser?: Maybe<User>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   login?: Maybe<User>
@@ -268,6 +271,10 @@ export type MutationAdminCreateIdentityArgs = {
   input: AdminCreateIdentityInput
 }
 
+export type MutationAdminCreatePresetArgs = {
+  input: PresetAdminCreateInput
+}
+
 export type MutationAdminCreateUserArgs = {
   input: AdminCreateUserInput
 }
@@ -288,6 +295,10 @@ export type MutationAdminDeleteMintArgs = {
   mintId: Scalars['String']['input']
 }
 
+export type MutationAdminDeletePresetArgs = {
+  presetId: Scalars['String']['input']
+}
+
 export type MutationAdminDeleteUserArgs = {
   userId: Scalars['String']['input']
 }
@@ -305,6 +316,11 @@ export type MutationAdminUpdateCommunityMemberArgs = {
 export type MutationAdminUpdateMintArgs = {
   input: AdminUpdateMintInput
   mintId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdatePresetArgs = {
+  input: PresetAdminUpdateInput
+  presetId: Scalars['String']['input']
 }
 
 export type MutationAdminUpdateUserArgs = {
@@ -395,16 +411,55 @@ export type PagingMeta = {
   totalCount?: Maybe<Scalars['Int']['output']>
 }
 
+export type Preset = {
+  __typename?: 'Preset'
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['String']['output']
+  name: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+}
+
+export type PresetAdminCreateInput = {
+  description?: InputMaybe<Scalars['String']['input']>
+  name: Scalars['String']['input']
+}
+
+export type PresetAdminFindManyInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type PresetAdminUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+}
+
+export type PresetPaging = {
+  __typename?: 'PresetPaging'
+  data: Array<Preset>
+  meta: PagingMeta
+}
+
+export type PresetUserFindManyInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type Query = {
   __typename?: 'Query'
   adminFindManyCommunity: CommunityPaging
   adminFindManyCommunityMember: CommunityMemberPaging
   adminFindManyIdentity?: Maybe<Array<Identity>>
   adminFindManyMint: MintPaging
+  adminFindManyPreset: PresetPaging
   adminFindManyUser: UserPaging
   adminFindOneCommunity?: Maybe<Community>
   adminFindOneCommunityMember?: Maybe<CommunityMember>
   adminFindOneMint?: Maybe<Mint>
+  adminFindOnePreset?: Maybe<Preset>
   adminFindOneUser?: Maybe<User>
   anonFindManyCommunity: CommunityPaging
   anonFindOneCommunity?: Maybe<Community>
@@ -416,10 +471,12 @@ export type Query = {
   userFindManyCommunityMember: CommunityMemberPaging
   userFindManyIdentity?: Maybe<Array<Identity>>
   userFindManyMint: MintPaging
+  userFindManyPreset: PresetPaging
   userFindManyUser: UserPaging
   userFindOneCommunity?: Maybe<Community>
   userFindOneCommunityMember?: Maybe<CommunityMember>
   userFindOneMint?: Maybe<Mint>
+  userFindOnePreset?: Maybe<Preset>
   userFindOneUser?: Maybe<User>
   userGetMintAccount?: Maybe<Scalars['JSON']['output']>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
@@ -441,6 +498,10 @@ export type QueryAdminFindManyMintArgs = {
   input: AdminFindManyMintInput
 }
 
+export type QueryAdminFindManyPresetArgs = {
+  input: PresetAdminFindManyInput
+}
+
 export type QueryAdminFindManyUserArgs = {
   input: AdminFindManyUserInput
 }
@@ -455,6 +516,10 @@ export type QueryAdminFindOneCommunityMemberArgs = {
 
 export type QueryAdminFindOneMintArgs = {
   mintId: Scalars['String']['input']
+}
+
+export type QueryAdminFindOnePresetArgs = {
+  presetId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneUserArgs = {
@@ -489,6 +554,10 @@ export type QueryUserFindManyMintArgs = {
   input: UserFindManyMintInput
 }
 
+export type QueryUserFindManyPresetArgs = {
+  input: PresetUserFindManyInput
+}
+
 export type QueryUserFindManyUserArgs = {
   input: UserFindManyUserInput
 }
@@ -503,6 +572,10 @@ export type QueryUserFindOneCommunityMemberArgs = {
 
 export type QueryUserFindOneMintArgs = {
   mintId: Scalars['String']['input']
+}
+
+export type QueryUserFindOnePresetArgs = {
+  presetId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneUserArgs = {
@@ -1739,6 +1812,144 @@ export type AdminDeleteMintMutationVariables = Exact<{
 
 export type AdminDeleteMintMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
+export type PresetDetailsFragment = {
+  __typename?: 'Preset'
+  createdAt?: Date | null
+  id: string
+  name: string
+  description?: string | null
+  updatedAt?: Date | null
+}
+
+export type AdminFindManyPresetQueryVariables = Exact<{
+  input: PresetAdminFindManyInput
+}>
+
+export type AdminFindManyPresetQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'PresetPaging'
+    data: Array<{
+      __typename?: 'Preset'
+      createdAt?: Date | null
+      id: string
+      name: string
+      description?: string | null
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOnePresetQueryVariables = Exact<{
+  presetId: Scalars['String']['input']
+}>
+
+export type AdminFindOnePresetQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Preset'
+    createdAt?: Date | null
+    id: string
+    name: string
+    description?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminCreatePresetMutationVariables = Exact<{
+  input: PresetAdminCreateInput
+}>
+
+export type AdminCreatePresetMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Preset'
+    createdAt?: Date | null
+    id: string
+    name: string
+    description?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdatePresetMutationVariables = Exact<{
+  presetId: Scalars['String']['input']
+  input: PresetAdminUpdateInput
+}>
+
+export type AdminUpdatePresetMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Preset'
+    createdAt?: Date | null
+    id: string
+    name: string
+    description?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeletePresetMutationVariables = Exact<{
+  presetId: Scalars['String']['input']
+}>
+
+export type AdminDeletePresetMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type UserFindManyPresetQueryVariables = Exact<{
+  input: PresetUserFindManyInput
+}>
+
+export type UserFindManyPresetQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'PresetPaging'
+    data: Array<{
+      __typename?: 'Preset'
+      createdAt?: Date | null
+      id: string
+      name: string
+      description?: string | null
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOnePresetQueryVariables = Exact<{
+  presetId: Scalars['String']['input']
+}>
+
+export type UserFindOnePresetQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Preset'
+    createdAt?: Date | null
+    id: string
+    name: string
+    description?: string | null
+    updatedAt?: Date | null
+  } | null
+}
+
 export type UserDetailsFragment = {
   __typename?: 'User'
   avatarUrl?: string | null
@@ -2045,6 +2256,15 @@ export const MintDetailsFragmentDoc = gql`
     decimals
     imageUrl
     publicKey
+    updatedAt
+  }
+`
+export const PresetDetailsFragmentDoc = gql`
+  fragment PresetDetails on Preset {
+    createdAt
+    id
+    name
+    description
     updatedAt
   }
 `
@@ -2455,6 +2675,71 @@ export const AdminDeleteMintDocument = gql`
     deleted: adminDeleteMint(mintId: $mintId)
   }
 `
+export const AdminFindManyPresetDocument = gql`
+  query adminFindManyPreset($input: PresetAdminFindManyInput!) {
+    paging: adminFindManyPreset(input: $input) {
+      data {
+        ...PresetDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${PresetDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOnePresetDocument = gql`
+  query adminFindOnePreset($presetId: String!) {
+    item: adminFindOnePreset(presetId: $presetId) {
+      ...PresetDetails
+    }
+  }
+  ${PresetDetailsFragmentDoc}
+`
+export const AdminCreatePresetDocument = gql`
+  mutation adminCreatePreset($input: PresetAdminCreateInput!) {
+    created: adminCreatePreset(input: $input) {
+      ...PresetDetails
+    }
+  }
+  ${PresetDetailsFragmentDoc}
+`
+export const AdminUpdatePresetDocument = gql`
+  mutation adminUpdatePreset($presetId: String!, $input: PresetAdminUpdateInput!) {
+    updated: adminUpdatePreset(presetId: $presetId, input: $input) {
+      ...PresetDetails
+    }
+  }
+  ${PresetDetailsFragmentDoc}
+`
+export const AdminDeletePresetDocument = gql`
+  mutation adminDeletePreset($presetId: String!) {
+    deleted: adminDeletePreset(presetId: $presetId)
+  }
+`
+export const UserFindManyPresetDocument = gql`
+  query userFindManyPreset($input: PresetUserFindManyInput!) {
+    paging: userFindManyPreset(input: $input) {
+      data {
+        ...PresetDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${PresetDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOnePresetDocument = gql`
+  query userFindOnePreset($presetId: String!) {
+    item: userFindOnePreset(presetId: $presetId) {
+      ...PresetDetails
+    }
+  }
+  ${PresetDetailsFragmentDoc}
+`
 export const AdminCreateUserDocument = gql`
   mutation adminCreateUser($input: AdminCreateUserInput!) {
     created: adminCreateUser(input: $input) {
@@ -2589,6 +2874,13 @@ const AdminFindManyMintDocumentString = print(AdminFindManyMintDocument)
 const AdminFindOneMintDocumentString = print(AdminFindOneMintDocument)
 const AdminUpdateMintDocumentString = print(AdminUpdateMintDocument)
 const AdminDeleteMintDocumentString = print(AdminDeleteMintDocument)
+const AdminFindManyPresetDocumentString = print(AdminFindManyPresetDocument)
+const AdminFindOnePresetDocumentString = print(AdminFindOnePresetDocument)
+const AdminCreatePresetDocumentString = print(AdminCreatePresetDocument)
+const AdminUpdatePresetDocumentString = print(AdminUpdatePresetDocument)
+const AdminDeletePresetDocumentString = print(AdminDeletePresetDocument)
+const UserFindManyPresetDocumentString = print(UserFindManyPresetDocument)
+const UserFindOnePresetDocumentString = print(UserFindOnePresetDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -3574,6 +3866,153 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    adminFindManyPreset(
+      variables: AdminFindManyPresetQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyPresetQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyPresetQuery>(AdminFindManyPresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyPreset',
+        'query',
+        variables,
+      )
+    },
+    adminFindOnePreset(
+      variables: AdminFindOnePresetQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOnePresetQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOnePresetQuery>(AdminFindOnePresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOnePreset',
+        'query',
+        variables,
+      )
+    },
+    adminCreatePreset(
+      variables: AdminCreatePresetMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreatePresetMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreatePresetMutation>(AdminCreatePresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreatePreset',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdatePreset(
+      variables: AdminUpdatePresetMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdatePresetMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdatePresetMutation>(AdminUpdatePresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdatePreset',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeletePreset(
+      variables: AdminDeletePresetMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeletePresetMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeletePresetMutation>(AdminDeletePresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeletePreset',
+        'mutation',
+        variables,
+      )
+    },
+    userFindManyPreset(
+      variables: UserFindManyPresetQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyPresetQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyPresetQuery>(UserFindManyPresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyPreset',
+        'query',
+        variables,
+      )
+    },
+    userFindOnePreset(
+      variables: UserFindOnePresetQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOnePresetQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOnePresetQuery>(UserFindOnePresetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOnePreset',
+        'query',
+        variables,
+      )
+    },
     adminCreateUser(
       variables: AdminCreateUserMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -3885,6 +4324,36 @@ export function LoginInputSchema(): z.ZodObject<Properties<LoginInput>> {
   return z.object({
     password: z.string(),
     username: z.string(),
+  })
+}
+
+export function PresetAdminCreateInputSchema(): z.ZodObject<Properties<PresetAdminCreateInput>> {
+  return z.object({
+    description: z.string().nullish(),
+    name: z.string(),
+  })
+}
+
+export function PresetAdminFindManyInputSchema(): z.ZodObject<Properties<PresetAdminFindManyInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function PresetAdminUpdateInputSchema(): z.ZodObject<Properties<PresetAdminUpdateInput>> {
+  return z.object({
+    description: z.string().nullish(),
+    name: z.string().nullish(),
+  })
+}
+
+export function PresetUserFindManyInputSchema(): z.ZodObject<Properties<PresetUserFindManyInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
   })
 }
 

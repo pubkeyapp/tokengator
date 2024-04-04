@@ -87,6 +87,7 @@ export class ApiMetadataService {
       const { name, symbol, description, external_url } = defaults()
 
       if (metadata) {
+        // The metadata is external, fetch it and return
         if (!metadata.state.uri.startsWith(this.core.config.apiUrl)) {
           // We have external metadata
           const externalMetadata = await this.externalMetadataCache.fetch(metadata.state.uri)
@@ -105,6 +106,7 @@ export class ApiMetadataService {
           }
         }
 
+        // The metadata is on the account, return it
         return {
           name: metadata.state.name ?? name,
           symbol: metadata.state.symbol ?? symbol,

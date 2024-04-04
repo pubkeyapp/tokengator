@@ -25,6 +25,7 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
           toggle={toggle}
           links={[
             { link: '/dashboard', label: 'Dashboard' },
+            { link: '/presets', label: 'Presets' },
             { link: '/c', label: 'Communities' },
           ]}
           profile={

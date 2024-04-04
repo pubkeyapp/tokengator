@@ -1,6 +1,7 @@
 import { UiContainer, UiDashboardGrid, UiDashboardItem } from '@pubkey-ui/core'
-import { IconSettings, IconUsers, IconUsersGroup } from '@tabler/icons-react'
+import { IconAdjustmentsX, IconSettings, IconUsersGroup } from '@tabler/icons-react'
 import { UserCommunityFeature } from '@tokengator-mint/web-community-feature'
+import { UserPresetFeature } from '@tokengator-mint/web-preset-feature'
 import { SettingsFeature } from '@tokengator-mint/web-settings-feature'
 import { SolanaFeature } from '@tokengator-mint/web-solana-feature'
 import { UserFeature } from '@tokengator-mint/web-user-feature'
@@ -10,7 +11,7 @@ const links: UiDashboardItem[] = [
   // User Dashboard Links are added by the web-crud generator
   { label: 'Communities', icon: IconUsersGroup, to: '/c' },
   { label: 'Settings', icon: IconSettings, to: '/settings' },
-  { label: 'Users', icon: IconUsers, to: '/u' },
+  { label: 'Presets', icon: IconAdjustmentsX, to: '/presets' },
 ]
 
 const routes: RouteObject[] = [
@@ -20,6 +21,7 @@ const routes: RouteObject[] = [
   { path: '/solana/*', element: <SolanaFeature /> },
   { path: '/u/*', element: <UserFeature /> },
   { path: '/c/*', element: <UserCommunityFeature /> },
+  { path: '/presets/*', element: <UserPresetFeature /> },
 ]
 
 export default function WebCoreRoutesUser() {

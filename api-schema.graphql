@@ -208,15 +208,18 @@ type MintPaging {
 type Mutation {
   adminCreateCommunityMember(input: AdminCreateCommunityMemberInput!): CommunityMember
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
+  adminCreatePreset(input: PresetAdminCreateInput!): Preset
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteCommunity(communityId: String!): Boolean
   adminDeleteCommunityMember(communityMemberId: String!): Boolean
   adminDeleteIdentity(identityId: String!): Boolean
   adminDeleteMint(mintId: String!): Boolean
+  adminDeletePreset(presetId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateCommunityMember(communityMemberId: String!, input: AdminUpdateCommunityMemberInput!): CommunityMember
   adminUpdateMint(input: AdminUpdateMintInput!, mintId: String!): Mint
+  adminUpdatePreset(input: PresetAdminUpdateInput!, presetId: String!): Preset
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
@@ -248,15 +251,52 @@ type PagingMeta {
   totalCount: Int
 }
 
+type Preset {
+  createdAt: DateTime
+  description: String
+  id: String!
+  name: String!
+  updatedAt: DateTime
+}
+
+input PresetAdminCreateInput {
+  description: String
+  name: String!
+}
+
+input PresetAdminFindManyInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input PresetAdminUpdateInput {
+  description: String
+  name: String
+}
+
+type PresetPaging {
+  data: [Preset!]!
+  meta: PagingMeta!
+}
+
+input PresetUserFindManyInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
 type Query {
   adminFindManyCommunity(input: AdminFindManyCommunityInput!): CommunityPaging!
   adminFindManyCommunityMember(input: AdminFindManyCommunityMemberInput!): CommunityMemberPaging!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
   adminFindManyMint(input: AdminFindManyMintInput!): MintPaging!
+  adminFindManyPreset(input: PresetAdminFindManyInput!): PresetPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
   adminFindOneCommunity(communityId: String!): Community
   adminFindOneCommunityMember(communityMemberId: String!): CommunityMember
   adminFindOneMint(mintId: String!): Mint
+  adminFindOnePreset(presetId: String!): Preset
   adminFindOneUser(userId: String!): User
   anonFindManyCommunity(input: AnonFindManyCommunityInput!): CommunityPaging!
   anonFindOneCommunity(slug: String!): Community
@@ -268,10 +308,12 @@ type Query {
   userFindManyCommunityMember(input: UserFindManyCommunityMemberInput!): CommunityMemberPaging!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
   userFindManyMint(input: UserFindManyMintInput!): MintPaging!
+  userFindManyPreset(input: PresetUserFindManyInput!): PresetPaging!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
   userFindOneCommunity(slug: String!): Community
   userFindOneCommunityMember(communityMemberId: String!): CommunityMember
   userFindOneMint(mintId: String!): Mint
+  userFindOnePreset(presetId: String!): Preset
   userFindOneUser(username: String!): User
   userGetMintAccount(mintId: String!): JSON
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
