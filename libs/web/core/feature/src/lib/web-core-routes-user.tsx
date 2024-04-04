@@ -12,6 +12,7 @@ const links: UiDashboardItem[] = [
   { label: 'Communities', icon: IconUsersGroup, to: '/c' },
   { label: 'Settings', icon: IconSettings, to: '/settings' },
   { label: 'Presets', icon: IconAdjustmentsX, to: '/presets' },
+  { label: 'Prices', icon: IconSettings, to: '/prices' },
 ]
 
 const routes: RouteObject[] = [

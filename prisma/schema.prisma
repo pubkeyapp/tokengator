@@ -84,6 +84,22 @@ model Preset {
   updatedAt   DateTime @updatedAt
   name        String
   description String?
+  prices      Price[]
+}
+
+model Price {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  preset    Preset   @relation(fields: [presetId], references: [id], onDelete: Cascade)
+  presetId  String
+  name      String
+  mint      String
+  days      Int
+  assets    Int
+  price     String
+  currency  String
+  active    Boolean  @default(true)
 }
 
 model User {

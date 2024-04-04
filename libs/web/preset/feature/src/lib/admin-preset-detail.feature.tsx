@@ -2,6 +2,7 @@ import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiError, UiLoader, UiPage, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { useAdminFindOnePreset } from '@tokengator-mint/web-preset-data-access'
 import { PresetUiItem } from '@tokengator-mint/web-preset-ui'
+import { AdminPriceFeature } from '@tokengator-mint/web-price-feature'
 import { useParams } from 'react-router-dom'
 import { AdminPresetDetailInfoTab } from './admin-preset-detail-info.tab'
 import { AdminPresetDetailSettingsTab } from './admin-preset-detail-settings.tab'
@@ -22,6 +23,11 @@ export default function AdminPresetDetailFeature() {
       path: 'info',
       label: 'Info',
       element: <AdminPresetDetailInfoTab presetId={presetId} />,
+    },
+    {
+      path: 'prices',
+      label: 'Prices',
+      element: <AdminPriceFeature presetId={presetId} />,
     },
     {
       path: 'settings',

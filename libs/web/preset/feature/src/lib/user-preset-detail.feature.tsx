@@ -2,6 +2,7 @@ import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiError, UiLoader, UiPage, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { useUserFindOnePreset } from '@tokengator-mint/web-preset-data-access'
 import { PresetUiItem } from '@tokengator-mint/web-preset-ui'
+import { UserPriceFeature } from '@tokengator-mint/web-price-feature'
 import { useParams } from 'react-router-dom'
 import { UserPresetDetailInfoTab } from './user-preset-detail-info.tab'
 
@@ -21,6 +22,11 @@ export default function UserPresetDetailFeature() {
       path: 'info',
       label: 'Info',
       element: <UserPresetDetailInfoTab presetId={presetId} />,
+    },
+    {
+      path: 'prices',
+      label: 'Prices',
+      element: <UserPriceFeature presetId={presetId} />,
     },
   ]
 

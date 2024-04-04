@@ -1,0 +1,41 @@
+fragment PriceDetails on Price {
+  createdAt
+  id
+  name
+  mint
+  price
+  currency
+  active
+  days
+  assets
+  presetId
+  updatedAt
+}
+
+query adminFindManyPrice($input: PriceAdminFindManyInput!) {
+  items: adminFindManyPrice(input: $input) {
+    ...PriceDetails
+  }
+}
+
+mutation adminCreatePrice($input: PriceAdminCreateInput!) {
+  created: adminCreatePrice(input: $input) {
+    ...PriceDetails
+  }
+}
+
+mutation adminUpdatePrice($priceId: String!, $input: PriceAdminUpdateInput!) {
+  updated: adminUpdatePrice(priceId: $priceId, input: $input) {
+    ...PriceDetails
+  }
+}
+
+mutation adminDeletePrice($priceId: String!) {
+  deleted: adminDeletePrice(priceId: $priceId)
+}
+
+query userFindManyPrice($input: PriceUserFindManyInput!) {
+  items: userFindManyPrice(input: $input) {
+    ...PriceDetails
+  }
+}

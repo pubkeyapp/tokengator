@@ -1,0 +1,7 @@
+export * from './lib/api-price.data-access.module'
+export * from './lib/api-price.service'
+export * from './lib/entity/price.entity'
+export * from './lib/dto/price-admin-create.input'
+export * from './lib/dto/price-admin-find-many.input'
+export * from './lib/dto/price-admin-update.input'
+export * from './lib/dto/price-user-find-many.input'

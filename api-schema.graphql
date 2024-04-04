@@ -209,17 +209,20 @@ type Mutation {
   adminCreateCommunityMember(input: AdminCreateCommunityMemberInput!): CommunityMember
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreatePreset(input: PresetAdminCreateInput!): Preset
+  adminCreatePrice(input: PriceAdminCreateInput!): Price
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteCommunity(communityId: String!): Boolean
   adminDeleteCommunityMember(communityMemberId: String!): Boolean
   adminDeleteIdentity(identityId: String!): Boolean
   adminDeleteMint(mintId: String!): Boolean
   adminDeletePreset(presetId: String!): Boolean
+  adminDeletePrice(priceId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateCommunityMember(communityMemberId: String!, input: AdminUpdateCommunityMemberInput!): CommunityMember
   adminUpdateMint(input: AdminUpdateMintInput!, mintId: String!): Mint
   adminUpdatePreset(input: PresetAdminUpdateInput!, presetId: String!): Preset
+  adminUpdatePrice(input: PriceAdminUpdateInput!, priceId: String!): Price
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
@@ -286,12 +289,56 @@ input PresetUserFindManyInput {
   search: String
 }
 
+type Price {
+  active: Boolean!
+  assets: Int!
+  createdAt: DateTime
+  currency: String!
+  days: Int!
+  id: String!
+  mint: String!
+  name: String!
+  preset: Preset
+  presetId: String!
+  price: String!
+  updatedAt: DateTime
+}
+
+input PriceAdminCreateInput {
+  assets: Int!
+  currency: String!
+  days: Int!
+  mint: String!
+  name: String!
+  presetId: String!
+  price: String!
+}
+
+input PriceAdminFindManyInput {
+  presetId: String!
+}
+
+input PriceAdminUpdateInput {
+  active: Boolean
+  assets: Int!
+  currency: String
+  days: Int!
+  mint: String
+  name: String
+  price: String
+}
+
+input PriceUserFindManyInput {
+  presetId: String!
+}
+
 type Query {
   adminFindManyCommunity(input: AdminFindManyCommunityInput!): CommunityPaging!
   adminFindManyCommunityMember(input: AdminFindManyCommunityMemberInput!): CommunityMemberPaging!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
   adminFindManyMint(input: AdminFindManyMintInput!): MintPaging!
   adminFindManyPreset(input: PresetAdminFindManyInput!): PresetPaging!
+  adminFindManyPrice(input: PriceAdminFindManyInput!): [Price!]!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
   adminFindOneCommunity(communityId: String!): Community
   adminFindOneCommunityMember(communityMemberId: String!): CommunityMember
@@ -309,6 +356,7 @@ type Query {
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
   userFindManyMint(input: UserFindManyMintInput!): MintPaging!
   userFindManyPreset(input: PresetUserFindManyInput!): PresetPaging!
+  userFindManyPrice(input: PriceUserFindManyInput!): [Price!]!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
   userFindOneCommunity(slug: String!): Community
   userFindOneCommunityMember(communityMemberId: String!): CommunityMember
