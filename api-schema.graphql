@@ -134,10 +134,11 @@ type CommunityPaging {
 }
 
 type Currency {
+  address: String!
   decimals: Int!
   id: String
-  mint: String!
   name: String!
+  programId: String!
   symbol: String!
 }
 
@@ -239,6 +240,7 @@ type Mutation {
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
+  solanaRequestAirdrop(account: String!): JSON
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
   userCreateMint(input: UserCreateMintInput!): Mint

@@ -32,12 +32,13 @@ model CommunityMember {
 }
 
 model Currency {
-  id       String  @id @default(cuid())
-  name     String
-  mint     String
-  symbol   String  @unique
-  decimals Int
-  prices   Price[]
+  id        String  @id @default(cuid())
+  name      String
+  address   String
+  programId String
+  symbol    String  @unique
+  decimals  Int
+  prices    Price[]
 }
 
 model Identity {

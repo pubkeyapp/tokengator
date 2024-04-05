@@ -162,10 +162,11 @@ export type CommunityPaging = {
 
 export type Currency = {
   __typename?: 'Currency'
+  address: Scalars['String']['output']
   decimals: Scalars['Int']['output']
   id?: Maybe<Scalars['String']['output']>
-  mint: Scalars['String']['output']
   name: Scalars['String']['output']
+  programId: Scalars['String']['output']
   symbol: Scalars['String']['output']
 }
 
@@ -262,6 +263,7 @@ export type Mutation = {
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
+  solanaRequestAirdrop?: Maybe<Scalars['JSON']['output']>
   userCreateCommunity?: Maybe<Community>
   userCreateCommunityMember?: Maybe<CommunityMember>
   userCreateMint?: Maybe<Mint>
@@ -384,6 +386,10 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   input: RegisterInput
+}
+
+export type MutationSolanaRequestAirdropArgs = {
+  account: Scalars['String']['input']
 }
 
 export type MutationUserCreateCommunityArgs = {
@@ -1571,7 +1577,8 @@ export type AppConfigDetailsFragment = {
 export type CurrencyDetailsFragment = {
   __typename?: 'Currency'
   decimals: number
-  mint: string
+  address: string
+  programId: string
   name: string
   symbol: string
 }
@@ -1611,7 +1618,14 @@ export type CurrenciesQueryVariables = Exact<{ [key: string]: never }>
 
 export type CurrenciesQuery = {
   __typename?: 'Query'
-  items: Array<{ __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string }>
+  items: Array<{
+    __typename?: 'Currency'
+    decimals: number
+    address: string
+    programId: string
+    name: string
+    symbol: string
+  }>
 }
 
 export type IdentityDetailsFragment = {
@@ -2225,7 +2239,14 @@ export type PriceDetailsFragment = {
   assets: number
   presetId: string
   updatedAt?: Date | null
-  currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+  currency?: {
+    __typename?: 'Currency'
+    decimals: number
+    address: string
+    programId: string
+    name: string
+    symbol: string
+  } | null
 }
 
 export type AdminFindManyPriceQueryVariables = Exact<{
@@ -2245,7 +2266,14 @@ export type AdminFindManyPriceQuery = {
     assets: number
     presetId: string
     updatedAt?: Date | null
-    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+    currency?: {
+      __typename?: 'Currency'
+      decimals: number
+      address: string
+      programId: string
+      name: string
+      symbol: string
+    } | null
   }>
 }
 
@@ -2266,7 +2294,14 @@ export type AdminFindOnePriceQuery = {
     assets: number
     presetId: string
     updatedAt?: Date | null
-    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+    currency?: {
+      __typename?: 'Currency'
+      decimals: number
+      address: string
+      programId: string
+      name: string
+      symbol: string
+    } | null
   } | null
 }
 
@@ -2287,7 +2322,14 @@ export type AdminCreatePriceMutation = {
     assets: number
     presetId: string
     updatedAt?: Date | null
-    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+    currency?: {
+      __typename?: 'Currency'
+      decimals: number
+      address: string
+      programId: string
+      name: string
+      symbol: string
+    } | null
   } | null
 }
 
@@ -2309,7 +2351,14 @@ export type AdminUpdatePriceMutation = {
     assets: number
     presetId: string
     updatedAt?: Date | null
-    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+    currency?: {
+      __typename?: 'Currency'
+      decimals: number
+      address: string
+      programId: string
+      name: string
+      symbol: string
+    } | null
   } | null
 }
 
@@ -2336,7 +2385,14 @@ export type UserFindManyPriceQuery = {
     assets: number
     presetId: string
     updatedAt?: Date | null
-    currency?: { __typename?: 'Currency'; decimals: number; mint: string; name: string; symbol: string } | null
+    currency?: {
+      __typename?: 'Currency'
+      decimals: number
+      address: string
+      programId: string
+      name: string
+      symbol: string
+    } | null
   }>
 }
 
@@ -2865,7 +2921,8 @@ export const PresetDetailsFragmentDoc = gql`
 export const CurrencyDetailsFragmentDoc = gql`
   fragment CurrencyDetails on Currency {
     decimals
-    mint
+    address
+    programId
     name
     symbol
   }

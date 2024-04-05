@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { Prisma } from '@prisma/client'
 import { ApiCoreService, CORE_APP_STARTED, slugifyId } from '@tokengator-mint/api-core-data-access'
-import { MINT_USDC } from '@tokengator-mint/api-solana-util'
+import { MINT_EURC, MINT_USDC } from '@tokengator-mint/api-solana-util'
 import { provisionPresets } from './api-preset-provision-data'
 import { PRESET_PROVISIONED } from './api-preset.events'
 
@@ -25,7 +25,10 @@ export class ApiPresetProvisionService {
     const count = await this.core.data.currency.count()
     if (count < 1) {
       await this.core.data.currency.createMany({
-        data: [{ id: 'USDC', ...MINT_USDC }],
+        data: [
+          { id: MINT_EURC.symbol, ...MINT_EURC },
+          { id: MINT_USDC.symbol, ...MINT_USDC },
+        ],
       })
     }
   }

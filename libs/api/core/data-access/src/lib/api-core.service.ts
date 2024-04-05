@@ -28,6 +28,10 @@ export class ApiCoreService {
     return this.findUsername(newUsername)
   }
 
+  async getCurrencies() {
+    return this.data.currency.findMany({ orderBy: { name: 'asc' } })
+  }
+
   uptime() {
     return process.uptime()
   }

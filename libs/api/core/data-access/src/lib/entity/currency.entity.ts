@@ -7,7 +7,9 @@ export class Currency {
   @Field()
   name!: string
   @Field()
-  mint!: string
+  address!: string
+  @Field()
+  programId!: string
   @Field()
   symbol!: string
   @Field(() => Int)

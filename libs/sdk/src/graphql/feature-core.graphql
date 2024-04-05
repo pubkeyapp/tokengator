@@ -10,7 +10,8 @@ fragment AppConfigDetails on AppConfig {
 
 fragment CurrencyDetails on Currency {
   decimals
-  mint
+  address
+  programId
   name
   symbol
 }

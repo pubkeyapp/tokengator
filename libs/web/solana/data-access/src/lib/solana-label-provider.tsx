@@ -13,7 +13,7 @@ export function SolanaLabelProvider({ children }: { children: ReactNode }) {
   const currencyQuery = useCurrencies()
   const map = new Map<string, string>()
   currencyQuery.data?.forEach((currency) => {
-    map.set(currency.mint, currency.symbol)
+    map.set(currency.address, currency.symbol)
   })
   const value: SolanaLabelProviderContext = {
     map,
