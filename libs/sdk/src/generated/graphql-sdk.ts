@@ -265,6 +265,7 @@ export type Mutation = {
   userCreateCommunity?: Maybe<Community>
   userCreateCommunityMember?: Maybe<CommunityMember>
   userCreateMint?: Maybe<Mint>
+  userCreateMintFromMinter?: Maybe<Scalars['String']['output']>
   userCreateMintFromPreset?: Maybe<Scalars['String']['output']>
   userCreateWallet?: Maybe<Wallet>
   userDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
@@ -395,6 +396,11 @@ export type MutationUserCreateCommunityMemberArgs = {
 
 export type MutationUserCreateMintArgs = {
   input: UserCreateMintInput
+}
+
+export type MutationUserCreateMintFromMinterArgs = {
+  account: Scalars['String']['input']
+  communityId: Scalars['String']['input']
 }
 
 export type MutationUserCreateMintFromPresetArgs = {
@@ -593,6 +599,9 @@ export type Query = {
   userFindOneUser?: Maybe<User>
   userFindOneWallet?: Maybe<Wallet>
   userGetMintAccount?: Maybe<Scalars['JSON']['output']>
+  userGetMinter: Scalars['JSON']['output']
+  userGetMinterAssets: Scalars['JSON']['output']
+  userGetMinters: Scalars['JSON']['output']
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
 }
 
@@ -738,6 +747,14 @@ export type QueryUserFindOneWalletArgs = {
 
 export type QueryUserGetMintAccountArgs = {
   mintId: Scalars['String']['input']
+}
+
+export type QueryUserGetMinterArgs = {
+  account: Scalars['String']['input']
+}
+
+export type QueryUserGetMinterAssetsArgs = {
+  account: Scalars['String']['input']
 }
 
 export type QueryUserRequestIdentityChallengeArgs = {
@@ -2167,12 +2184,35 @@ export type UserFindOnePresetQuery = {
   } | null
 }
 
+export type UserGetMintersQueryVariables = Exact<{ [key: string]: never }>
+
+export type UserGetMintersQuery = { __typename?: 'Query'; items: any }
+
+export type UserGetMinterQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type UserGetMinterQuery = { __typename?: 'Query'; item: any }
+
+export type UserGetMinterAssetsQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type UserGetMinterAssetsQuery = { __typename?: 'Query'; items: any }
+
 export type UserCreateMintFromPresetMutationVariables = Exact<{
   presetId: Scalars['String']['input']
   communityId: Scalars['String']['input']
 }>
 
 export type UserCreateMintFromPresetMutation = { __typename?: 'Mutation'; minted?: string | null }
+
+export type UserCreateMintFromMinterMutationVariables = Exact<{
+  account: Scalars['String']['input']
+  communityId: Scalars['String']['input']
+}>
+
+export type UserCreateMintFromMinterMutation = { __typename?: 'Mutation'; minted?: string | null }
 
 export type PriceDetailsFragment = {
   __typename?: 'Price'
@@ -3337,9 +3377,29 @@ export const UserFindOnePresetDocument = gql`
   }
   ${PresetDetailsFragmentDoc}
 `
+export const UserGetMintersDocument = gql`
+  query userGetMinters {
+    items: userGetMinters
+  }
+`
+export const UserGetMinterDocument = gql`
+  query userGetMinter($account: String!) {
+    item: userGetMinter(account: $account)
+  }
+`
+export const UserGetMinterAssetsDocument = gql`
+  query userGetMinterAssets($account: String!) {
+    items: userGetMinterAssets(account: $account)
+  }
+`
 export const UserCreateMintFromPresetDocument = gql`
   mutation userCreateMintFromPreset($presetId: String!, $communityId: String!) {
     minted: userCreateMintFromPreset(presetId: $presetId, communityId: $communityId)
+  }
+`
+export const UserCreateMintFromMinterDocument = gql`
+  mutation userCreateMintFromMinter($account: String!, $communityId: String!) {
+    minted: userCreateMintFromMinter(account: $account, communityId: $communityId)
   }
 `
 export const AdminFindManyPriceDocument = gql`
@@ -3630,7 +3690,11 @@ const AdminUpdatePresetDocumentString = print(AdminUpdatePresetDocument)
 const AdminDeletePresetDocumentString = print(AdminDeletePresetDocument)
 const UserFindManyPresetDocumentString = print(UserFindManyPresetDocument)
 const UserFindOnePresetDocumentString = print(UserFindOnePresetDocument)
+const UserGetMintersDocumentString = print(UserGetMintersDocument)
+const UserGetMinterDocumentString = print(UserGetMinterDocument)
+const UserGetMinterAssetsDocumentString = print(UserGetMinterAssetsDocument)
 const UserCreateMintFromPresetDocumentString = print(UserCreateMintFromPresetDocument)
+const UserCreateMintFromMinterDocumentString = print(UserCreateMintFromMinterDocument)
 const AdminFindManyPriceDocumentString = print(AdminFindManyPriceDocument)
 const AdminFindOnePriceDocumentString = print(AdminFindOnePriceDocument)
 const AdminCreatePriceDocumentString = print(AdminCreatePriceDocument)
@@ -4797,6 +4861,69 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    userGetMinters(
+      variables?: UserGetMintersQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserGetMintersQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserGetMintersQuery>(UserGetMintersDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userGetMinters',
+        'query',
+        variables,
+      )
+    },
+    userGetMinter(
+      variables: UserGetMinterQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserGetMinterQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserGetMinterQuery>(UserGetMinterDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userGetMinter',
+        'query',
+        variables,
+      )
+    },
+    userGetMinterAssets(
+      variables: UserGetMinterAssetsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserGetMinterAssetsQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserGetMinterAssetsQuery>(UserGetMinterAssetsDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userGetMinterAssets',
+        'query',
+        variables,
+      )
+    },
     userCreateMintFromPreset(
       variables: UserCreateMintFromPresetMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -4814,6 +4941,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userCreateMintFromPreset',
+        'mutation',
+        variables,
+      )
+    },
+    userCreateMintFromMinter(
+      variables: UserCreateMintFromMinterMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateMintFromMinterMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateMintFromMinterMutation>(UserCreateMintFromMinterDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateMintFromMinter',
         'mutation',
         variables,
       )

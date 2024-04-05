@@ -57,6 +57,22 @@ query userFindOnePreset($presetId: String!) {
   }
 }
 
+query userGetMinters {
+  items: userGetMinters
+}
+
+query userGetMinter($account: String!) {
+  item: userGetMinter(account: $account)
+}
+
+query userGetMinterAssets($account: String!) {
+  items: userGetMinterAssets(account: $account)
+}
+
 mutation userCreateMintFromPreset($presetId: String!, $communityId: String!) {
   minted: userCreateMintFromPreset(presetId: $presetId, communityId: $communityId)
+}
+
+mutation userCreateMintFromMinter($account: String!, $communityId: String!) {
+  minted: userCreateMintFromMinter(account: $account, communityId: $communityId)
 }

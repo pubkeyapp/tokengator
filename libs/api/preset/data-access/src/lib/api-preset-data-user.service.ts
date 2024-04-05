@@ -26,4 +26,21 @@ export class ApiPresetDataUserService {
     // TODO: Check if userId can mint on behalf of communityId
     return this.minter.mintFromPreset(presetId, communityId)
   }
+
+  async createMintFromMinter(userId: string, account: string, communityId: string) {
+    // TODO: Check if userId can mint on behalf of communityId
+    return this.minter.mintFromMinter(account, communityId)
+  }
+
+  async getMinters() {
+    return this.minter.getMinters()
+  }
+
+  async getMinter(account: string) {
+    return this.minter.getMinter(account)
+  }
+
+  async getMinterAssets(account: string) {
+    return this.minter.getMinterAssets(account)
+  }
 }

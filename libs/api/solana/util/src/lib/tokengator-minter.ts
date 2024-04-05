@@ -1,8 +1,13 @@
-import * as anchor from '@coral-xyz/anchor'
+import { Program, Provider } from '@coral-xyz/anchor'
 import { PublicKey } from '@solana/web3.js'
+import {
+  WEN_NEW_STANDARD_PROGRAM_ID,
+  WenNewStandard,
+  WenNewStandardIDL,
+} from './tokengator-minter-sdk/wen-new-standard-exports'
 
-export const PREFIX = new TextEncoder().encode('tokengator_minter')
-export const MINTER = new TextEncoder().encode('minter')
+export const PREFIX = encodeToBuffer('tokengator_minter')
+export const MINTER = encodeToBuffer('minter')
 
 export enum IdentityProvider {
   Discord = 'discord',
@@ -12,22 +17,29 @@ export enum IdentityProvider {
 }
 
 export function getMinterPda({ programId, name }: { name: string; programId: PublicKey }) {
-  return PublicKey.findProgramAddressSync([PREFIX, MINTER, new TextEncoder().encode(name)], programId)
+  return PublicKey.findProgramAddressSync([PREFIX, MINTER, encodeToBuffer(name)], programId)
+}
+
+export function getCommunityPda(name: string, programId: PublicKey) {
+  return PublicKey.findProgramAddressSync([PREFIX, encodeToBuffer('community'), encodeToBuffer(name)], programId)
 }
 
 export function getWNSGroupPda(mint: PublicKey, programId: PublicKey) {
-  const GROUP_ACCOUNT_SEED = anchor.utils.bytes.utf8.encode('group')
-  return PublicKey.findProgramAddressSync([GROUP_ACCOUNT_SEED, mint.toBuffer()], programId)
+  return PublicKey.findProgramAddressSync([encodeToBuffer('group'), mint.toBuffer()], programId)
 }
 
 export function getWNSMemberPda(mint: PublicKey, programId: PublicKey) {
-  const GROUP_ACCOUNT_SEED = anchor.utils.bytes.utf8.encode('member')
-  return PublicKey.findProgramAddressSync([GROUP_ACCOUNT_SEED, mint.toBuffer()], programId)
+  return PublicKey.findProgramAddressSync([encodeToBuffer('member'), mint.toBuffer()], programId)
 }
 
 export function getWNSManagerPda(programId: PublicKey) {
-  const MANAGER_SEED = anchor.utils.bytes.utf8.encode('manager')
-  return PublicKey.findProgramAddressSync([MANAGER_SEED], programId)
+  return PublicKey.findProgramAddressSync([encodeToBuffer('manager')], programId)
 }
 
-export const WNS_PROGRAM_ID = new PublicKey('wns1gDLt8fgLcGhWi5MqAqgXpwEP1JftKE9eZnXS1HM')
+function encodeToBuffer(input: string) {
+  return new TextEncoder().encode(input)
+}
+
+export function getMetadataProgram(provider: Provider, programId: PublicKey = WEN_NEW_STANDARD_PROGRAM_ID) {
+  return new Program(WenNewStandardIDL, programId, provider) as unknown as Program<WenNewStandard>
+}

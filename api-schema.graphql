@@ -242,6 +242,7 @@ type Mutation {
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
   userCreateMint(input: UserCreateMintInput!): Mint
+  userCreateMintFromMinter(account: String!, communityId: String!): String
   userCreateMintFromPreset(communityId: String!, presetId: String!): String
   userCreateWallet(input: WalletUserCreateInput!): Wallet
   userDeleteCommunity(communityId: String!): Boolean
@@ -384,6 +385,9 @@ type Query {
   userFindOneUser(username: String!): User
   userFindOneWallet(walletId: String!): Wallet
   userGetMintAccount(mintId: String!): JSON
+  userGetMinter(account: String!): JSON!
+  userGetMinterAssets(account: String!): JSON!
+  userGetMinters: JSON!
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
 

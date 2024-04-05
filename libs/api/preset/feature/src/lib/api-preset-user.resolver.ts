@@ -7,6 +7,7 @@ import {
   PresetPaging,
   PresetUserFindManyInput,
 } from '@tokengator-mint/api-preset-data-access'
+import { GraphQLJSON } from 'graphql-scalars'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)
@@ -20,6 +21,30 @@ export class ApiPresetUserResolver {
     @Args('communityId') communityId: string,
   ) {
     return this.service.user.createMinterFromPreset(userId, presetId, communityId)
+  }
+
+  @Mutation(() => String, { nullable: true })
+  userCreateMintFromMinter(
+    @CtxUserId() userId: string,
+    @Args('account') account: string,
+    @Args('communityId') communityId: string,
+  ) {
+    return this.service.user.createMintFromMinter(userId, account, communityId)
+  }
+
+  @Query(() => GraphQLJSON)
+  userGetMinters() {
+    return this.service.user.getMinters()
+  }
+
+  @Query(() => GraphQLJSON)
+  userGetMinter(@Args('account') account: string) {
+    return this.service.user.getMinter(account)
+  }
+
+  @Query(() => GraphQLJSON)
+  userGetMinterAssets(@Args('account') account: string) {
+    return this.service.user.getMinterAssets(account)
   }
 
   @Query(() => PresetPaging)

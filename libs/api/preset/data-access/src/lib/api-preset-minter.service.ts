@@ -7,14 +7,18 @@ import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY
 import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
 import { ApiSolanaService } from '@tokengator-mint/api-solana-data-access'
 import {
+  getCommunityPda,
   getMinterPda,
   getTokengatorMinterProgramId,
   getWNSGroupPda,
   getWNSManagerPda,
+  getWNSMemberPda,
   IdentityProvider,
   TokengatorMinter,
   TokengatorMinterIDL,
-  WNS_PROGRAM_ID,
+  WEN_NEW_STANDARD_PROGRAM_ID,
+  WenNewStandard,
+  WenNewStandardIDL,
 } from '@tokengator-mint/api-solana-util'
 
 @Injectable()
@@ -22,46 +26,28 @@ export class ApiPresetMinterService {
   private readonly logger = new Logger(ApiPresetMinterService.name)
   private readonly feePayer: Keypair
   private readonly provider: AnchorProvider
-  private readonly program: Program<TokengatorMinter>
+  private readonly programTokenMinter: Program<TokengatorMinter>
+  private readonly programWns: Program<WenNewStandard>
   private readonly programId: PublicKey
 
   constructor(readonly core: ApiCoreService, readonly solana: ApiSolanaService) {
     this.feePayer = this.core.config.solanaFeePayer
     this.provider = this.solana.getAnchorProvider(this.feePayer)
     this.programId = getTokengatorMinterProgramId('devnet')
-    this.program = new Program(TokengatorMinterIDL, this.programId, this.provider)
+    this.programTokenMinter = new Program(TokengatorMinterIDL, this.programId, this.provider)
+
+    this.programWns = new Program(WenNewStandardIDL, WEN_NEW_STANDARD_PROGRAM_ID, this.provider)
     this.logger.debug(`Program ID: ${this.programId.toString()}`)
   }
 
   async mintFromPreset(presetId: string, communityId: string) {
-    const community = await this.core.data.community.findUnique({
-      where: { id: communityId },
-      include: {
-        wallets: {
-          where: {
-            // TODO: Add feePayer boolean to Wallet model
-            name: 'Fee Payer',
-          },
-        },
-      },
-    })
-    if (!community) {
-      throw new Error(`Community not found: ${communityId}`)
-    }
-    if (!community.wallets.length) {
-      throw new Error(
-        `Community has no wallets: ${communityId}. Please add a wallet with the name 'Fee Payer' to the community.`,
-      )
-    }
-    const wallet = community.wallets[0]
-    const communityFeePayer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(wallet.secretKey)))
-
+    const communityFeePayer = await this.getKeypairFromCommunity(communityId)
     const authority = communityFeePayer
+    const remoteFeePayer = this.feePayer
 
     this.logger.debug(
       `Minting from preset: ${presetId} for community: ${communityId}, fee payer: ${communityFeePayer.publicKey.toString()}`,
     )
-    const remoteFeePayer = this.feePayer
 
     // Random id between 0 and 1000
     const randId = Math.floor(Math.random() * 1000)
@@ -71,8 +57,8 @@ export class ApiPresetMinterService {
 
     const groupMintKeypair = Keypair.generate()
     const [minter] = getMinterPda({ name: minterName, programId: this.programId })
-    const [group] = getWNSGroupPda(groupMintKeypair.publicKey, WNS_PROGRAM_ID)
-    const [manager] = getWNSManagerPda(WNS_PROGRAM_ID)
+    const [group] = getWNSGroupPda(groupMintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
+    const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
     const minterTokenAccount = getAssociatedTokenAddressSync(
       groupMintKeypair.publicKey,
@@ -137,7 +123,7 @@ export class ApiPresetMinterService {
       },
     }
 
-    const signature = await this.program.methods
+    const signature = await this.programTokenMinter.methods
       .createMinterWns({
         name,
         imageUrl,
@@ -177,7 +163,7 @@ export class ApiPresetMinterService {
         feePayer: remoteFeePayer.publicKey,
         mint: groupMintKeypair.publicKey,
         rent: SYSVAR_RENT_PUBKEY,
-        wnsProgram: WNS_PROGRAM_ID,
+        wnsProgram: WEN_NEW_STANDARD_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         tokenProgram: TOKEN_2022_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
@@ -187,5 +173,118 @@ export class ApiPresetMinterService {
 
     this.logger.debug(`Signature: ${signature}`)
     return signature
+  }
+
+  async mintFromMinter(minterAccount: string, communityId: string) {
+    const minter = new PublicKey(minterAccount)
+
+    const found = await this.programTokenMinter.account.minter.fetch(minter)
+    if (!found) {
+      throw new Error(`Minter not found: ${minterAccount}`)
+    }
+
+    const communityFeePayer = await this.getKeypairFromCommunity(communityId)
+    const authority = communityFeePayer
+    const remoteFeePayer = this.feePayer
+
+    const groupMintPublicKey = found.minterConfig.mint
+    const memberMintKeypair = Keypair.generate()
+
+    // ---- THIS WILL BE MOVED TO THE SDK AT SOME POINT ----
+
+    const [group] = getWNSGroupPda(groupMintPublicKey, WEN_NEW_STANDARD_PROGRAM_ID)
+    const [member] = getWNSMemberPda(memberMintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
+    const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
+
+    const { name, symbol, uri } = {
+      uri: `https://devnet.tokengator.app/api/metadata/json/${memberMintKeypair.publicKey.toString()}`,
+      name: 'test',
+      symbol: 'HI',
+    }
+
+    const authorityTokenAccount = getAssociatedTokenAddressSync(
+      memberMintKeypair.publicKey,
+      authority.publicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    )
+
+    const signature = await this.programTokenMinter.methods
+      .mintMinterWns({ name, symbol, uri })
+      .accounts({
+        minter,
+        group,
+        manager,
+        member,
+        authorityTokenAccount,
+        authority: authority.publicKey,
+        feePayer: remoteFeePayer.publicKey,
+        mint: memberMintKeypair.publicKey,
+        rent: SYSVAR_RENT_PUBKEY,
+        wnsProgram: WEN_NEW_STANDARD_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([authority, memberMintKeypair])
+      .rpc({ commitment: 'confirmed' })
+
+    this.logger.debug(`Signature: ${signature}`)
+
+    return signature
+  }
+
+  async getMinters() {
+    return this.programTokenMinter.account.minter.all()
+  }
+
+  async getMintersByCommunity(communityId: string) {
+    const [account] = getCommunityPda(communityId, this.programId)
+    return this.programTokenMinter.account.minter.all([{ memcmp: { offset: 8, bytes: account.toBase58() } }])
+  }
+
+  async getMinterAssets(account: string) {
+    const found = await this.getMinter(account)
+    const [group] = getWNSGroupPda(found.minterConfig.mint, WEN_NEW_STANDARD_PROGRAM_ID)
+
+    return this.getGroupMembers({ account: group })
+      .then((res) => res.map((member) => member.account.mint))
+      .then((accounts) => this.solana.connection.getMultipleParsedAccounts(accounts))
+      .then((res) => res.value ?? [])
+  }
+
+  async getMinter(account: string) {
+    return this.programTokenMinter.account.minter.fetch(new PublicKey(account))
+  }
+
+  private async getKeypairFromCommunity(communityId: string): Promise<Keypair> {
+    const community = await this.core.data.community.findUnique({
+      where: { id: communityId },
+      include: {
+        wallets: {
+          where: {
+            // TODO: Add feePayer boolean to Wallet model
+            name: 'Fee Payer',
+          },
+        },
+      },
+    })
+    if (!community) {
+      throw new Error(`Community not found: ${communityId}`)
+    }
+    if (!community.wallets.length) {
+      throw new Error(
+        `Community has no wallets: ${communityId}. Please add a wallet with the name 'Fee Payer' to the community.`,
+      )
+    }
+    const wallet = community.wallets[0]
+    return Keypair.fromSecretKey(Uint8Array.from(JSON.parse(wallet.secretKey)))
+  }
+
+  private async getGroupMembers({ account }: { account: PublicKey }) {
+    return this.programWns.account.tokenGroupMember
+      .all([{ memcmp: { offset: 32 + 8, bytes: account.toBase58() } }])
+      .then((res) => res.sort((a, b) => a.account.memberNumber - b.account.memberNumber))
   }
 }

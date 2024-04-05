@@ -8,6 +8,8 @@ import { UserMintFeature } from '@tokengator-mint/web-mint-feature'
 import { UserWalletFeature } from '@tokengator-mint/web-wallet-feature'
 import { useParams } from 'react-router-dom'
 import { UserCommunityDetailDashboardTab } from './user-community-detail-dashboard-tab'
+import { UserCommunityDetailMinterDetailTab } from './user-community-detail-minter-detail-tab'
+import { UserCommunityDetailMinterListTab } from './user-community-detail-minter-list-tab'
 import { UserCommunityDetailSettingsTab } from './user-community-detail-settings.tab'
 
 export function UserCommunityDetailFeature() {
@@ -28,6 +30,16 @@ export function UserCommunityDetailFeature() {
       label: 'Dashboard',
       element: <UserCommunityDetailDashboardTab community={item} />,
       leftSection: <IconDashboard size={20} />,
+    },
+    {
+      path: 'minters',
+      label: 'Minters',
+      element: <UserCommunityDetailMinterListTab community={item} />,
+      leftSection: <IconCoinFilled size={20} />,
+    },
+    {
+      path: 'minters/:account',
+      element: <UserCommunityDetailMinterDetailTab community={item} />,
     },
     {
       path: 'mints',
