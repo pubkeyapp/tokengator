@@ -81,6 +81,76 @@ type AppConfig {
   authTwitterEnabled: Boolean!
 }
 
+type Claim {
+  amount: String!
+  communityId: String!
+  createdAt: DateTime
+  id: String!
+  minter: String!
+  name: String!
+  provider: IdentityProvider!
+  providerId: String!
+  signature: String
+  status: ClaimStatus!
+  updatedAt: DateTime
+}
+
+input ClaimAdminCreateInput {
+  amount: String
+  communityId: String!
+  minter: String!
+  provider: IdentityProvider!
+  providerId: String!
+}
+
+input ClaimAdminFindManyInput {
+  communityId: String!
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input ClaimAdminUpdateInput {
+  amount: String
+  signature: String
+  status: ClaimStatus
+}
+
+type ClaimPaging {
+  data: [Claim!]!
+  meta: PagingMeta!
+}
+
+enum ClaimStatus {
+  Claimed
+  Pending
+}
+
+input ClaimUserCreateInput {
+  amount: String
+  communityId: String!
+  minter: String!
+  provider: IdentityProvider!
+  providerId: String!
+}
+
+input ClaimUserFindManyInput {
+  communityId: String!
+  limit: Int = 10
+  minter: String
+  page: Int = 1
+  provider: IdentityProvider
+  providerId: String
+  search: String
+  status: ClaimStatus
+}
+
+input ClaimUserUpdateInput {
+  amount: String
+  signature: String
+  status: ClaimStatus
+}
+
 type Community {
   createdAt: DateTime
   description: String!
@@ -184,12 +254,14 @@ input LoginInput {
 }
 
 type Mutation {
+  adminCreateClaim(input: ClaimAdminCreateInput!): Claim
   adminCreateCommunityMember(input: AdminCreateCommunityMemberInput!): CommunityMember
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreatePreset(input: PresetAdminCreateInput!): Preset
   adminCreatePrice(input: PriceAdminCreateInput!): Price
   adminCreateUser(input: AdminCreateUserInput!): User
   adminCreateWallet(input: WalletAdminCreateInput!): Wallet
+  adminDeleteClaim(claimId: String!): Boolean
   adminDeleteCommunity(communityId: String!): Boolean
   adminDeleteCommunityMember(communityMemberId: String!): Boolean
   adminDeleteIdentity(identityId: String!): Boolean
@@ -197,6 +269,7 @@ type Mutation {
   adminDeletePrice(priceId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
   adminDeleteWallet(walletId: String!): Boolean
+  adminUpdateClaim(claimId: String!, input: ClaimAdminUpdateInput!): Claim
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateCommunityMember(communityMemberId: String!, input: AdminUpdateCommunityMemberInput!): CommunityMember
   adminUpdatePreset(input: PresetAdminUpdateInput!, presetId: String!): Preset
@@ -208,17 +281,21 @@ type Mutation {
   logout: Boolean
   register(input: RegisterInput!): User
   solanaRequestAirdrop(account: String!): JSON
+  userCreateClaim(input: ClaimUserCreateInput!): Claim
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
   userCreateMintFromMinter(account: String!, communitySlug: String!): String
   userCreateMintFromPreset(communitySlug: String!, presetId: String!): String
   userCreateWallet(input: WalletUserCreateInput!): Wallet
+  userDeleteClaim(claimId: String!): Boolean
   userDeleteCommunity(communityId: String!): Boolean
   userDeleteCommunityMember(communityMemberId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
+  userDeleteMinter(account: String!): Boolean
   userDeleteWallet(publicKey: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
   userSetWalletFeepayer(publicKey: String!): Wallet
+  userUpdateClaim(claimId: String!, input: ClaimUserUpdateInput!): Claim
   userUpdateCommunity(communityId: String!, input: UserUpdateCommunityInput!): Community
   userUpdateCommunityMember(communityMemberId: String!, input: UserUpdateCommunityMemberInput!): CommunityMember
   userUpdateUser(input: UserUpdateUserInput!): User
@@ -314,6 +391,7 @@ input PriceUserFindManyInput {
 }
 
 type Query {
+  adminFindManyClaim(input: ClaimAdminFindManyInput!): ClaimPaging!
   adminFindManyCommunity(input: AdminFindManyCommunityInput!): CommunityPaging!
   adminFindManyCommunityMember(input: AdminFindManyCommunityMemberInput!): CommunityMemberPaging!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
@@ -321,6 +399,7 @@ type Query {
   adminFindManyPrice(input: PriceAdminFindManyInput!): [Price!]!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
   adminFindManyWallet(input: WalletAdminFindManyInput!): WalletPaging!
+  adminFindOneClaim(claimId: String!): Claim
   adminFindOneCommunity(communityId: String!): Community
   adminFindOneCommunityMember(communityMemberId: String!): CommunityMember
   adminFindOnePreset(presetId: String!): Preset
@@ -337,6 +416,7 @@ type Query {
   solanaGetTokenAccounts(account: String!): JSON
   solanaGetTransactions(account: String!): JSON
   uptime: Float!
+  userFindManyClaim(input: ClaimUserFindManyInput!): ClaimPaging!
   userFindManyCommunity(input: UserFindManyCommunityInput!): CommunityPaging!
   userFindManyCommunityMember(input: UserFindManyCommunityMemberInput!): CommunityMemberPaging!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
@@ -344,6 +424,7 @@ type Query {
   userFindManyPrice(input: PriceUserFindManyInput!): [Price!]!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
   userFindManyWallet(input: WalletUserFindManyInput!): WalletPaging!
+  userFindOneClaim(claimId: String!): Claim
   userFindOneCommunity(slug: String!): Community
   userFindOneCommunityMember(communityMemberId: String!): CommunityMember
   userFindOnePreset(presetId: String!): Preset

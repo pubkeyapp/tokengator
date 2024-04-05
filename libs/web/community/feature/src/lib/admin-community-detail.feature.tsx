@@ -1,5 +1,6 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiError, UiLoader, UiPage, UiTabRoutes } from '@pubkey-ui/core'
+import { AdminClaimFeature } from '@tokengator-mint/web-claim-feature'
 import { useAdminFindOneCommunity } from '@tokengator-mint/web-community-data-access'
 import { AdminCommunityMemberFeature } from '@tokengator-mint/web-community-member-feature'
 import { CommunityUiItem } from '@tokengator-mint/web-community-ui'
@@ -36,6 +37,7 @@ export function AdminCommunityDetailFeature() {
             label: 'Info',
             element: <AdminCommunityDetailInfoTab communityId={communityId} />,
           },
+          { path: 'claims', label: 'Claims', element: <AdminClaimFeature communityId={communityId} /> },
           { path: 'members', label: 'Members', element: <AdminCommunityMemberFeature communityId={communityId} /> },
           { path: 'wallets', label: 'Wallets', element: <AdminWalletFeature communityId={communityId} /> },
           {

@@ -1,0 +1,4 @@
+import { lazy } from 'react'
+export const AdminClaimFeature = lazy(() => import('./lib/admin-claim.routes'))
+
+export const UserClaimFeature = lazy(() => import('./lib/user-claim.routes'))

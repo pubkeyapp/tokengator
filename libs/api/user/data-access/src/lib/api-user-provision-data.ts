@@ -8,9 +8,10 @@ export const provisionUsers: Prisma.UserCreateInput[] = [
     developer: true,
     identities: {
       create: [
-        { provider: IdentityProvider.GitHub, providerId: '36491' },
         { provider: IdentityProvider.Discord, providerId: '386584531353862154' },
+        { provider: IdentityProvider.GitHub, providerId: '36491' },
         { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
+        { provider: IdentityProvider.Twitter, providerId: '11481502' },
       ],
     },
   },

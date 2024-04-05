@@ -1,7 +1,8 @@
 import { Button, Group } from '@mantine/core'
-import { UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiStack, UiTabRoute, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
 import { Community } from '@tokengator-mint/sdk'
+import { UserClaimFeature } from '@tokengator-mint/web-claim-feature'
 import {
   useUserCreateMintFromMinter,
   useUserGetMinter,
@@ -18,23 +19,39 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
   const queryAssets = useUserGetMinterAssets({ account })
   const items: AccountInfo<ParsedAccountData>[] = useMemo(() => queryAssets.data ?? [], [queryAssets.data])
 
+  const tabs: UiTabRoute[] = [
+    {
+      path: 'assets',
+      label: 'Assets',
+      element: items?.length ? <MinterUiAssets items={items} /> : <UiInfo message="No assets found" />,
+    },
+    {
+      path: 'claims',
+      label: 'Claims',
+      element: <UserClaimFeature communityId={community.id} minter={account} />,
+    },
+  ]
+
   return (
     <UiStack>
       {query.isLoading ? (
         <UiLoader />
       ) : query.data ? (
-        <MinterUiCard item={query.data}>
-          <Group justify="flex-end">
-            <Button
-              loading={mutation.isPending}
-              onClick={() => mutation.mutateAsync().then(() => queryAssets.refetch())}
-            >
-              Mint
-            </Button>
-          </Group>
+        <UiStack>
+          <MinterUiCard item={query.data}>
+            <Group justify="flex-end">
+              <Button
+                loading={mutation.isPending}
+                onClick={() => mutation.mutateAsync().then(() => queryAssets.refetch())}
+              >
+                Mint
+              </Button>
+            </Group>
 
-          <MinterUiAssets items={items} />
-        </MinterUiCard>
+            <MinterUiAssets items={items} />
+          </MinterUiCard>
+          <UiTabRoutes tabs={tabs} />
+        </UiStack>
       ) : (
         <UiWarning message={`Minter not found: ${account}`} />
       )}

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { CommunityMemberRole, Prisma } from '@prisma/client'
+import { CommunityMemberRole, IdentityProvider, Prisma } from '@prisma/client'
 import { ApiCoreService, slugifyId } from '@tokengator-mint/api-core-data-access'
 import { USER_PROVISIONED } from '@tokengator-mint/api-user-data-access'
 import { ApiCommunityDataService } from './api-community-data.service'
@@ -51,6 +51,17 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
             '[166,235,136,99,90,201,134,87,79,70,57,226,248,4,209,10,59,173,53,196,41,37,191,187,220,103,97,142,154,137,244,235,5,193,130,10,92,178,160,158,239,84,253,48,150,59,48,130,37,177,165,83,131,175,247,42,156,20,230,138,188,229,120,129]',
         },
       ],
+    },
+    claims: {
+      create: [
+        { provider: IdentityProvider.Discord, providerId: '185307556032413697' },
+        { provider: IdentityProvider.Discord, providerId: '386584531353862154' },
+        { provider: IdentityProvider.GitHub, providerId: '32637757' },
+        { provider: IdentityProvider.GitHub, providerId: '36491' },
+        { provider: IdentityProvider.Solana, providerId: '81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn' },
+        { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
+        { provider: IdentityProvider.Twitter, providerId: 'beeman_nl' },
+      ].map((i) => ({ ...i, minter: '9u6HpBdFd1yZzQ8JszBoSRtcgbvJF5uk5pv7zcvrL3Se' })),
     },
   },
   {

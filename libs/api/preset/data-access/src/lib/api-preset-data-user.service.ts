@@ -48,4 +48,11 @@ export class ApiPresetDataUserService {
   async getMinterAssets(account: string) {
     return this.minter.getMinterAssets(account)
   }
+
+  async deleteMinter(userId: string, account: string) {
+    const find = await this.minter.getMinter(account)
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug: find.communityId, userId })
+    // TODO: delete minter
+    return false
+  }
 }

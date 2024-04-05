@@ -17,10 +17,8 @@ import {
   getWNSMemberPda,
   IdentityProvider,
   MINT_USDC,
-  TokengatorMinter,
   TokengatorMinterIDL,
   WEN_NEW_STANDARD_PROGRAM_ID,
-  WenNewStandard,
   WenNewStandardIDL,
 } from '@tokengator-mint/api-solana-util'
 import { ApiPresetDataService } from './api-preset-data.service'
@@ -31,30 +29,30 @@ import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'
 export class ApiPresetMinterService {
   private readonly logger = new Logger(ApiPresetMinterService.name)
   private readonly feePayer: Keypair
-  private readonly provider: AnchorProvider
-  private readonly programTokenMinter: Program<TokengatorMinter>
-  private readonly programWns: Program<WenNewStandard>
-  private readonly programId: PublicKey
+  private readonly programId = getTokengatorMinterProgramId('devnet')
 
   constructor(readonly data: ApiPresetDataService, readonly core: ApiCoreService, readonly solana: ApiSolanaService) {
     this.feePayer = this.core.config.solanaFeePayer
-    this.provider = this.solana.getAnchorProvider(this.feePayer)
-    this.programId = getTokengatorMinterProgramId('devnet')
-    this.programTokenMinter = new Program(TokengatorMinterIDL, this.programId, this.provider)
-
-    this.programWns = new Program(WenNewStandardIDL, WEN_NEW_STANDARD_PROGRAM_ID, this.provider)
     this.logger.debug(`Program ID: ${this.programId.toString()}`)
+  }
+
+  getProgramTokenMinter(provider: AnchorProvider = this.solana.getAnchorProvider()) {
+    return new Program(TokengatorMinterIDL, this.programId, provider)
+  }
+
+  getProgramWns(provider: AnchorProvider = this.solana.getAnchorProvider()) {
+    return new Program(WenNewStandardIDL, WEN_NEW_STANDARD_PROGRAM_ID, provider)
   }
 
   async mintFromPreset(presetId: string, communitySlug: string) {
     const preset = await this.data.findOne(presetId)
 
-    const communityFeePayer = await this.getKeypairFromCommunity(communitySlug)
-    const authority = communityFeePayer
+    const authority = await this.getKeypairFromCommunity(communitySlug)
+    const programTokenMinter = this.getProgramTokenMinter(this.solana.getAnchorProvider(authority))
     const remoteFeePayer = this.feePayer
 
     this.logger.debug(
-      `Minting from preset: ${presetId} for community: ${communitySlug}, fee payer: ${communityFeePayer.publicKey.toString()}`,
+      `Minting from preset: ${presetId} for community: ${communitySlug}, fee payer: ${remoteFeePayer.publicKey.toString()}`,
     )
 
     const mintKeypair = Keypair.generate()
@@ -85,7 +83,7 @@ export class ApiPresetMinterService {
 
     const identities = getIdentityProviders([IdentityProvider.Discord])
 
-    const signature = await this.programTokenMinter.methods
+    const signature = await programTokenMinter.methods
       .createMinterWns({
         community: communitySlug,
         name,
@@ -135,14 +133,15 @@ export class ApiPresetMinterService {
 
   async mintFromMinter(minterAccount: string, communitySlug: string) {
     const minter = new PublicKey(minterAccount)
+    const authority = await this.getKeypairFromCommunity(communitySlug)
+    const programTokenMinter = this.getProgramTokenMinter(this.solana.getAnchorProvider(authority))
 
-    const found = await this.programTokenMinter.account.minter.fetch(minter)
+    const found = await programTokenMinter.account.minter.fetch(minter)
     if (!found) {
       throw new Error(`Minter not found: ${minterAccount}`)
     }
 
-    const authority = await this.getKeypairFromCommunity(communitySlug)
-    const remoteFeePayer = this.feePayer
+    const feePayer = this.feePayer
 
     const groupMintPublicKey = found.minterConfig.mint
     const memberMintKeypair = Keypair.generate()
@@ -167,7 +166,7 @@ export class ApiPresetMinterService {
       ASSOCIATED_TOKEN_PROGRAM_ID,
     )
 
-    const signature = await this.programTokenMinter.methods
+    const signature = await programTokenMinter.methods
       .mintMinterWns({ name, symbol, uri })
       .accounts({
         minter,
@@ -176,7 +175,7 @@ export class ApiPresetMinterService {
         member,
         authorityTokenAccount,
         authority: authority.publicKey,
-        feePayer: remoteFeePayer.publicKey,
+        feePayer: feePayer.publicKey,
         mint: memberMintKeypair.publicKey,
         rent: SYSVAR_RENT_PUBKEY,
         wnsProgram: WEN_NEW_STANDARD_PROGRAM_ID,
@@ -184,7 +183,7 @@ export class ApiPresetMinterService {
         tokenProgram: TOKEN_2022_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
       })
-      .signers([authority, memberMintKeypair])
+      .signers([feePayer, authority, memberMintKeypair])
       .rpc({ commitment: 'confirmed', skipPreflight: true })
 
     this.logger.debug(`Signature: ${signature}`)
@@ -193,32 +192,38 @@ export class ApiPresetMinterService {
   }
 
   async getMinters(): Promise<TokenGatorMinter[]> {
-    return this.programTokenMinter.account.minter.all().then((res) =>
-      res.map(({ account: { minterConfig, paymentConfig, ...account }, publicKey }) =>
-        formatTokenGatorMinter({
-          account,
-          publicKey,
-          paymentConfig,
-          minterConfig,
-        }),
-      ),
-    )
+    return this.getProgramTokenMinter()
+      .account.minter.all()
+      .then((res) =>
+        res
+          .map(({ account: { minterConfig, paymentConfig, ...account }, publicKey }) =>
+            formatTokenGatorMinter({
+              account,
+              publicKey,
+              paymentConfig,
+              minterConfig,
+            }),
+          )
+          .sort((a, b) => a.name.localeCompare(b.name)),
+      )
   }
 
   async getMintersByCommunity(communitySlug: string): Promise<TokenGatorMinter[]> {
     const [account] = getCommunityPda(communitySlug, this.programId)
 
-    return this.programTokenMinter.account.minter
-      .all([{ memcmp: { offset: 8 + 1, bytes: account.toBase58() } }])
+    return this.getProgramTokenMinter()
+      .account.minter.all([{ memcmp: { offset: 8 + 1, bytes: account.toBase58() } }])
       .then((res) =>
-        res.map(({ account: { minterConfig, paymentConfig, ...account }, publicKey }) =>
-          formatTokenGatorMinter({
-            account,
-            publicKey,
-            paymentConfig,
-            minterConfig,
-          }),
-        ),
+        res
+          .map(({ account: { minterConfig, paymentConfig, ...account }, publicKey }) =>
+            formatTokenGatorMinter({
+              account,
+              publicKey,
+              paymentConfig,
+              minterConfig,
+            }),
+          )
+          .sort((a, b) => a.name.localeCompare(b.name)),
       )
   }
 
@@ -233,8 +238,8 @@ export class ApiPresetMinterService {
   }
 
   async getMinter(publicKey: string): Promise<TokenGatorMinter> {
-    return this.programTokenMinter.account.minter
-      .fetch(new PublicKey(publicKey))
+    return this.getProgramTokenMinter()
+      .account.minter.fetch(new PublicKey(publicKey))
       .then(({ minterConfig, paymentConfig, ...account }) =>
         formatTokenGatorMinter({
           account,
@@ -261,8 +266,8 @@ export class ApiPresetMinterService {
   }
 
   private async getGroupMembers({ account }: { account: PublicKey }) {
-    return this.programWns.account.tokenGroupMember
-      .all([{ memcmp: { offset: 32 + 8, bytes: account.toBase58() } }])
+    return this.getProgramWns()
+      .account.tokenGroupMember.all([{ memcmp: { offset: 32 + 8, bytes: account.toBase58() } }])
       .then((res) => res.sort((a, b) => a.account.memberNumber - b.account.memberNumber))
   }
 }

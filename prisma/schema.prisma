@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Claim {
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  community   Community        @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId String
+  amount      String           @default("1")
+  minter      String
+  signature   String?
+  provider    IdentityProvider
+  providerId  String
+  status      ClaimStatus      @default(Pending)
+}
+
 model Community {
   id          String            @id @default(cuid())
   createdAt   DateTime          @default(now())
@@ -15,6 +29,7 @@ model Community {
   slug        String            @unique
   description String
   imageUrl    String?
+  claims      Claim[]
   members     CommunityMember[]
   wallets     Wallet[]
 }
@@ -124,6 +139,11 @@ model Wallet {
   name        String
   publicKey   String     @unique
   secretKey   String
+}
+
+enum ClaimStatus {
+  Claimed
+  Pending
 }
 
 enum CommunityMemberRole {

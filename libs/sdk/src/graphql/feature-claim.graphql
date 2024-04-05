@@ -1,0 +1,79 @@
+fragment ClaimDetails on Claim {
+  createdAt
+  id
+  communityId
+  amount
+  minter
+  signature
+  provider
+  providerId
+  status
+  name
+  updatedAt
+}
+
+query adminFindManyClaim($input: ClaimAdminFindManyInput!) {
+  paging: adminFindManyClaim(input: $input) {
+    data {
+      ...ClaimDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminFindOneClaim($claimId: String!) {
+  item: adminFindOneClaim(claimId: $claimId) {
+    ...ClaimDetails
+  }
+}
+
+mutation adminCreateClaim($input: ClaimAdminCreateInput!) {
+  created: adminCreateClaim(input: $input) {
+    ...ClaimDetails
+  }
+}
+
+mutation adminUpdateClaim($claimId: String!, $input: ClaimAdminUpdateInput!) {
+  updated: adminUpdateClaim(claimId: $claimId, input: $input) {
+    ...ClaimDetails
+  }
+}
+
+mutation adminDeleteClaim($claimId: String!) {
+  deleted: adminDeleteClaim(claimId: $claimId)
+}
+
+query userFindManyClaim($input: ClaimUserFindManyInput!) {
+  paging: userFindManyClaim(input: $input) {
+    data {
+      ...ClaimDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query userFindOneClaim($claimId: String!) {
+  item: userFindOneClaim(claimId: $claimId) {
+    ...ClaimDetails
+  }
+}
+
+mutation userCreateClaim($input: ClaimUserCreateInput!) {
+  created: userCreateClaim(input: $input) {
+    ...ClaimDetails
+  }
+}
+
+mutation userUpdateClaim($claimId: String!, $input: ClaimUserUpdateInput!) {
+  updated: userUpdateClaim(claimId: $claimId, input: $input) {
+    ...ClaimDetails
+  }
+}
+
+mutation userDeleteClaim($claimId: String!) {
+  deleted: userDeleteClaim(claimId: $claimId)
+}

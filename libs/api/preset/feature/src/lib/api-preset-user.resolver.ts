@@ -33,6 +33,11 @@ export class ApiPresetUserResolver {
     return this.service.user.createMintFromMinter(userId, account, communitySlug)
   }
 
+  @Mutation(() => Boolean, { nullable: true })
+  userDeleteMinter(@CtxUserId() userId: string, @Args('account') account: string) {
+    return this.service.user.deleteMinter(userId, account)
+  }
+
   @Query(() => TokenGatorMinter)
   userGetMinters() {
     return this.service.user.getMinters()

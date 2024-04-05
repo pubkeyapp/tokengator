@@ -104,6 +104,78 @@ export type AppConfig = {
   authTwitterEnabled: Scalars['Boolean']['output']
 }
 
+export type Claim = {
+  __typename?: 'Claim'
+  amount: Scalars['String']['output']
+  communityId: Scalars['String']['output']
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  minter: Scalars['String']['output']
+  name: Scalars['String']['output']
+  provider: IdentityProvider
+  providerId: Scalars['String']['output']
+  signature?: Maybe<Scalars['String']['output']>
+  status: ClaimStatus
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+}
+
+export type ClaimAdminCreateInput = {
+  amount?: InputMaybe<Scalars['String']['input']>
+  communityId: Scalars['String']['input']
+  minter: Scalars['String']['input']
+  provider: IdentityProvider
+  providerId: Scalars['String']['input']
+}
+
+export type ClaimAdminFindManyInput = {
+  communityId: Scalars['String']['input']
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ClaimAdminUpdateInput = {
+  amount?: InputMaybe<Scalars['String']['input']>
+  signature?: InputMaybe<Scalars['String']['input']>
+  status?: InputMaybe<ClaimStatus>
+}
+
+export type ClaimPaging = {
+  __typename?: 'ClaimPaging'
+  data: Array<Claim>
+  meta: PagingMeta
+}
+
+export enum ClaimStatus {
+  Claimed = 'Claimed',
+  Pending = 'Pending',
+}
+
+export type ClaimUserCreateInput = {
+  amount?: InputMaybe<Scalars['String']['input']>
+  communityId: Scalars['String']['input']
+  minter: Scalars['String']['input']
+  provider: IdentityProvider
+  providerId: Scalars['String']['input']
+}
+
+export type ClaimUserFindManyInput = {
+  communityId: Scalars['String']['input']
+  limit?: InputMaybe<Scalars['Int']['input']>
+  minter?: InputMaybe<Scalars['String']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  provider?: InputMaybe<IdentityProvider>
+  providerId?: InputMaybe<Scalars['String']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+  status?: InputMaybe<ClaimStatus>
+}
+
+export type ClaimUserUpdateInput = {
+  amount?: InputMaybe<Scalars['String']['input']>
+  signature?: InputMaybe<Scalars['String']['input']>
+  status?: InputMaybe<ClaimStatus>
+}
+
 export type Community = {
   __typename?: 'Community'
   createdAt?: Maybe<Scalars['DateTime']['output']>
@@ -205,12 +277,14 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  adminCreateClaim?: Maybe<Claim>
   adminCreateCommunityMember?: Maybe<CommunityMember>
   adminCreateIdentity?: Maybe<Identity>
   adminCreatePreset?: Maybe<Preset>
   adminCreatePrice?: Maybe<Price>
   adminCreateUser?: Maybe<User>
   adminCreateWallet?: Maybe<Wallet>
+  adminDeleteClaim?: Maybe<Scalars['Boolean']['output']>
   adminDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
@@ -218,6 +292,7 @@ export type Mutation = {
   adminDeletePrice?: Maybe<Scalars['Boolean']['output']>
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
   adminDeleteWallet?: Maybe<Scalars['Boolean']['output']>
+  adminUpdateClaim?: Maybe<Claim>
   adminUpdateCommunity?: Maybe<Community>
   adminUpdateCommunityMember?: Maybe<CommunityMember>
   adminUpdatePreset?: Maybe<Preset>
@@ -229,22 +304,30 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
   solanaRequestAirdrop?: Maybe<Scalars['JSON']['output']>
+  userCreateClaim?: Maybe<Claim>
   userCreateCommunity?: Maybe<Community>
   userCreateCommunityMember?: Maybe<CommunityMember>
   userCreateMintFromMinter?: Maybe<Scalars['String']['output']>
   userCreateMintFromPreset?: Maybe<Scalars['String']['output']>
   userCreateWallet?: Maybe<Wallet>
+  userDeleteClaim?: Maybe<Scalars['Boolean']['output']>
   userDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   userDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
+  userDeleteMinter?: Maybe<Scalars['Boolean']['output']>
   userDeleteWallet?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
   userSetWalletFeepayer?: Maybe<Wallet>
+  userUpdateClaim?: Maybe<Claim>
   userUpdateCommunity?: Maybe<Community>
   userUpdateCommunityMember?: Maybe<CommunityMember>
   userUpdateUser?: Maybe<User>
   userUpdateWallet?: Maybe<Wallet>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
+}
+
+export type MutationAdminCreateClaimArgs = {
+  input: ClaimAdminCreateInput
 }
 
 export type MutationAdminCreateCommunityMemberArgs = {
@@ -269,6 +352,10 @@ export type MutationAdminCreateUserArgs = {
 
 export type MutationAdminCreateWalletArgs = {
   input: WalletAdminCreateInput
+}
+
+export type MutationAdminDeleteClaimArgs = {
+  claimId: Scalars['String']['input']
 }
 
 export type MutationAdminDeleteCommunityArgs = {
@@ -297,6 +384,11 @@ export type MutationAdminDeleteUserArgs = {
 
 export type MutationAdminDeleteWalletArgs = {
   walletId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateClaimArgs = {
+  claimId: Scalars['String']['input']
+  input: ClaimAdminUpdateInput
 }
 
 export type MutationAdminUpdateCommunityArgs = {
@@ -345,6 +437,10 @@ export type MutationSolanaRequestAirdropArgs = {
   account: Scalars['String']['input']
 }
 
+export type MutationUserCreateClaimArgs = {
+  input: ClaimUserCreateInput
+}
+
 export type MutationUserCreateCommunityArgs = {
   input: UserCreateCommunityInput
 }
@@ -367,6 +463,10 @@ export type MutationUserCreateWalletArgs = {
   input: WalletUserCreateInput
 }
 
+export type MutationUserDeleteClaimArgs = {
+  claimId: Scalars['String']['input']
+}
+
 export type MutationUserDeleteCommunityArgs = {
   communityId: Scalars['String']['input']
 }
@@ -379,6 +479,10 @@ export type MutationUserDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
+export type MutationUserDeleteMinterArgs = {
+  account: Scalars['String']['input']
+}
+
 export type MutationUserDeleteWalletArgs = {
   publicKey: Scalars['String']['input']
 }
@@ -389,6 +493,11 @@ export type MutationUserLinkIdentityArgs = {
 
 export type MutationUserSetWalletFeepayerArgs = {
   publicKey: Scalars['String']['input']
+}
+
+export type MutationUserUpdateClaimArgs = {
+  claimId: Scalars['String']['input']
+  input: ClaimUserUpdateInput
 }
 
 export type MutationUserUpdateCommunityArgs = {
@@ -507,6 +616,7 @@ export type PriceUserFindManyInput = {
 
 export type Query = {
   __typename?: 'Query'
+  adminFindManyClaim: ClaimPaging
   adminFindManyCommunity: CommunityPaging
   adminFindManyCommunityMember: CommunityMemberPaging
   adminFindManyIdentity?: Maybe<Array<Identity>>
@@ -514,6 +624,7 @@ export type Query = {
   adminFindManyPrice: Array<Price>
   adminFindManyUser: UserPaging
   adminFindManyWallet: WalletPaging
+  adminFindOneClaim?: Maybe<Claim>
   adminFindOneCommunity?: Maybe<Community>
   adminFindOneCommunityMember?: Maybe<CommunityMember>
   adminFindOnePreset?: Maybe<Preset>
@@ -530,6 +641,7 @@ export type Query = {
   solanaGetTokenAccounts?: Maybe<Scalars['JSON']['output']>
   solanaGetTransactions?: Maybe<Scalars['JSON']['output']>
   uptime: Scalars['Float']['output']
+  userFindManyClaim: ClaimPaging
   userFindManyCommunity: CommunityPaging
   userFindManyCommunityMember: CommunityMemberPaging
   userFindManyIdentity?: Maybe<Array<Identity>>
@@ -537,6 +649,7 @@ export type Query = {
   userFindManyPrice: Array<Price>
   userFindManyUser: UserPaging
   userFindManyWallet: WalletPaging
+  userFindOneClaim?: Maybe<Claim>
   userFindOneCommunity?: Maybe<Community>
   userFindOneCommunityMember?: Maybe<CommunityMember>
   userFindOnePreset?: Maybe<Preset>
@@ -547,6 +660,10 @@ export type Query = {
   userGetMinters: TokenGatorMinter
   userGetMintersByCommunity: Array<TokenGatorMinter>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
+}
+
+export type QueryAdminFindManyClaimArgs = {
+  input: ClaimAdminFindManyInput
 }
 
 export type QueryAdminFindManyCommunityArgs = {
@@ -575,6 +692,10 @@ export type QueryAdminFindManyUserArgs = {
 
 export type QueryAdminFindManyWalletArgs = {
   input: WalletAdminFindManyInput
+}
+
+export type QueryAdminFindOneClaimArgs = {
+  claimId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneCommunityArgs = {
@@ -625,6 +746,10 @@ export type QuerySolanaGetTransactionsArgs = {
   account: Scalars['String']['input']
 }
 
+export type QueryUserFindManyClaimArgs = {
+  input: ClaimUserFindManyInput
+}
+
 export type QueryUserFindManyCommunityArgs = {
   input: UserFindManyCommunityInput
 }
@@ -651,6 +776,10 @@ export type QueryUserFindManyUserArgs = {
 
 export type QueryUserFindManyWalletArgs = {
   input: WalletUserFindManyInput
+}
+
+export type QueryUserFindOneClaimArgs = {
+  claimId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneCommunityArgs = {
@@ -961,6 +1090,237 @@ export type MeQuery = {
     }> | null
   } | null
 }
+
+export type ClaimDetailsFragment = {
+  __typename?: 'Claim'
+  createdAt?: Date | null
+  id: string
+  communityId: string
+  amount: string
+  minter: string
+  signature?: string | null
+  provider: IdentityProvider
+  providerId: string
+  status: ClaimStatus
+  name: string
+  updatedAt?: Date | null
+}
+
+export type AdminFindManyClaimQueryVariables = Exact<{
+  input: ClaimAdminFindManyInput
+}>
+
+export type AdminFindManyClaimQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'ClaimPaging'
+    data: Array<{
+      __typename?: 'Claim'
+      createdAt?: Date | null
+      id: string
+      communityId: string
+      amount: string
+      minter: string
+      signature?: string | null
+      provider: IdentityProvider
+      providerId: string
+      status: ClaimStatus
+      name: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOneClaimQueryVariables = Exact<{
+  claimId: Scalars['String']['input']
+}>
+
+export type AdminFindOneClaimQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    amount: string
+    minter: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminCreateClaimMutationVariables = Exact<{
+  input: ClaimAdminCreateInput
+}>
+
+export type AdminCreateClaimMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    amount: string
+    minter: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdateClaimMutationVariables = Exact<{
+  claimId: Scalars['String']['input']
+  input: ClaimAdminUpdateInput
+}>
+
+export type AdminUpdateClaimMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    amount: string
+    minter: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeleteClaimMutationVariables = Exact<{
+  claimId: Scalars['String']['input']
+}>
+
+export type AdminDeleteClaimMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type UserFindManyClaimQueryVariables = Exact<{
+  input: ClaimUserFindManyInput
+}>
+
+export type UserFindManyClaimQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'ClaimPaging'
+    data: Array<{
+      __typename?: 'Claim'
+      createdAt?: Date | null
+      id: string
+      communityId: string
+      amount: string
+      minter: string
+      signature?: string | null
+      provider: IdentityProvider
+      providerId: string
+      status: ClaimStatus
+      name: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneClaimQueryVariables = Exact<{
+  claimId: Scalars['String']['input']
+}>
+
+export type UserFindOneClaimQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    amount: string
+    minter: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserCreateClaimMutationVariables = Exact<{
+  input: ClaimUserCreateInput
+}>
+
+export type UserCreateClaimMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    amount: string
+    minter: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserUpdateClaimMutationVariables = Exact<{
+  claimId: Scalars['String']['input']
+  input: ClaimUserUpdateInput
+}>
+
+export type UserUpdateClaimMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    amount: string
+    minter: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserDeleteClaimMutationVariables = Exact<{
+  claimId: Scalars['String']['input']
+}>
+
+export type UserDeleteClaimMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
 export type CommunityMemberDetailsFragment = {
   __typename?: 'CommunityMember'
@@ -2841,6 +3201,21 @@ export type UserSetWalletFeepayerMutation = {
   } | null
 }
 
+export const ClaimDetailsFragmentDoc = gql`
+  fragment ClaimDetails on Claim {
+    createdAt
+    id
+    communityId
+    amount
+    minter
+    signature
+    provider
+    providerId
+    status
+    name
+    updatedAt
+  }
+`
 export const UserDetailsFragmentDoc = gql`
   fragment UserDetails on User {
     avatarUrl
@@ -3071,6 +3446,92 @@ export const MeDocument = gql`
   }
   ${UserDetailsFragmentDoc}
   ${IdentityDetailsFragmentDoc}
+`
+export const AdminFindManyClaimDocument = gql`
+  query adminFindManyClaim($input: ClaimAdminFindManyInput!) {
+    paging: adminFindManyClaim(input: $input) {
+      data {
+        ...ClaimDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOneClaimDocument = gql`
+  query adminFindOneClaim($claimId: String!) {
+    item: adminFindOneClaim(claimId: $claimId) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const AdminCreateClaimDocument = gql`
+  mutation adminCreateClaim($input: ClaimAdminCreateInput!) {
+    created: adminCreateClaim(input: $input) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const AdminUpdateClaimDocument = gql`
+  mutation adminUpdateClaim($claimId: String!, $input: ClaimAdminUpdateInput!) {
+    updated: adminUpdateClaim(claimId: $claimId, input: $input) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const AdminDeleteClaimDocument = gql`
+  mutation adminDeleteClaim($claimId: String!) {
+    deleted: adminDeleteClaim(claimId: $claimId)
+  }
+`
+export const UserFindManyClaimDocument = gql`
+  query userFindManyClaim($input: ClaimUserFindManyInput!) {
+    paging: userFindManyClaim(input: $input) {
+      data {
+        ...ClaimDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneClaimDocument = gql`
+  query userFindOneClaim($claimId: String!) {
+    item: userFindOneClaim(claimId: $claimId) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const UserCreateClaimDocument = gql`
+  mutation userCreateClaim($input: ClaimUserCreateInput!) {
+    created: userCreateClaim(input: $input) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const UserUpdateClaimDocument = gql`
+  mutation userUpdateClaim($claimId: String!, $input: ClaimUserUpdateInput!) {
+    updated: userUpdateClaim(claimId: $claimId, input: $input) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const UserDeleteClaimDocument = gql`
+  mutation userDeleteClaim($claimId: String!) {
+    deleted: userDeleteClaim(claimId: $claimId)
+  }
 `
 export const UserFindManyCommunityMemberDocument = gql`
   query userFindManyCommunityMember($input: UserFindManyCommunityMemberInput!) {
@@ -3719,6 +4180,16 @@ const LoginDocumentString = print(LoginDocument)
 const LogoutDocumentString = print(LogoutDocument)
 const RegisterDocumentString = print(RegisterDocument)
 const MeDocumentString = print(MeDocument)
+const AdminFindManyClaimDocumentString = print(AdminFindManyClaimDocument)
+const AdminFindOneClaimDocumentString = print(AdminFindOneClaimDocument)
+const AdminCreateClaimDocumentString = print(AdminCreateClaimDocument)
+const AdminUpdateClaimDocumentString = print(AdminUpdateClaimDocument)
+const AdminDeleteClaimDocumentString = print(AdminDeleteClaimDocument)
+const UserFindManyClaimDocumentString = print(UserFindManyClaimDocument)
+const UserFindOneClaimDocumentString = print(UserFindOneClaimDocument)
+const UserCreateClaimDocumentString = print(UserCreateClaimDocument)
+const UserUpdateClaimDocumentString = print(UserUpdateClaimDocument)
+const UserDeleteClaimDocumentString = print(UserDeleteClaimDocument)
 const UserFindManyCommunityMemberDocumentString = print(UserFindManyCommunityMemberDocument)
 const UserFindOneCommunityMemberDocumentString = print(UserFindOneCommunityMemberDocument)
 const UserCreateCommunityMemberDocumentString = print(UserCreateCommunityMemberDocument)
@@ -3857,6 +4328,216 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
           client.rawRequest<MeQuery>(MeDocumentString, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
         'me',
         'query',
+        variables,
+      )
+    },
+    adminFindManyClaim(
+      variables: AdminFindManyClaimQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyClaimQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyClaimQuery>(AdminFindManyClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyClaim',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneClaim(
+      variables: AdminFindOneClaimQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneClaimQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneClaimQuery>(AdminFindOneClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneClaim',
+        'query',
+        variables,
+      )
+    },
+    adminCreateClaim(
+      variables: AdminCreateClaimMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreateClaimMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreateClaimMutation>(AdminCreateClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreateClaim',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdateClaim(
+      variables: AdminUpdateClaimMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateClaimMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateClaimMutation>(AdminUpdateClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateClaim',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteClaim(
+      variables: AdminDeleteClaimMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteClaimMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteClaimMutation>(AdminDeleteClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteClaim',
+        'mutation',
+        variables,
+      )
+    },
+    userFindManyClaim(
+      variables: UserFindManyClaimQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyClaimQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyClaimQuery>(UserFindManyClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyClaim',
+        'query',
+        variables,
+      )
+    },
+    userFindOneClaim(
+      variables: UserFindOneClaimQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneClaimQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneClaimQuery>(UserFindOneClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneClaim',
+        'query',
+        variables,
+      )
+    },
+    userCreateClaim(
+      variables: UserCreateClaimMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateClaimMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateClaimMutation>(UserCreateClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateClaim',
+        'mutation',
+        variables,
+      )
+    },
+    userUpdateClaim(
+      variables: UserUpdateClaimMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserUpdateClaimMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserUpdateClaimMutation>(UserUpdateClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userUpdateClaim',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteClaim(
+      variables: UserDeleteClaimMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteClaimMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteClaimMutation>(UserDeleteClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteClaim',
+        'mutation',
         variables,
       )
     },
@@ -5452,6 +6133,8 @@ export const isDefinedNonNullAny = (v: any): v is definedNonNullAny => v !== und
 
 export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny(v))
 
+export const ClaimStatusSchema = z.nativeEnum(ClaimStatus)
+
 export const CommunityMemberRoleSchema = z.nativeEnum(CommunityMemberRole)
 
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
@@ -5548,6 +6231,64 @@ export function AnonFindManyCommunityInputSchema(): z.ZodObject<Properties<AnonF
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
+  })
+}
+
+export function ClaimAdminCreateInputSchema(): z.ZodObject<Properties<ClaimAdminCreateInput>> {
+  return z.object({
+    amount: z.string().nullish(),
+    communityId: z.string(),
+    minter: z.string(),
+    provider: IdentityProviderSchema,
+    providerId: z.string(),
+  })
+}
+
+export function ClaimAdminFindManyInputSchema(): z.ZodObject<Properties<ClaimAdminFindManyInput>> {
+  return z.object({
+    communityId: z.string(),
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function ClaimAdminUpdateInputSchema(): z.ZodObject<Properties<ClaimAdminUpdateInput>> {
+  return z.object({
+    amount: z.string().nullish(),
+    signature: z.string().nullish(),
+    status: ClaimStatusSchema.nullish(),
+  })
+}
+
+export function ClaimUserCreateInputSchema(): z.ZodObject<Properties<ClaimUserCreateInput>> {
+  return z.object({
+    amount: z.string().nullish(),
+    communityId: z.string(),
+    minter: z.string(),
+    provider: IdentityProviderSchema,
+    providerId: z.string(),
+  })
+}
+
+export function ClaimUserFindManyInputSchema(): z.ZodObject<Properties<ClaimUserFindManyInput>> {
+  return z.object({
+    communityId: z.string(),
+    limit: z.number().nullish(),
+    minter: z.string().nullish(),
+    page: z.number().nullish(),
+    provider: IdentityProviderSchema.nullish(),
+    providerId: z.string().nullish(),
+    search: z.string().nullish(),
+    status: ClaimStatusSchema.nullish(),
+  })
+}
+
+export function ClaimUserUpdateInputSchema(): z.ZodObject<Properties<ClaimUserUpdateInput>> {
+  return z.object({
+    amount: z.string().nullish(),
+    signature: z.string().nullish(),
+    status: ClaimStatusSchema.nullish(),
   })
 }
 
