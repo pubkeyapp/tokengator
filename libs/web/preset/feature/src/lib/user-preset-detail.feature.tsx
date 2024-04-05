@@ -65,9 +65,9 @@ export default function UserPresetDetailFeature() {
 function CreateMinterComponent({ presetId }: { presetId: string }) {
   const { createMinter } = useUserFindOnePreset({ presetId })
   const { items } = useUserFindManyCommunity()
-  const [communityId, setCommunityId] = useState<string | null>(null)
+  const [communitySlug, setCommunitySlug] = useState<string | null>(null)
 
-  const options = items.map((item) => ({ value: item.id, label: item.name }))
+  const options = items.map((item) => ({ value: item.slug, label: item.name }))
 
   return (
     <UiStack>
@@ -77,25 +77,25 @@ function CreateMinterComponent({ presetId }: { presetId: string }) {
         data={options}
         label="Community"
         placeholder="Select community"
-        value={communityId}
-        onChange={(value) => setCommunityId(value)}
+        value={communitySlug || ''}
+        onChange={(value) => setCommunitySlug(value)}
       />
 
       <Group justify="flex-end">
         <Button
-          disabled={!communityId}
+          disabled={!communitySlug}
           onClick={() => {
-            if (!communityId) {
+            if (!communitySlug) {
               return
             }
-            return createMinter(communityId)
+            return createMinter({ communitySlug })
           }}
         >
           Create Minter
         </Button>
       </Group>
 
-      <UiDebug data={{ communityId, items }} open />
+      <UiDebug data={{ communitySlug, items }} open />
     </UiStack>
   )
 }

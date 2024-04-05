@@ -16,9 +16,9 @@ export function useUserFindOnePreset({ presetId }: { presetId: string }) {
   return {
     item,
     query,
-    createMinter: (communityId: string) =>
+    createMinter: ({ communitySlug }: { communitySlug: string }) =>
       sdk
-        .userCreateMintFromPreset({ presetId, communityId })
+        .userCreateMintFromPreset({ presetId, communitySlug })
         .then((res) => {
           if (res.data.minted) {
             toastSuccess('Minter created')

@@ -40,13 +40,17 @@ export class ApiPresetMinterService {
     this.logger.debug(`Program ID: ${this.programId.toString()}`)
   }
 
-  async mintFromPreset(presetId: string, communityId: string) {
-    const communityFeePayer = await this.getKeypairFromCommunity(communityId)
+  async mintFromPreset(presetId: string, communitySlug: string) {
+    console.log({
+      presetId,
+      communitySlug,
+    })
+    const communityFeePayer = await this.getKeypairFromCommunity(communitySlug)
     const authority = communityFeePayer
     const remoteFeePayer = this.feePayer
 
     this.logger.debug(
-      `Minting from preset: ${presetId} for community: ${communityId}, fee payer: ${communityFeePayer.publicKey.toString()}`,
+      `Minting from preset: ${presetId} for community: ${communitySlug}, fee payer: ${communityFeePayer.publicKey.toString()}`,
     )
 
     // Random id between 0 and 1000
@@ -54,14 +58,13 @@ export class ApiPresetMinterService {
     const minterName = `Business Visa #${randId}`
 
     // BELOW HERE WILL MOVE TO THE SDK AT SOME POINT
-
-    const groupMintKeypair = Keypair.generate()
-    const [minter] = getMinterPda({ name: minterName, programId: this.programId })
-    const [group] = getWNSGroupPda(groupMintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
+    const mintKeypair = Keypair.generate()
+    const [minter] = getMinterPda({ name: minterName, mint: mintKeypair.publicKey, programId: this.programId })
+    const [group] = getWNSGroupPda(mintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
     const minterTokenAccount = getAssociatedTokenAddressSync(
-      groupMintKeypair.publicKey,
+      mintKeypair.publicKey,
       minter,
       true,
       TOKEN_2022_PROGRAM_ID,
@@ -97,7 +100,7 @@ export class ApiPresetMinterService {
       },
       minterConfig: {
         metadataConfig: {
-          uri: `https://devnet.tokengator.app/api/metadata/json/${groupMintKeypair.publicKey.toString()}.json`,
+          uri: `https://devnet.tokengator.app/api/metadata/json/${mintKeypair.publicKey.toString()}.json`,
           name: 'Business Visa',
           symbol: 'BV',
           metadata: [
@@ -125,6 +128,7 @@ export class ApiPresetMinterService {
 
     const signature = await this.programTokenMinter.methods
       .createMinterWns({
+        community: communitySlug,
         name,
         imageUrl,
         description,
@@ -161,21 +165,21 @@ export class ApiPresetMinterService {
         minterTokenAccount,
         authority: authority.publicKey,
         feePayer: remoteFeePayer.publicKey,
-        mint: groupMintKeypair.publicKey,
+        mint: mintKeypair.publicKey,
         rent: SYSVAR_RENT_PUBKEY,
         wnsProgram: WEN_NEW_STANDARD_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         tokenProgram: TOKEN_2022_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
       })
-      .signers([authority, groupMintKeypair, remoteFeePayer])
+      .signers([authority, mintKeypair, remoteFeePayer])
       .rpc({ commitment: 'confirmed' })
 
     this.logger.debug(`Signature: ${signature}`)
     return signature
   }
 
-  async mintFromMinter(minterAccount: string, communityId: string) {
+  async mintFromMinter(minterAccount: string, communitySlug: string) {
     const minter = new PublicKey(minterAccount)
 
     const found = await this.programTokenMinter.account.minter.fetch(minter)
@@ -183,7 +187,7 @@ export class ApiPresetMinterService {
       throw new Error(`Minter not found: ${minterAccount}`)
     }
 
-    const communityFeePayer = await this.getKeypairFromCommunity(communityId)
+    const communityFeePayer = await this.getKeypairFromCommunity(communitySlug)
     const authority = communityFeePayer
     const remoteFeePayer = this.feePayer
 
@@ -239,9 +243,10 @@ export class ApiPresetMinterService {
     return this.programTokenMinter.account.minter.all()
   }
 
-  async getMintersByCommunity(communityId: string) {
-    const [account] = getCommunityPda(communityId, this.programId)
-    return this.programTokenMinter.account.minter.all([{ memcmp: { offset: 8, bytes: account.toBase58() } }])
+  async getMintersByCommunity(communitySlug: string) {
+    const [account] = getCommunityPda(communitySlug, this.programId)
+
+    return this.programTokenMinter.account.minter.all([{ memcmp: { offset: 8 + 1, bytes: account.toBase58() } }])
   }
 
   async getMinterAssets(account: string) {
@@ -258,9 +263,9 @@ export class ApiPresetMinterService {
     return this.programTokenMinter.account.minter.fetch(new PublicKey(account))
   }
 
-  private async getKeypairFromCommunity(communityId: string): Promise<Keypair> {
+  private async getKeypairFromCommunity(communitySlug: string): Promise<Keypair> {
     const community = await this.core.data.community.findUnique({
-      where: { id: communityId },
+      where: { slug: communitySlug },
       include: {
         wallets: {
           where: {
@@ -271,11 +276,11 @@ export class ApiPresetMinterService {
       },
     })
     if (!community) {
-      throw new Error(`Community not found: ${communityId}`)
+      throw new Error(`Community not found: ${communitySlug}`)
     }
     if (!community.wallets.length) {
       throw new Error(
-        `Community has no wallets: ${communityId}. Please add a wallet with the name 'Fee Payer' to the community.`,
+        `Community has no wallets: ${communitySlug}. Please add a wallet with the name 'Fee Payer' to the community.`,
       )
     }
     const wallet = community.wallets[0]

@@ -22,18 +22,22 @@ export class ApiPresetDataUserService {
     return this.data.findOne(presetId)
   }
 
-  async createMinterFromPreset(userId: string, presetId: string, communityId: string) {
-    // TODO: Check if userId can mint on behalf of communityId
-    return this.minter.mintFromPreset(presetId, communityId)
+  async createMinterFromPreset(userId: string, presetId: string, communitySlug: string) {
+    // TODO: Check if userId can mint on behalf of communitySlug
+    return this.minter.mintFromPreset(presetId, communitySlug)
   }
 
-  async createMintFromMinter(userId: string, account: string, communityId: string) {
-    // TODO: Check if userId can mint on behalf of communityId
-    return this.minter.mintFromMinter(account, communityId)
+  async createMintFromMinter(userId: string, account: string, communitySlug: string) {
+    // TODO: Check if userId can mint on behalf of communitySlug
+    return this.minter.mintFromMinter(account, communitySlug)
   }
 
   async getMinters() {
     return this.minter.getMinters()
+  }
+
+  async getMintersByCommunity(communitySlug: string) {
+    return this.minter.getMintersByCommunity(communitySlug)
   }
 
   async getMinter(account: string) {

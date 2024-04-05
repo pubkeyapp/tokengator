@@ -20,11 +20,11 @@ export class ApiSolanaService {
 
   @OnEvent(CORE_APP_STARTED)
   async onApplicationStarted() {
-    const balance = await this.ensureFeePayerBalance()
     this.logger.verbose(`Solana Fee Payer: ${this.core.config.solanaFeePayer.publicKey}`)
-    this.logger.verbose(`Fee Payer Balance: ${balance / LAMPORTS_PER_SOL} SOL`)
 
-    await this.solanaRequestAirdrop(this.core.config.solanaFeePayer.publicKey.toString())
+    await this.solanaRequestAirdrop(this.core.config.solanaFeePayer.publicKey.toString()).then((res) => {
+      this.logger.verbose(`Fee Payer Balances: ${res.sol} SOL, ${res.eurc} EURC, ${res.usdc} USDC`)
+    })
   }
 
   @Cron(CronExpression.EVERY_MINUTE)

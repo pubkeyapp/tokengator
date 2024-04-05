@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom'
 export function UserCommunityDetailMinterDetailTab({ community }: { community: Community }) {
   const { account } = useParams<{ account: string }>() as { account: string }
   const query = useUserGetMinter({ account })
-  const mutation = useUserCreateMintFromMinter({ account, communityId: community.id })
+  const mutation = useUserCreateMintFromMinter({ account, communitySlug: community.slug })
   const queryAssets = useUserGetMinterAssets({ account })
   const items: AccountInfo<ParsedAccountData>[] = useMemo(() => queryAssets.data ?? [], [queryAssets.data])
 

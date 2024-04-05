@@ -60,6 +60,9 @@ query userFindOnePreset($presetId: String!) {
 query userGetMinters {
   items: userGetMinters
 }
+query userGetMintersByCommunity($communitySlug: String!) {
+  items: userGetMintersByCommunity(communitySlug: $communitySlug)
+}
 
 query userGetMinter($account: String!) {
   item: userGetMinter(account: $account)
@@ -69,10 +72,10 @@ query userGetMinterAssets($account: String!) {
   items: userGetMinterAssets(account: $account)
 }
 
-mutation userCreateMintFromPreset($presetId: String!, $communityId: String!) {
-  minted: userCreateMintFromPreset(presetId: $presetId, communityId: $communityId)
+mutation userCreateMintFromPreset($presetId: String!, $communitySlug: String!) {
+  minted: userCreateMintFromPreset(presetId: $presetId, communitySlug: $communitySlug)
 }
 
-mutation userCreateMintFromMinter($account: String!, $communityId: String!) {
-  minted: userCreateMintFromMinter(account: $account, communityId: $communityId)
+mutation userCreateMintFromMinter($account: String!, $communitySlug: String!) {
+  minted: userCreateMintFromMinter(account: $account, communitySlug: $communitySlug)
 }

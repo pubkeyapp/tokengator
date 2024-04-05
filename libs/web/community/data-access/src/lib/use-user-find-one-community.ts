@@ -2,10 +2,11 @@ import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { Community, UserUpdateCommunityInput } from '@tokengator-mint/sdk'
 import { useSdk } from '@tokengator-mint/web-core-data-access'
-import { uiToastLink } from '@tokengator-mint/web-solana-data-access'
+import { uiToastLink, useCluster } from '@tokengator-mint/web-solana-data-access'
 
 export function useUserFindOneCommunity({ slug }: { slug: string }) {
   const sdk = useSdk()
+  const { getExplorerUrl } = useCluster()
   const query = useQuery({
     queryKey: ['user', 'find-one-community', slug],
     queryFn: () => sdk.userFindOneCommunity({ slug }).then((res) => res.data),
@@ -16,15 +17,15 @@ export function useUserFindOneCommunity({ slug }: { slug: string }) {
   return {
     item,
     query,
-    createMinter: (presetId: string) =>
+    createMinter: ({ presetId }: { presetId: string }) =>
       sdk
-        .userCreateMintFromPreset({ presetId, communityId: item?.id ?? '' })
+        .userCreateMintFromPreset({ presetId, communitySlug: item?.slug ?? '' })
         .then((res) => {
           if (res.data.minted) {
             toastSuccess('Minter created')
             uiToastLink({
               label: 'View Transaction',
-              link: `tx/${res.data.minted}`,
+              link: getExplorerUrl(`tx/${res.data.minted}`),
             })
           }
           return res.data.minted

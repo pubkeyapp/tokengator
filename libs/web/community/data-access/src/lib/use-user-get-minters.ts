@@ -10,3 +10,13 @@ export function useUserGetMinters() {
     },
   })
 }
+
+export function useUserGetMintersByCommunity({ slug }: { slug: string }) {
+  const sdk = useSdk()
+  return useQuery({
+    queryKey: ['userGetMinters'],
+    queryFn: async () => {
+      return sdk.userGetMintersByCommunity({ communitySlug: slug }).then((res) => res.data?.items ?? [])
+    },
+  })
+}

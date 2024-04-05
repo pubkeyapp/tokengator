@@ -16,12 +16,12 @@ export enum IdentityProvider {
   Twitter = 'twitter',
 }
 
-export function getMinterPda({ programId, name }: { name: string; programId: PublicKey }) {
-  return PublicKey.findProgramAddressSync([PREFIX, MINTER, encodeToBuffer(name)], programId)
+export function getMinterPda({ programId, mint, name }: { name: string; mint: PublicKey; programId: PublicKey }) {
+  return PublicKey.findProgramAddressSync([PREFIX, MINTER, mint.toBuffer(), encodeToBuffer(name)], programId)
 }
 
 export function getCommunityPda(name: string, programId: PublicKey) {
-  return PublicKey.findProgramAddressSync([PREFIX, encodeToBuffer('community'), encodeToBuffer(name)], programId)
+  return PublicKey.findProgramAddressSync([PREFIX, encodeToBuffer(name)], programId)
 }
 
 export function getWNSGroupPda(mint: PublicKey, programId: PublicKey) {

@@ -259,6 +259,10 @@ export type TokengatorMinter = {
             "type": "u8"
           },
           {
+            "name": "communityId",
+            "type": "publicKey"
+          },
+          {
             "name": "name",
             "type": "string"
           },
@@ -315,6 +319,10 @@ export type TokengatorMinter = {
         "kind": "struct",
         "fields": [
           {
+            "name": "community",
+            "type": "string"
+          },
+          {
             "name": "name",
             "type": "string"
           },
@@ -368,6 +376,10 @@ export type TokengatorMinter = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "community",
+            "type": "string"
+          },
           {
             "name": "name",
             "type": "string"
@@ -976,6 +988,10 @@ export const IDL: TokengatorMinter = {
             "type": "u8"
           },
           {
+            "name": "communityId",
+            "type": "publicKey"
+          },
+          {
             "name": "name",
             "type": "string"
           },
@@ -1032,6 +1048,10 @@ export const IDL: TokengatorMinter = {
         "kind": "struct",
         "fields": [
           {
+            "name": "community",
+            "type": "string"
+          },
+          {
             "name": "name",
             "type": "string"
           },
@@ -1085,6 +1105,10 @@ export const IDL: TokengatorMinter = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "community",
+            "type": "string"
+          },
           {
             "name": "name",
             "type": "string"

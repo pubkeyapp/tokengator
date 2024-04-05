@@ -18,23 +18,28 @@ export class ApiPresetUserResolver {
   userCreateMintFromPreset(
     @CtxUserId() userId: string,
     @Args('presetId') presetId: string,
-    @Args('communityId') communityId: string,
+    @Args('communitySlug') communitySlug: string,
   ) {
-    return this.service.user.createMinterFromPreset(userId, presetId, communityId)
+    return this.service.user.createMinterFromPreset(userId, presetId, communitySlug)
   }
 
   @Mutation(() => String, { nullable: true })
   userCreateMintFromMinter(
     @CtxUserId() userId: string,
     @Args('account') account: string,
-    @Args('communityId') communityId: string,
+    @Args('communitySlug') communitySlug: string,
   ) {
-    return this.service.user.createMintFromMinter(userId, account, communityId)
+    return this.service.user.createMintFromMinter(userId, account, communitySlug)
   }
 
   @Query(() => GraphQLJSON)
   userGetMinters() {
     return this.service.user.getMinters()
+  }
+
+  @Query(() => GraphQLJSON)
+  userGetMintersByCommunity(@Args('communitySlug') communitySlug: string) {
+    return this.service.user.getMintersByCommunity(communitySlug)
   }
 
   @Query(() => GraphQLJSON)
