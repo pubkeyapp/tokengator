@@ -1,0 +1,45 @@
+fragment TokenGatorMinterDetails on TokenGatorMinter {
+  publicKey
+  bump
+  communityId
+  name
+  description
+  imageUrl
+  feePayer
+  authorities
+  paymentConfig {
+    ...TokenGatorPaymentConfigDetails
+  }
+  minterConfig {
+    ...TokenGatorMinterConfigDetails
+  }
+}
+
+fragment TokenGatorApplicationConfigDetails on TokenGatorMinterApplicationConfig {
+  identities
+  paymentConfig {
+    ...TokenGatorPaymentConfigDetails
+  }
+}
+fragment TokenGatorMinterConfigDetails on TokenGatorMinterConfig {
+  mint
+  applicationConfig {
+    ...TokenGatorApplicationConfigDetails
+  }
+  metadataConfig {
+    ...TokenGatorMetadataConfigDetails
+  }
+}
+fragment TokenGatorMetadataConfigDetails on TokenGatorMinterMetadataConfig {
+  metadata
+  name
+  symbol
+  uri
+}
+fragment TokenGatorPaymentConfigDetails on TokenGatorMinterPaymentConfig {
+  mint
+  days
+  amount
+  expiresAt
+  price
+}

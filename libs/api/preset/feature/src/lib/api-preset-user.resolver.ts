@@ -6,6 +6,7 @@ import {
   Preset,
   PresetPaging,
   PresetUserFindManyInput,
+  TokenGatorMinter,
 } from '@tokengator-mint/api-preset-data-access'
 import { GraphQLJSON } from 'graphql-scalars'
 
@@ -32,17 +33,17 @@ export class ApiPresetUserResolver {
     return this.service.user.createMintFromMinter(userId, account, communitySlug)
   }
 
-  @Query(() => GraphQLJSON)
+  @Query(() => TokenGatorMinter)
   userGetMinters() {
     return this.service.user.getMinters()
   }
 
-  @Query(() => GraphQLJSON)
-  userGetMintersByCommunity(@Args('communitySlug') communitySlug: string) {
-    return this.service.user.getMintersByCommunity(communitySlug)
+  @Query(() => [TokenGatorMinter])
+  userGetMintersByCommunity(@CtxUserId() userId: string, @Args('communitySlug') communitySlug: string) {
+    return this.service.user.getMintersByCommunity(userId, communitySlug)
   }
 
-  @Query(() => GraphQLJSON)
+  @Query(() => TokenGatorMinter)
   userGetMinter(@Args('account') account: string) {
     return this.service.user.getMinter(account)
   }

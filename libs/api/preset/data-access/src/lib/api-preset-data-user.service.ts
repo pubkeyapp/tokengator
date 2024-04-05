@@ -11,7 +11,7 @@ export class ApiPresetDataUserService {
 
   async findManyPreset(input: PresetUserFindManyInput): Promise<PresetPaging> {
     return this.data.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: getPresetWhereUserInput(input),
       limit: input.limit,
       page: input.page,
@@ -23,12 +23,12 @@ export class ApiPresetDataUserService {
   }
 
   async createMinterFromPreset(userId: string, presetId: string, communitySlug: string) {
-    // TODO: Check if userId can mint on behalf of communitySlug
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
     return this.minter.mintFromPreset(presetId, communitySlug)
   }
 
   async createMintFromMinter(userId: string, account: string, communitySlug: string) {
-    // TODO: Check if userId can mint on behalf of communitySlug
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
     return this.minter.mintFromMinter(account, communitySlug)
   }
 
@@ -36,7 +36,8 @@ export class ApiPresetDataUserService {
     return this.minter.getMinters()
   }
 
-  async getMintersByCommunity(communitySlug: string) {
+  async getMintersByCommunity(userId: string, communitySlug: string) {
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
     return this.minter.getMintersByCommunity(communitySlug)
   }
 

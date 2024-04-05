@@ -77,7 +77,10 @@ model Preset {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   name        String
+  color       String
   description String?
+  imageUrl    String?
+  config      Json
   prices      Price[]
 }
 

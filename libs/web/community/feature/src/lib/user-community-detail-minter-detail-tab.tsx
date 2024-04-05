@@ -1,5 +1,5 @@
 import { Button, Group } from '@mantine/core'
-import { UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
 import { Community } from '@tokengator-mint/sdk'
 import {
@@ -22,7 +22,7 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
     <UiStack>
       {query.isLoading ? (
         <UiLoader />
-      ) : (
+      ) : query.data ? (
         <MinterUiCard item={query.data}>
           <Group justify="flex-end">
             <Button
@@ -35,6 +35,8 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
 
           <MinterUiAssets items={items} />
         </MinterUiCard>
+      ) : (
+        <UiWarning message={`Minter not found: ${account}`} />
       )}
     </UiStack>
   )

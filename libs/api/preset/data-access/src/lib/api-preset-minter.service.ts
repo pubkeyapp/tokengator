@@ -1,25 +1,31 @@
 import * as anchor from '@coral-xyz/anchor'
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { Injectable, Logger } from '@nestjs/common'
+import { Preset } from '@prisma/client'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
-import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from '@solana/web3.js'
+import { Keypair, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from '@solana/web3.js'
 import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
 import { ApiSolanaService } from '@tokengator-mint/api-solana-data-access'
 import {
   getCommunityPda,
+  getIdentityProviders,
   getMinterPda,
   getTokengatorMinterProgramId,
   getWNSGroupPda,
   getWNSManagerPda,
   getWNSMemberPda,
   IdentityProvider,
+  MINT_USDC,
   TokengatorMinter,
   TokengatorMinterIDL,
   WEN_NEW_STANDARD_PROGRAM_ID,
   WenNewStandard,
   WenNewStandardIDL,
 } from '@tokengator-mint/api-solana-util'
+import { ApiPresetDataService } from './api-preset-data.service'
+import { TokenGatorMinter } from './entity/token-gator-minter.entity'
+import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'
 
 @Injectable()
 export class ApiPresetMinterService {
@@ -30,7 +36,7 @@ export class ApiPresetMinterService {
   private readonly programWns: Program<WenNewStandard>
   private readonly programId: PublicKey
 
-  constructor(readonly core: ApiCoreService, readonly solana: ApiSolanaService) {
+  constructor(readonly data: ApiPresetDataService, readonly core: ApiCoreService, readonly solana: ApiSolanaService) {
     this.feePayer = this.core.config.solanaFeePayer
     this.provider = this.solana.getAnchorProvider(this.feePayer)
     this.programId = getTokengatorMinterProgramId('devnet')
@@ -41,10 +47,8 @@ export class ApiPresetMinterService {
   }
 
   async mintFromPreset(presetId: string, communitySlug: string) {
-    console.log({
-      presetId,
-      communitySlug,
-    })
+    const preset = await this.data.findOne(presetId)
+
     const communityFeePayer = await this.getKeypairFromCommunity(communitySlug)
     const authority = communityFeePayer
     const remoteFeePayer = this.feePayer
@@ -53,13 +57,21 @@ export class ApiPresetMinterService {
       `Minting from preset: ${presetId} for community: ${communitySlug}, fee payer: ${communityFeePayer.publicKey.toString()}`,
     )
 
-    // Random id between 0 and 1000
-    const randId = Math.floor(Math.random() * 1000)
-    const minterName = `Business Visa #${randId}`
+    const mintKeypair = Keypair.generate()
+
+    const {
+      name,
+      description,
+      imageUrl,
+      paymentConfig,
+      minterConfig: {
+        applicationConfig: { paymentConfig: appPaymentConfig },
+        metadataConfig,
+      },
+    } = getPresetConfig({ communitySlug, mintPublicKey: mintKeypair.publicKey.toString(), preset })
 
     // BELOW HERE WILL MOVE TO THE SDK AT SOME POINT
-    const mintKeypair = Keypair.generate()
-    const [minter] = getMinterPda({ name: minterName, mint: mintKeypair.publicKey, programId: this.programId })
+    const [minter] = getMinterPda({ name, mint: mintKeypair.publicKey, programId: this.programId })
     const [group] = getWNSGroupPda(mintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
@@ -71,60 +83,7 @@ export class ApiPresetMinterService {
       ASSOCIATED_TOKEN_PROGRAM_ID,
     )
 
-    const {
-      name,
-      description,
-      imageUrl,
-      paymentConfig,
-      minterConfig: {
-        applicationConfig: { paymentConfig: appPaymentConfig, identities },
-        metadataConfig,
-      },
-    } = {
-      name: minterName,
-      description:
-        'The Business Visa preset is a preset that is used for business purposes. The end user pays to obtain the document and it expires after a certain period of time.',
-      imageUrl: `https://devnet.tokengator.app/api/preset/business-visa.png`,
-      // NEW: We add a payment_config field to the preset
-      paymentConfig: {
-        // The community can mint 100 Business Visa documents
-        amount: 100,
-        // At a price of 0.1 SOL
-        price: 0.1 * LAMPORTS_PER_SOL,
-        // The mint is the SPL Token mint of the payment
-        mint: new PublicKey('So11111111111111111111111111111111111111112'),
-        // The community can use this preset for 30 days
-        days: 30,
-        // The expires_at field is calculated based on the current timestamp and the days field at time of minting
-        expiresAt: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
-      },
-      minterConfig: {
-        metadataConfig: {
-          uri: `https://devnet.tokengator.app/api/metadata/json/${mintKeypair.publicKey.toString()}.json`,
-          name: 'Business Visa',
-          symbol: 'BV',
-          metadata: [
-            ['preset', 'business-visa'],
-            ['community', 'tokengator'],
-          ],
-        },
-        // NEW: We add an application_config field to the minter_config
-        applicationConfig: {
-          // In this case, the user needs to link their Discord and Twitter accounts before they can apply
-          identities: [IdentityProvider.Discord, IdentityProvider.Twitter],
-          // We set the price to 0.01 SOL and the payment is valid for 30 days
-          // The expires_at field is calculated based on the current timestamp and the days field at time of minting
-          paymentConfig: {
-            amount: 1,
-            price: 0.01 * LAMPORTS_PER_SOL,
-            mint: new PublicKey('So11111111111111111111111111111111111111112'),
-            days: 30,
-            // The expires_at field is calculated based on the current timestamp and the days field at time of minting
-            expiresAt: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
-          },
-        },
-      },
-    }
+    const identities = getIdentityProviders([IdentityProvider.Discord])
 
     const signature = await this.programTokenMinter.methods
       .createMinterWns({
@@ -132,10 +91,11 @@ export class ApiPresetMinterService {
         name,
         imageUrl,
         description,
+        metadataConfig,
         interestConfig: null,
         transferFeeConfig: null,
         applicationConfig: {
-          identities: [],
+          identities,
           paymentConfig: {
             amount: appPaymentConfig.amount,
             days: appPaymentConfig.days,
@@ -143,12 +103,6 @@ export class ApiPresetMinterService {
             mint: appPaymentConfig.mint,
             price: new anchor.BN(appPaymentConfig.price),
           },
-        },
-        metadataConfig: {
-          metadata: metadataConfig.metadata,
-          name: metadataConfig.name,
-          symbol: metadataConfig.symbol,
-          uri: metadataConfig.uri,
         },
         paymentConfig: {
           amount: paymentConfig.amount,
@@ -187,8 +141,7 @@ export class ApiPresetMinterService {
       throw new Error(`Minter not found: ${minterAccount}`)
     }
 
-    const communityFeePayer = await this.getKeypairFromCommunity(communitySlug)
-    const authority = communityFeePayer
+    const authority = await this.getKeypairFromCommunity(communitySlug)
     const remoteFeePayer = this.feePayer
 
     const groupMintPublicKey = found.minterConfig.mint
@@ -232,26 +185,46 @@ export class ApiPresetMinterService {
         systemProgram: SystemProgram.programId,
       })
       .signers([authority, memberMintKeypair])
-      .rpc({ commitment: 'confirmed' })
+      .rpc({ commitment: 'confirmed', skipPreflight: true })
 
     this.logger.debug(`Signature: ${signature}`)
 
     return signature
   }
 
-  async getMinters() {
-    return this.programTokenMinter.account.minter.all()
+  async getMinters(): Promise<TokenGatorMinter[]> {
+    return this.programTokenMinter.account.minter.all().then((res) =>
+      res.map(({ account: { minterConfig, paymentConfig, ...account }, publicKey }) =>
+        formatTokenGatorMinter({
+          account,
+          publicKey,
+          paymentConfig,
+          minterConfig,
+        }),
+      ),
+    )
   }
 
-  async getMintersByCommunity(communitySlug: string) {
+  async getMintersByCommunity(communitySlug: string): Promise<TokenGatorMinter[]> {
     const [account] = getCommunityPda(communitySlug, this.programId)
 
-    return this.programTokenMinter.account.minter.all([{ memcmp: { offset: 8 + 1, bytes: account.toBase58() } }])
+    return this.programTokenMinter.account.minter
+      .all([{ memcmp: { offset: 8 + 1, bytes: account.toBase58() } }])
+      .then((res) =>
+        res.map(({ account: { minterConfig, paymentConfig, ...account }, publicKey }) =>
+          formatTokenGatorMinter({
+            account,
+            publicKey,
+            paymentConfig,
+            minterConfig,
+          }),
+        ),
+      )
   }
 
   async getMinterAssets(account: string) {
     const found = await this.getMinter(account)
-    const [group] = getWNSGroupPda(found.minterConfig.mint, WEN_NEW_STANDARD_PROGRAM_ID)
+    const [group] = getWNSGroupPda(new PublicKey(found.minterConfig.mint), WEN_NEW_STANDARD_PROGRAM_ID)
 
     return this.getGroupMembers({ account: group })
       .then((res) => res.map((member) => member.account.mint))
@@ -259,8 +232,17 @@ export class ApiPresetMinterService {
       .then((res) => res.value ?? [])
   }
 
-  async getMinter(account: string) {
-    return this.programTokenMinter.account.minter.fetch(new PublicKey(account))
+  async getMinter(publicKey: string): Promise<TokenGatorMinter> {
+    return this.programTokenMinter.account.minter
+      .fetch(new PublicKey(publicKey))
+      .then(({ minterConfig, paymentConfig, ...account }) =>
+        formatTokenGatorMinter({
+          account,
+          publicKey,
+          paymentConfig,
+          minterConfig,
+        }),
+      )
   }
 
   private async getKeypairFromCommunity(communitySlug: string): Promise<Keypair> {
@@ -282,5 +264,73 @@ export class ApiPresetMinterService {
     return this.programWns.account.tokenGroupMember
       .all([{ memcmp: { offset: 32 + 8, bytes: account.toBase58() } }])
       .then((res) => res.sort((a, b) => a.account.memberNumber - b.account.memberNumber))
+  }
+}
+
+function getPresetConfig({
+  communitySlug,
+  mintPublicKey,
+  preset,
+}: {
+  communitySlug: string
+  mintPublicKey: string
+  preset: Preset
+}) {
+  return {
+    name: preset.name,
+    description: preset.description ?? '',
+    imageUrl: preset.imageUrl ?? '',
+    paymentConfig: getPaymentConfig({
+      amount: 1,
+      price: 0.5,
+      days: 30,
+    }),
+    minterConfig: {
+      metadataConfig: {
+        uri: `https://devnet.tokengator.app/api/metadata/json/${mintPublicKey}.json`,
+        name: preset.name,
+        symbol: 'TGC',
+        metadata: [
+          ['preset', preset.id],
+          ['community', communitySlug],
+        ],
+      },
+      // NEW: We add an application_config field to the minter_config
+      applicationConfig: {
+        // In this case, the user needs to link their Discord and Twitter accounts before they can apply
+        identities: [IdentityProvider.Discord, IdentityProvider.Twitter],
+        // We set the price to 0.01 SOL and the payment is valid for 30 days
+        // The expires_at field is calculated based on the current timestamp and the days field at time of minting
+        paymentConfig: getPaymentConfig({
+          amount: 1,
+          price: 0.5,
+          days: 30,
+        }),
+      },
+    },
+  }
+}
+
+function daysFromNow(n: number) {
+  return new Date().getTime() + 24 * 60 * 60 * n
+}
+
+function getPaymentConfig({
+  days,
+  price,
+  amount,
+  mint = new PublicKey(MINT_USDC.address),
+}: {
+  days: number
+  price: number
+  amount: number
+  mint?: PublicKey
+}) {
+  return {
+    amount,
+    price,
+    mint,
+    days,
+    expiresAt: daysFromNow(days),
   }
 }

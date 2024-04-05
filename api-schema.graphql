@@ -237,9 +237,12 @@ type PagingMeta {
 }
 
 type Preset {
+  color: String!
+  config: JSON
   createdAt: DateTime
   description: String
   id: String!
+  imageUrl: String
   name: String!
   updatedAt: DateTime
 }
@@ -346,10 +349,10 @@ type Query {
   userFindOnePreset(presetId: String!): Preset
   userFindOneUser(username: String!): User
   userFindOneWallet(publicKey: String!): Wallet
-  userGetMinter(account: String!): JSON!
+  userGetMinter(account: String!): TokenGatorMinter!
   userGetMinterAssets(account: String!): JSON!
-  userGetMinters: JSON!
-  userGetMintersByCommunity(communitySlug: String!): JSON!
+  userGetMinters: TokenGatorMinter!
+  userGetMintersByCommunity(communitySlug: String!): [TokenGatorMinter!]!
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
 
@@ -361,6 +364,45 @@ input RegisterInput {
 input RequestIdentityChallengeInput {
   provider: IdentityProvider!
   providerId: String!
+}
+
+type TokenGatorMinter {
+  authorities: [String!]!
+  bump: Float!
+  communityId: String!
+  description: String!
+  feePayer: String!
+  imageUrl: String!
+  minterConfig: TokenGatorMinterConfig!
+  name: String!
+  paymentConfig: TokenGatorMinterPaymentConfig!
+  publicKey: String!
+}
+
+type TokenGatorMinterApplicationConfig {
+  identities: [IdentityProvider!]!
+  paymentConfig: TokenGatorMinterPaymentConfig!
+}
+
+type TokenGatorMinterConfig {
+  applicationConfig: TokenGatorMinterApplicationConfig!
+  metadataConfig: TokenGatorMinterMetadataConfig!
+  mint: String!
+}
+
+type TokenGatorMinterMetadataConfig {
+  metadata: [[String!]!]!
+  name: String!
+  symbol: String!
+  uri: String!
+}
+
+type TokenGatorMinterPaymentConfig {
+  amount: Float!
+  days: Float!
+  expiresAt: String!
+  mint: String!
+  price: String!
 }
 
 type User {

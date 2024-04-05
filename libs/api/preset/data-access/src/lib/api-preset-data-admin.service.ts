@@ -20,7 +20,7 @@ export class ApiPresetDataAdminService {
 
   async findManyPreset(input: PresetAdminFindManyInput): Promise<PresetPaging> {
     return this.data.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: getPresetWhereAdminInput(input),
       limit: input.limit,
       page: input.page,

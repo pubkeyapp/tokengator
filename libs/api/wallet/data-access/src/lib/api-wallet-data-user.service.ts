@@ -11,7 +11,7 @@ export class ApiWalletDataUserService {
   constructor(private readonly data: ApiWalletDataService) {}
 
   async createWallet(userId: string, input: WalletUserCreateInput) {
-    await this.data.ensureCommunityAdmin({ userId, communityId: input.communityId })
+    await this.data.core.ensureCommunityAdmin({ userId, communityId: input.communityId })
     return this.data.create(input)
   }
 
@@ -24,7 +24,7 @@ export class ApiWalletDataUserService {
   }
 
   async findManyWallet(userId: string, input: WalletUserFindManyInput): Promise<WalletPaging> {
-    await this.data.ensureCommunityAdmin({ userId, communityId: input.communityId })
+    await this.data.core.ensureCommunityAdmin({ userId, communityId: input.communityId })
     return this.data.findMany({
       where: getWalletWhereUserInput(input),
       limit: input.limit,
@@ -37,7 +37,7 @@ export class ApiWalletDataUserService {
     if (!wallet.communityId) {
       throw new Error('Cannot find a wallet that is not associated with a community')
     }
-    await this.data.ensureCommunityAdmin({ userId, communityId: wallet.communityId })
+    await this.data.core.ensureCommunityAdmin({ userId, communityId: wallet.communityId })
     return wallet
   }
 

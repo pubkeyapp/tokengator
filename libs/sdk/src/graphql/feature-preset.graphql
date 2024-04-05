@@ -3,7 +3,9 @@ fragment PresetDetails on Preset {
   id
   name
   description
-
+  imageUrl
+  color
+  config
   updatedAt
 }
 
@@ -58,14 +60,20 @@ query userFindOnePreset($presetId: String!) {
 }
 
 query userGetMinters {
-  items: userGetMinters
+  items: userGetMinters {
+    ...TokenGatorMinterDetails
+  }
 }
 query userGetMintersByCommunity($communitySlug: String!) {
-  items: userGetMintersByCommunity(communitySlug: $communitySlug)
+  items: userGetMintersByCommunity(communitySlug: $communitySlug) {
+    ...TokenGatorMinterDetails
+  }
 }
 
 query userGetMinter($account: String!) {
-  item: userGetMinter(account: $account)
+  item: userGetMinter(account: $account) {
+    ...TokenGatorMinterDetails
+  }
 }
 
 query userGetMinterAssets($account: String!) {

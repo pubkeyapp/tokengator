@@ -4,6 +4,9 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
     name: 'Business Visa',
     description: 'Temporary access, can earn in the community',
+    imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-business-visa.png',
+    color: 'indigo',
+    config: {},
     prices: {
       create: [
         //
@@ -15,6 +18,9 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
     name: 'Visitor Pass',
     description: 'Temporary access, no earning in the community',
+    imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-visitor-pass.png',
+    color: 'lime',
+    config: {},
     prices: {
       create: [
         //
@@ -26,6 +32,9 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
     name: 'Citizenship',
     description: 'Permanent access, no need for renewal',
+    imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-citizenship.png',
+    color: 'grape',
+    config: {},
     prices: {
       create: [
         //
@@ -37,6 +46,9 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
     name: 'Residence',
     description: 'Permanent access, renewal required',
+    imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-residence.png',
+    color: 'teal',
+    config: {},
     prices: {
       create: [
         //

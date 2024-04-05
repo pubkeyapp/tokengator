@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { CommunityMemberRole, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { Keypair } from '@solana/web3.js'
 import { ApiCoreService, ellipsify, PagingInputFields } from '@tokengator-mint/api-core-data-access'
 import { WalletPaging } from './entity/wallet.entity'
 
 @Injectable()
 export class ApiWalletDataService {
-  constructor(private readonly core: ApiCoreService) {}
+  constructor(readonly core: ApiCoreService) {}
 
   async create(
     input: Omit<Prisma.WalletUncheckedCreateInput, 'name' | 'publicKey' | 'secretKey'> & { secretKey?: string },
@@ -89,16 +89,5 @@ export class ApiWalletDataService {
     await this.core.data.wallet.updateMany({ where: { publicKey: { not: publicKey } }, data: { feePayer: false } })
     // Update the selected wallet to be a fee payer
     return this.core.data.wallet.update({ where: { publicKey }, data: { feePayer: true } })
-  }
-
-  async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
-    const found = await this.core.data.communityMember.findFirst({
-      where: { communityId, userId, role: CommunityMemberRole.Admin },
-      include: { community: true, user: true },
-    })
-    if (!found) {
-      throw new Error('You must be a community admin to perform this action')
-    }
-    return found
   }
 }

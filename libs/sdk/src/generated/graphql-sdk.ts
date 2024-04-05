@@ -427,9 +427,12 @@ export type PagingMeta = {
 
 export type Preset = {
   __typename?: 'Preset'
+  color: Scalars['String']['output']
+  config?: Maybe<Scalars['JSON']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
   description?: Maybe<Scalars['String']['output']>
   id: Scalars['String']['output']
+  imageUrl?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
 }
@@ -539,10 +542,10 @@ export type Query = {
   userFindOnePreset?: Maybe<Preset>
   userFindOneUser?: Maybe<User>
   userFindOneWallet?: Maybe<Wallet>
-  userGetMinter: Scalars['JSON']['output']
+  userGetMinter: TokenGatorMinter
   userGetMinterAssets: Scalars['JSON']['output']
-  userGetMinters: Scalars['JSON']['output']
-  userGetMintersByCommunity: Scalars['JSON']['output']
+  userGetMinters: TokenGatorMinter
+  userGetMintersByCommunity: Array<TokenGatorMinter>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
 }
 
@@ -694,6 +697,50 @@ export type RegisterInput = {
 export type RequestIdentityChallengeInput = {
   provider: IdentityProvider
   providerId: Scalars['String']['input']
+}
+
+export type TokenGatorMinter = {
+  __typename?: 'TokenGatorMinter'
+  authorities: Array<Scalars['String']['output']>
+  bump: Scalars['Float']['output']
+  communityId: Scalars['String']['output']
+  description: Scalars['String']['output']
+  feePayer: Scalars['String']['output']
+  imageUrl: Scalars['String']['output']
+  minterConfig: TokenGatorMinterConfig
+  name: Scalars['String']['output']
+  paymentConfig: TokenGatorMinterPaymentConfig
+  publicKey: Scalars['String']['output']
+}
+
+export type TokenGatorMinterApplicationConfig = {
+  __typename?: 'TokenGatorMinterApplicationConfig'
+  identities: Array<IdentityProvider>
+  paymentConfig: TokenGatorMinterPaymentConfig
+}
+
+export type TokenGatorMinterConfig = {
+  __typename?: 'TokenGatorMinterConfig'
+  applicationConfig: TokenGatorMinterApplicationConfig
+  metadataConfig: TokenGatorMinterMetadataConfig
+  mint: Scalars['String']['output']
+}
+
+export type TokenGatorMinterMetadataConfig = {
+  __typename?: 'TokenGatorMinterMetadataConfig'
+  metadata: Array<Array<Scalars['String']['output']>>
+  name: Scalars['String']['output']
+  symbol: Scalars['String']['output']
+  uri: Scalars['String']['output']
+}
+
+export type TokenGatorMinterPaymentConfig = {
+  __typename?: 'TokenGatorMinterPaymentConfig'
+  amount: Scalars['Float']['output']
+  days: Scalars['Float']['output']
+  expiresAt: Scalars['String']['output']
+  mint: Scalars['String']['output']
+  price: Scalars['String']['output']
 }
 
 export type User = {
@@ -1764,6 +1811,9 @@ export type PresetDetailsFragment = {
   id: string
   name: string
   description?: string | null
+  imageUrl?: string | null
+  color: string
+  config?: any | null
   updatedAt?: Date | null
 }
 
@@ -1781,6 +1831,9 @@ export type AdminFindManyPresetQuery = {
       id: string
       name: string
       description?: string | null
+      imageUrl?: string | null
+      color: string
+      config?: any | null
       updatedAt?: Date | null
     }>
     meta: {
@@ -1808,6 +1861,9 @@ export type AdminFindOnePresetQuery = {
     id: string
     name: string
     description?: string | null
+    imageUrl?: string | null
+    color: string
+    config?: any | null
     updatedAt?: Date | null
   } | null
 }
@@ -1824,6 +1880,9 @@ export type AdminCreatePresetMutation = {
     id: string
     name: string
     description?: string | null
+    imageUrl?: string | null
+    color: string
+    config?: any | null
     updatedAt?: Date | null
   } | null
 }
@@ -1841,6 +1900,9 @@ export type AdminUpdatePresetMutation = {
     id: string
     name: string
     description?: string | null
+    imageUrl?: string | null
+    color: string
+    config?: any | null
     updatedAt?: Date | null
   } | null
 }
@@ -1865,6 +1927,9 @@ export type UserFindManyPresetQuery = {
       id: string
       name: string
       description?: string | null
+      imageUrl?: string | null
+      color: string
+      config?: any | null
       updatedAt?: Date | null
     }>
     meta: {
@@ -1892,25 +1957,160 @@ export type UserFindOnePresetQuery = {
     id: string
     name: string
     description?: string | null
+    imageUrl?: string | null
+    color: string
+    config?: any | null
     updatedAt?: Date | null
   } | null
 }
 
 export type UserGetMintersQueryVariables = Exact<{ [key: string]: never }>
 
-export type UserGetMintersQuery = { __typename?: 'Query'; items: any }
+export type UserGetMintersQuery = {
+  __typename?: 'Query'
+  items: {
+    __typename?: 'TokenGatorMinter'
+    publicKey: string
+    bump: number
+    communityId: string
+    name: string
+    description: string
+    imageUrl: string
+    feePayer: string
+    authorities: Array<string>
+    paymentConfig: {
+      __typename?: 'TokenGatorMinterPaymentConfig'
+      mint: string
+      days: number
+      amount: number
+      expiresAt: string
+      price: string
+    }
+    minterConfig: {
+      __typename?: 'TokenGatorMinterConfig'
+      mint: string
+      applicationConfig: {
+        __typename?: 'TokenGatorMinterApplicationConfig'
+        identities: Array<IdentityProvider>
+        paymentConfig: {
+          __typename?: 'TokenGatorMinterPaymentConfig'
+          mint: string
+          days: number
+          amount: number
+          expiresAt: string
+          price: string
+        }
+      }
+      metadataConfig: {
+        __typename?: 'TokenGatorMinterMetadataConfig'
+        metadata: Array<Array<string>>
+        name: string
+        symbol: string
+        uri: string
+      }
+    }
+  }
+}
 
 export type UserGetMintersByCommunityQueryVariables = Exact<{
   communitySlug: Scalars['String']['input']
 }>
 
-export type UserGetMintersByCommunityQuery = { __typename?: 'Query'; items: any }
+export type UserGetMintersByCommunityQuery = {
+  __typename?: 'Query'
+  items: Array<{
+    __typename?: 'TokenGatorMinter'
+    publicKey: string
+    bump: number
+    communityId: string
+    name: string
+    description: string
+    imageUrl: string
+    feePayer: string
+    authorities: Array<string>
+    paymentConfig: {
+      __typename?: 'TokenGatorMinterPaymentConfig'
+      mint: string
+      days: number
+      amount: number
+      expiresAt: string
+      price: string
+    }
+    minterConfig: {
+      __typename?: 'TokenGatorMinterConfig'
+      mint: string
+      applicationConfig: {
+        __typename?: 'TokenGatorMinterApplicationConfig'
+        identities: Array<IdentityProvider>
+        paymentConfig: {
+          __typename?: 'TokenGatorMinterPaymentConfig'
+          mint: string
+          days: number
+          amount: number
+          expiresAt: string
+          price: string
+        }
+      }
+      metadataConfig: {
+        __typename?: 'TokenGatorMinterMetadataConfig'
+        metadata: Array<Array<string>>
+        name: string
+        symbol: string
+        uri: string
+      }
+    }
+  }>
+}
 
 export type UserGetMinterQueryVariables = Exact<{
   account: Scalars['String']['input']
 }>
 
-export type UserGetMinterQuery = { __typename?: 'Query'; item: any }
+export type UserGetMinterQuery = {
+  __typename?: 'Query'
+  item: {
+    __typename?: 'TokenGatorMinter'
+    publicKey: string
+    bump: number
+    communityId: string
+    name: string
+    description: string
+    imageUrl: string
+    feePayer: string
+    authorities: Array<string>
+    paymentConfig: {
+      __typename?: 'TokenGatorMinterPaymentConfig'
+      mint: string
+      days: number
+      amount: number
+      expiresAt: string
+      price: string
+    }
+    minterConfig: {
+      __typename?: 'TokenGatorMinterConfig'
+      mint: string
+      applicationConfig: {
+        __typename?: 'TokenGatorMinterApplicationConfig'
+        identities: Array<IdentityProvider>
+        paymentConfig: {
+          __typename?: 'TokenGatorMinterPaymentConfig'
+          mint: string
+          days: number
+          amount: number
+          expiresAt: string
+          price: string
+        }
+      }
+      metadataConfig: {
+        __typename?: 'TokenGatorMinterMetadataConfig'
+        metadata: Array<Array<string>>
+        name: string
+        symbol: string
+        uri: string
+      }
+    }
+  }
+}
 
 export type UserGetMinterAssetsQueryVariables = Exact<{
   account: Scalars['String']['input']
@@ -2123,6 +2323,103 @@ export type SolanaRequestAirdropMutationVariables = Exact<{
 }>
 
 export type SolanaRequestAirdropMutation = { __typename?: 'Mutation'; requested?: any | null }
+
+export type TokenGatorMinterDetailsFragment = {
+  __typename?: 'TokenGatorMinter'
+  publicKey: string
+  bump: number
+  communityId: string
+  name: string
+  description: string
+  imageUrl: string
+  feePayer: string
+  authorities: Array<string>
+  paymentConfig: {
+    __typename?: 'TokenGatorMinterPaymentConfig'
+    mint: string
+    days: number
+    amount: number
+    expiresAt: string
+    price: string
+  }
+  minterConfig: {
+    __typename?: 'TokenGatorMinterConfig'
+    mint: string
+    applicationConfig: {
+      __typename?: 'TokenGatorMinterApplicationConfig'
+      identities: Array<IdentityProvider>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+    }
+    metadataConfig: {
+      __typename?: 'TokenGatorMinterMetadataConfig'
+      metadata: Array<Array<string>>
+      name: string
+      symbol: string
+      uri: string
+    }
+  }
+}
+
+export type TokenGatorApplicationConfigDetailsFragment = {
+  __typename?: 'TokenGatorMinterApplicationConfig'
+  identities: Array<IdentityProvider>
+  paymentConfig: {
+    __typename?: 'TokenGatorMinterPaymentConfig'
+    mint: string
+    days: number
+    amount: number
+    expiresAt: string
+    price: string
+  }
+}
+
+export type TokenGatorMinterConfigDetailsFragment = {
+  __typename?: 'TokenGatorMinterConfig'
+  mint: string
+  applicationConfig: {
+    __typename?: 'TokenGatorMinterApplicationConfig'
+    identities: Array<IdentityProvider>
+    paymentConfig: {
+      __typename?: 'TokenGatorMinterPaymentConfig'
+      mint: string
+      days: number
+      amount: number
+      expiresAt: string
+      price: string
+    }
+  }
+  metadataConfig: {
+    __typename?: 'TokenGatorMinterMetadataConfig'
+    metadata: Array<Array<string>>
+    name: string
+    symbol: string
+    uri: string
+  }
+}
+
+export type TokenGatorMetadataConfigDetailsFragment = {
+  __typename?: 'TokenGatorMinterMetadataConfig'
+  metadata: Array<Array<string>>
+  name: string
+  symbol: string
+  uri: string
+}
+
+export type TokenGatorPaymentConfigDetailsFragment = {
+  __typename?: 'TokenGatorMinterPaymentConfig'
+  mint: string
+  days: number
+  amount: number
+  expiresAt: string
+  price: string
+}
 
 export type UserDetailsFragment = {
   __typename?: 'User'
@@ -2640,6 +2937,9 @@ export const PresetDetailsFragmentDoc = gql`
     id
     name
     description
+    imageUrl
+    color
+    config
     updatedAt
   }
 `
@@ -2668,6 +2968,65 @@ export const PriceDetailsFragmentDoc = gql`
     updatedAt
   }
   ${CurrencyDetailsFragmentDoc}
+`
+export const TokenGatorPaymentConfigDetailsFragmentDoc = gql`
+  fragment TokenGatorPaymentConfigDetails on TokenGatorMinterPaymentConfig {
+    mint
+    days
+    amount
+    expiresAt
+    price
+  }
+`
+export const TokenGatorApplicationConfigDetailsFragmentDoc = gql`
+  fragment TokenGatorApplicationConfigDetails on TokenGatorMinterApplicationConfig {
+    identities
+    paymentConfig {
+      ...TokenGatorPaymentConfigDetails
+    }
+  }
+  ${TokenGatorPaymentConfigDetailsFragmentDoc}
+`
+export const TokenGatorMetadataConfigDetailsFragmentDoc = gql`
+  fragment TokenGatorMetadataConfigDetails on TokenGatorMinterMetadataConfig {
+    metadata
+    name
+    symbol
+    uri
+  }
+`
+export const TokenGatorMinterConfigDetailsFragmentDoc = gql`
+  fragment TokenGatorMinterConfigDetails on TokenGatorMinterConfig {
+    mint
+    applicationConfig {
+      ...TokenGatorApplicationConfigDetails
+    }
+    metadataConfig {
+      ...TokenGatorMetadataConfigDetails
+    }
+  }
+  ${TokenGatorApplicationConfigDetailsFragmentDoc}
+  ${TokenGatorMetadataConfigDetailsFragmentDoc}
+`
+export const TokenGatorMinterDetailsFragmentDoc = gql`
+  fragment TokenGatorMinterDetails on TokenGatorMinter {
+    publicKey
+    bump
+    communityId
+    name
+    description
+    imageUrl
+    feePayer
+    authorities
+    paymentConfig {
+      ...TokenGatorPaymentConfigDetails
+    }
+    minterConfig {
+      ...TokenGatorMinterConfigDetails
+    }
+  }
+  ${TokenGatorPaymentConfigDetailsFragmentDoc}
+  ${TokenGatorMinterConfigDetailsFragmentDoc}
 `
 export const WalletDetailsFragmentDoc = gql`
   fragment WalletDetails on Wallet {
@@ -3074,18 +3433,27 @@ export const UserFindOnePresetDocument = gql`
 `
 export const UserGetMintersDocument = gql`
   query userGetMinters {
-    items: userGetMinters
+    items: userGetMinters {
+      ...TokenGatorMinterDetails
+    }
   }
+  ${TokenGatorMinterDetailsFragmentDoc}
 `
 export const UserGetMintersByCommunityDocument = gql`
   query userGetMintersByCommunity($communitySlug: String!) {
-    items: userGetMintersByCommunity(communitySlug: $communitySlug)
+    items: userGetMintersByCommunity(communitySlug: $communitySlug) {
+      ...TokenGatorMinterDetails
+    }
   }
+  ${TokenGatorMinterDetailsFragmentDoc}
 `
 export const UserGetMinterDocument = gql`
   query userGetMinter($account: String!) {
-    item: userGetMinter(account: $account)
+    item: userGetMinter(account: $account) {
+      ...TokenGatorMinterDetails
+    }
   }
+  ${TokenGatorMinterDetailsFragmentDoc}
 `
 export const UserGetMinterAssetsDocument = gql`
   query userGetMinterAssets($account: String!) {

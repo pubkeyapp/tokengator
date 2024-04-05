@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
-import { ApiCoreService, PagingInputFields } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService, PagingInputFields, slugifyId } from '@tokengator-mint/api-core-data-access'
 import { PresetPaging } from './entity/preset.entity'
 
 @Injectable()
 export class ApiPresetDataService {
-  constructor(private readonly core: ApiCoreService) {}
+  constructor(readonly core: ApiCoreService) {}
 
-  async create(input: Prisma.PresetUncheckedCreateInput) {
-    return this.core.data.preset.create({ data: input })
+  async create(input: Omit<Prisma.PresetUncheckedCreateInput, 'color' | 'config'>) {
+    const id = slugifyId(input.name).toLowerCase()
+    return this.core.data.preset.create({ data: { ...input, id, color: 'brand', config: {} } })
   }
 
   async delete(presetId: string) {

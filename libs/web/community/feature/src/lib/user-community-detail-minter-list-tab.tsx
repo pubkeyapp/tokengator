@@ -1,8 +1,7 @@
 import { Button, Group, Select } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { UiDebug, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
-import { Community, Preset } from '@tokengator-mint/sdk'
+import { UiDebug, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { Community, Preset, TokenGatorMinter } from '@tokengator-mint/sdk'
 import { useUserFindOneCommunity, useUserGetMintersByCommunity } from '@tokengator-mint/web-community-data-access'
 import { MinterUiList } from '@tokengator-mint/web-community-ui'
 import { useUserFindManyPreset } from '@tokengator-mint/web-preset-data-access'
@@ -12,7 +11,7 @@ export function UserCommunityDetailMinterListTab({ community }: { community: Com
   const { createMinter } = useUserFindOneCommunity({ slug: community.slug })
   const query = useUserGetMintersByCommunity({ slug: community.slug })
   const { items: presets } = useUserFindManyPreset()
-  const items: AccountInfo<ParsedAccountData>[] = query.data ?? []
+  const items: TokenGatorMinter[] = query.data ?? []
 
   return query.isLoading ? (
     <UiLoader />
@@ -26,6 +25,7 @@ export function UserCommunityDetailMinterListTab({ community }: { community: Com
         <UiInfo message="No minters found" />
       )}
       <Group justify="flex-end">
+        <UiDebugModal data={{ items, presets }} />
         <Button
           onClick={() => {
             modals.open({
