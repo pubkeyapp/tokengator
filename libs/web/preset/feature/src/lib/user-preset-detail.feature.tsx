@@ -71,7 +71,7 @@ function CreateMinterComponent({ presetId }: { presetId: string }) {
 
   return (
     <UiStack>
-      <div>Here we are goint to create a minter frmo the Preset</div>
+      <div>Here we are going to create a minter from the Preset</div>
 
       <Select
         data={options}

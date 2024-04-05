@@ -2,14 +2,23 @@ fragment ClaimDetails on Claim {
   createdAt
   id
   communityId
+  account
   amount
-  minter
   signature
   provider
   providerId
   status
   name
   updatedAt
+  identity {
+    ...IdentityDetails
+  }
+  community {
+    ...CommunityDetails
+  }
+  minter {
+    ...TokenGatorMinterDetails
+  }
 }
 
 query adminFindManyClaim($input: ClaimAdminFindManyInput!) {
@@ -53,6 +62,18 @@ query userFindManyClaim($input: ClaimUserFindManyInput!) {
     meta {
       ...PagingMetaDetails
     }
+  }
+}
+
+query userGetClaim($claimId: String!) {
+  item: userGetClaim(claimId: $claimId) {
+    ...ClaimDetails
+  }
+}
+
+query userGetClaims {
+  items: userGetClaims {
+    ...ClaimDetails
   }
 }
 

@@ -8,7 +8,7 @@ export function AdminClaimUiCreateForm({ submit }: { submit: (res: ClaimAdminCre
     initialValues: {
       communityId: '',
       amount: '',
-      minter: '',
+      account: '',
       provider: IdentityProvider.Solana,
       providerId: '',
     },
@@ -17,7 +17,7 @@ export function AdminClaimUiCreateForm({ submit }: { submit: (res: ClaimAdminCre
   return (
     <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
-        <TextInput required name="minter" label="minter" {...form.getInputProps('minter')} />
+        <TextInput required name="account" label="account" {...form.getInputProps('account')} />
         <Select
           data={getEnumOptions(IdentityProvider)}
           name="provider"

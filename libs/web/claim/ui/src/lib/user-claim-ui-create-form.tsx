@@ -8,7 +8,7 @@ export function UserClaimUiCreateForm({ submit }: { submit: (res: ClaimUserCreat
     initialValues: {
       communityId: '',
       amount: '',
-      minter: '',
+      account: '',
       provider: IdentityProvider.Solana,
       providerId: '',
     },

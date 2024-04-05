@@ -8,7 +8,7 @@ export class ClaimAdminCreateInput {
   @Field()
   communityId!: string
   @Field()
-  minter!: string
+  account!: string
   @Field(() => IdentityProvider)
   provider!: IdentityProvider
   @Field()

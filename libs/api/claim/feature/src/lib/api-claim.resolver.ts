@@ -8,6 +8,11 @@ export class ApiClaimResolver {
 
   @ResolveField(() => String)
   name(@Parent() claim: Claim) {
+    const communityName = claim.community?.name
+    const minterName = claim.minter?.name
+    if (communityName && minterName) {
+      return `${communityName} - ${minterName}`
+    }
     return `${claim.provider}: ${ellipsify(claim.providerId)} `
   }
 }

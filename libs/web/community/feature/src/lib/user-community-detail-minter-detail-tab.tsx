@@ -28,7 +28,7 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
     {
       path: 'claims',
       label: 'Claims',
-      element: <UserClaimFeature communityId={community.id} minter={account} />,
+      element: <UserClaimFeature communityId={community.id} account={account} />,
     },
   ]
 

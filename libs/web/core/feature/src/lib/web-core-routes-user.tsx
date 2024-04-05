@@ -1,5 +1,6 @@
-import { UiContainer, UiDashboardGrid, UiDashboardItem } from '@pubkey-ui/core'
+import { UiContainer, UiDashboardGrid, UiDashboardItem, UiNotFound } from '@pubkey-ui/core'
 import { IconAdjustmentsX, IconSettings, IconUsersGroup } from '@tabler/icons-react'
+import { UserClaimPageFeature } from '@tokengator-mint/web-claim-feature'
 import { UserCommunityFeature } from '@tokengator-mint/web-community-feature'
 import { UserPresetFeature } from '@tokengator-mint/web-preset-feature'
 import { SettingsFeature } from '@tokengator-mint/web-settings-feature'
@@ -21,8 +22,10 @@ const routes: RouteObject[] = [
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
   { path: '/u/*', element: <UserFeature /> },
+  { path: '/claims/*', element: <UserClaimPageFeature /> },
   { path: '/c/*', element: <UserCommunityFeature /> },
   { path: '/presets/*', element: <UserPresetFeature /> },
+  { path: '/*', element: <UiNotFound to="/dashboard" /> },
 ]
 
 export default function WebCoreRoutesUser() {

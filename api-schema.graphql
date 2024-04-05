@@ -82,11 +82,14 @@ type AppConfig {
 }
 
 type Claim {
+  account: String!
   amount: String!
+  community: Community
   communityId: String!
   createdAt: DateTime
   id: String!
-  minter: String!
+  identity: Identity
+  minter: TokenGatorMinter
   name: String!
   provider: IdentityProvider!
   providerId: String!
@@ -96,9 +99,9 @@ type Claim {
 }
 
 input ClaimAdminCreateInput {
+  account: String!
   amount: String
   communityId: String!
-  minter: String!
   provider: IdentityProvider!
   providerId: String!
 }
@@ -127,17 +130,17 @@ enum ClaimStatus {
 }
 
 input ClaimUserCreateInput {
+  account: String!
   amount: String
   communityId: String!
-  minter: String!
   provider: IdentityProvider!
   providerId: String!
 }
 
 input ClaimUserFindManyInput {
+  account: String
   communityId: String!
   limit: Int = 10
-  minter: String
   page: Int = 1
   provider: IdentityProvider
   providerId: String
@@ -204,7 +207,7 @@ scalar DateTime
 
 type Identity {
   challenges: [IdentityChallenge!]
-  createdAt: DateTime!
+  createdAt: DateTime
   expired: Boolean
   id: String!
   name: String
@@ -212,7 +215,7 @@ type Identity {
   profile: JSON
   provider: IdentityProvider!
   providerId: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
   url: String
   verified: Boolean
 }
@@ -430,6 +433,8 @@ type Query {
   userFindOnePreset(presetId: String!): Preset
   userFindOneUser(username: String!): User
   userFindOneWallet(publicKey: String!): Wallet
+  userGetClaim(claimId: String!): Claim!
+  userGetClaims: [Claim!]!
   userGetMinter(account: String!): TokenGatorMinter!
   userGetMinterAssets(account: String!): JSON!
   userGetMinters: TokenGatorMinter!

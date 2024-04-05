@@ -5,10 +5,10 @@ const Create = lazy(() => import('./user-claim-create.feature'))
 const Detail = lazy(() => import('./user-claim-detail.feature'))
 const List = lazy(() => import('./user-claim-list.feature'))
 
-export default function UserClaimRoutes({ communityId, minter }: { communityId: string; minter: string }) {
+export default function UserClaimRoutes({ communityId, account }: { communityId: string; account: string }) {
   return useRoutes([
-    { path: '', element: <List communityId={communityId} minter={minter} /> },
-    { path: 'create', element: <Create communityId={communityId} minter={minter} /> },
+    { path: '', element: <List communityId={communityId} account={account} /> },
+    { path: 'create', element: <Create communityId={communityId} account={account} /> },
     { path: ':claimId/*', element: <Detail /> },
   ])
 }

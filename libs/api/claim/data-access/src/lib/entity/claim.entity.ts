@@ -1,6 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql'
+import { Community } from '@tokengator-mint/api-community-data-access'
 import { PagingResponse } from '@tokengator-mint/api-core-data-access'
-import { IdentityProvider } from '@tokengator-mint/api-identity-data-access'
+import { Identity, IdentityProvider } from '@tokengator-mint/api-identity-data-access'
+import { TokenGatorMinter } from '@tokengator-mint/api-preset-data-access'
 import { ClaimStatus } from './claim-status.enum'
 
 @ObjectType()
@@ -16,7 +18,7 @@ export class Claim {
   @Field()
   communityId!: string
   @Field()
-  minter!: string
+  account!: string
   @Field({ nullable: true })
   signature?: string | null
   @Field(() => IdentityProvider)
@@ -25,6 +27,12 @@ export class Claim {
   providerId!: string
   @Field(() => ClaimStatus)
   status!: ClaimStatus
+  @Field(() => Community, { nullable: true })
+  community?: Community
+  @Field(() => TokenGatorMinter, { nullable: true })
+  minter?: TokenGatorMinter
+  @Field(() => Identity, { nullable: true })
+  identity?: Identity
 }
 
 @ObjectType()

@@ -8,7 +8,7 @@ export class ClaimUserCreateInput {
   @Field({ nullable: true })
   amount?: string
   @Field()
-  minter!: string
+  account!: string
   @Field(() => IdentityProvider)
   provider!: IdentityProvider
   @Field()

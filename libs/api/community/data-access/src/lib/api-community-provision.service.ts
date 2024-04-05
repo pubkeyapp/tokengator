@@ -61,7 +61,7 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
         { provider: IdentityProvider.Solana, providerId: '81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn' },
         { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
         { provider: IdentityProvider.Twitter, providerId: 'beeman_nl' },
-      ].map((i) => ({ ...i, minter: '9u6HpBdFd1yZzQ8JszBoSRtcgbvJF5uk5pv7zcvrL3Se' })),
+      ].map((i) => ({ ...i, account: '9u6HpBdFd1yZzQ8JszBoSRtcgbvJF5uk5pv7zcvrL3Se' })),
     },
   },
   {

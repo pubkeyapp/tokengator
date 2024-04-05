@@ -34,4 +34,12 @@ export class ApiClaimDataUserService {
   async updateClaim(claimId: string, input: ClaimUserUpdateInput) {
     return this.data.update(claimId, input)
   }
+
+  async userGetClaims(userId: string) {
+    return this.data.getClaims(userId)
+  }
+
+  async userGetClaim(userId: string, claimId: string) {
+    return this.data.getClaim(userId, claimId)
+  }
 }

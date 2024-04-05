@@ -10,7 +10,7 @@ export class ClaimUserFindManyInput extends PagingInput() {
   @Field({ nullable: true })
   search?: string
   @Field({ nullable: true })
-  minter?: string
+  account?: string
   @Field(() => IdentityProvider, { nullable: true })
   provider?: IdentityProvider
   @Field({ nullable: true })

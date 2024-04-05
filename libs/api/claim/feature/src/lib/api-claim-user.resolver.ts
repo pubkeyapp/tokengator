@@ -1,13 +1,12 @@
-import { Resolver } from '@nestjs/graphql'
-import { ApiClaimService } from '@tokengator-mint/api-claim-data-access'
-import { ApiAuthGraphQLUserGuard } from '@tokengator-mint/api-auth-data-access'
-import { Mutation, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { ApiAuthGraphQLUserGuard, CtxUserId } from '@tokengator-mint/api-auth-data-access'
 import {
-  ClaimUserCreateInput,
-  ClaimUserFindManyInput,
+  ApiClaimService,
   Claim,
   ClaimPaging,
+  ClaimUserCreateInput,
+  ClaimUserFindManyInput,
   ClaimUserUpdateInput,
 } from '@tokengator-mint/api-claim-data-access'
 
@@ -24,6 +23,16 @@ export class ApiClaimUserResolver {
   @Mutation(() => Boolean, { nullable: true })
   userDeleteClaim(@Args('claimId') claimId: string) {
     return this.service.user.deleteClaim(claimId)
+  }
+
+  @Query(() => Claim)
+  userGetClaim(@CtxUserId() userId: string, @Args('claimId') claimId: string) {
+    return this.service.user.userGetClaim(userId, claimId)
+  }
+
+  @Query(() => [Claim])
+  userGetClaims(@CtxUserId() userId: string) {
+    return this.service.user.userGetClaims(userId)
   }
 
   @Query(() => ClaimPaging)

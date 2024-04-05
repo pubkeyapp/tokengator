@@ -5,9 +5,9 @@ import { useUserFindManyClaim } from '@tokengator-mint/web-claim-data-access'
 import { UserClaimUiCreateForm } from '@tokengator-mint/web-claim-ui'
 import { useNavigate } from 'react-router-dom'
 
-export default function UserClaimCreateFeature({ communityId, minter }: { communityId: string; minter: string }) {
+export default function UserClaimCreateFeature({ communityId, account }: { communityId: string; account: string }) {
   const navigate = useNavigate()
-  const { createClaim } = useUserFindManyClaim({ communityId, minter })
+  const { createClaim } = useUserFindManyClaim({ communityId, account })
 
   async function submit(input: ClaimUserCreateInput) {
     return createClaim(input)

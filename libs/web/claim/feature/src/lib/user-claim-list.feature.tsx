@@ -5,11 +5,11 @@ import { UserClaimUiTable } from '@tokengator-mint/web-claim-ui'
 import { UiSearchField } from '@tokengator-mint/web-core-ui'
 import { Link } from 'react-router-dom'
 
-export default function UserClaimListFeature({ communityId, minter }: { communityId: string; minter: string }) {
+export default function UserClaimListFeature({ communityId, account }: { communityId: string; account: string }) {
   const { deleteClaim, items, pagination, query, setSearch } = useUserFindManyClaim({
     limit: 100,
     communityId,
-    minter,
+    account,
   })
 
   return (

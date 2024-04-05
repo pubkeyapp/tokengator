@@ -9,7 +9,7 @@ export function ClaimUiInfo({ claim }: { claim?: Claim }) {
     ['amount', claim.amount],
     ['provider', claim.provider],
     ['providerId', claim.providerId],
-    ['minter', claim.minter],
+    ['account', claim.account],
     ['signature', claim.signature],
     ['Created At', <UiTime size="xs" c="dimmed" date={new Date(claim.createdAt ?? '0')} />],
     ['Updated At', <UiTime size="xs" c="dimmed" date={new Date(claim.updatedAt ?? '0')} />],

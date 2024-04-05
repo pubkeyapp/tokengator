@@ -4,13 +4,15 @@ import { ClaimUserCreateInput, ClaimUserFindManyInput } from '@tokengator-mint/s
 import { useSdk } from '@tokengator-mint/web-core-data-access'
 import { useState } from 'react'
 
-export function useUserFindManyClaim(props: Partial<ClaimUserFindManyInput> & { communityId: string; minter: string }) {
+export function useUserFindManyClaim(
+  props: Partial<ClaimUserFindManyInput> & { communityId: string; account: string },
+) {
   const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
-  const input: ClaimUserFindManyInput = { page, limit, search, communityId: props.communityId }
+  const input: ClaimUserFindManyInput = { page, limit, search, communityId: props.communityId, account: props.account }
   const query = useQuery({
     queryKey: ['user', 'find-many-claim', input],
     queryFn: () => sdk.userFindManyClaim({ input }).then((res) => res.data),
@@ -31,7 +33,7 @@ export function useUserFindManyClaim(props: Partial<ClaimUserFindManyInput> & { 
     setSearch,
     createClaim: (input: ClaimUserCreateInput) =>
       sdk
-        .userCreateClaim({ input: { ...input, minter: props.minter, communityId: props.communityId } })
+        .userCreateClaim({ input: { ...input, account: props.account, communityId: props.communityId } })
         .then((res) => res.data)
         .then((res) => {
           if (res.created) {

@@ -4,7 +4,7 @@ import { ClaimUserFindManyInput } from '../dto/claim-user-find-many.input'
 export function getClaimWhereUserInput(input: ClaimUserFindManyInput): Prisma.ClaimWhereInput {
   const where: Prisma.ClaimWhereInput = {
     communityId: input.communityId,
-    minter: input.minter ?? undefined,
+    account: input.account ?? undefined,
     provider: input.provider ?? undefined,
     providerId: input.providerId ?? undefined,
     status: input.status ?? undefined,

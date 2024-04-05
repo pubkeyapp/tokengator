@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { CommunityMemberRole, IdentityProvider } from '@prisma/client'
+import { CommunityMemberRole, Identity, IdentityProvider } from '@prisma/client'
 import { ApiCorePrismaClient, prismaClient } from './api-core-prisma-client'
 import { ApiCoreConfigService } from './config/api-core-config.service'
 import { slugifyId } from './helpers/slugify-id'
@@ -31,6 +31,26 @@ export class ApiCoreService {
       throw new Error('You must be a community admin to perform this action')
     }
     return found
+  }
+
+  async getUserIdentityMap({ userId }: { userId: string }): Promise<Map<IdentityProvider, Identity[]>> {
+    const identities = await this.data.identity.findMany({
+      where: { ownerId: userId },
+      select: {
+        id: true,
+        profile: true,
+        provider: true,
+        providerId: true,
+        name: true,
+      },
+    })
+
+    return identities.reduce((acc, identity) => {
+      const { provider } = identity
+      const existing = acc.get(provider) || []
+      acc.set(provider, existing.length ? [...existing, identity] : [identity])
+      return acc
+    }, new Map())
   }
 
   async findUserByIdentity({ provider, providerId }: { provider: IdentityProvider; providerId: string }) {

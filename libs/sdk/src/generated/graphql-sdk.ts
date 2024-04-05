@@ -106,11 +106,14 @@ export type AppConfig = {
 
 export type Claim = {
   __typename?: 'Claim'
+  account: Scalars['String']['output']
   amount: Scalars['String']['output']
+  community?: Maybe<Community>
   communityId: Scalars['String']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
-  minter: Scalars['String']['output']
+  identity?: Maybe<Identity>
+  minter?: Maybe<TokenGatorMinter>
   name: Scalars['String']['output']
   provider: IdentityProvider
   providerId: Scalars['String']['output']
@@ -120,9 +123,9 @@ export type Claim = {
 }
 
 export type ClaimAdminCreateInput = {
+  account: Scalars['String']['input']
   amount?: InputMaybe<Scalars['String']['input']>
   communityId: Scalars['String']['input']
-  minter: Scalars['String']['input']
   provider: IdentityProvider
   providerId: Scalars['String']['input']
 }
@@ -152,17 +155,17 @@ export enum ClaimStatus {
 }
 
 export type ClaimUserCreateInput = {
+  account: Scalars['String']['input']
   amount?: InputMaybe<Scalars['String']['input']>
   communityId: Scalars['String']['input']
-  minter: Scalars['String']['input']
   provider: IdentityProvider
   providerId: Scalars['String']['input']
 }
 
 export type ClaimUserFindManyInput = {
+  account?: InputMaybe<Scalars['String']['input']>
   communityId: Scalars['String']['input']
   limit?: InputMaybe<Scalars['Int']['input']>
-  minter?: InputMaybe<Scalars['String']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   provider?: InputMaybe<IdentityProvider>
   providerId?: InputMaybe<Scalars['String']['input']>
@@ -230,7 +233,7 @@ export type Currency = {
 export type Identity = {
   __typename?: 'Identity'
   challenges?: Maybe<Array<IdentityChallenge>>
-  createdAt: Scalars['DateTime']['output']
+  createdAt?: Maybe<Scalars['DateTime']['output']>
   expired?: Maybe<Scalars['Boolean']['output']>
   id: Scalars['String']['output']
   name?: Maybe<Scalars['String']['output']>
@@ -238,7 +241,7 @@ export type Identity = {
   profile?: Maybe<Scalars['JSON']['output']>
   provider: IdentityProvider
   providerId: Scalars['String']['output']
-  updatedAt: Scalars['DateTime']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
   url?: Maybe<Scalars['String']['output']>
   verified?: Maybe<Scalars['Boolean']['output']>
 }
@@ -655,6 +658,8 @@ export type Query = {
   userFindOnePreset?: Maybe<Preset>
   userFindOneUser?: Maybe<User>
   userFindOneWallet?: Maybe<Wallet>
+  userGetClaim: Claim
+  userGetClaims: Array<Claim>
   userGetMinter: TokenGatorMinter
   userGetMinterAssets: Scalars['JSON']['output']
   userGetMinters: TokenGatorMinter
@@ -800,6 +805,10 @@ export type QueryUserFindOneUserArgs = {
 
 export type QueryUserFindOneWalletArgs = {
   publicKey: Scalars['String']['input']
+}
+
+export type QueryUserGetClaimArgs = {
+  claimId: Scalars['String']['input']
 }
 
 export type QueryUserGetMinterArgs = {
@@ -1077,14 +1086,14 @@ export type MeQuery = {
     username?: string | null
     identities?: Array<{
       __typename?: 'Identity'
-      createdAt: Date
+      createdAt?: Date | null
       expired?: boolean | null
       id: string
       name?: string | null
       profile?: any | null
       provider: IdentityProvider
       providerId: string
-      updatedAt: Date
+      updatedAt?: Date | null
       url?: string | null
       verified?: boolean | null
     }> | null
@@ -1096,14 +1105,80 @@ export type ClaimDetailsFragment = {
   createdAt?: Date | null
   id: string
   communityId: string
+  account: string
   amount: string
-  minter: string
   signature?: string | null
   provider: IdentityProvider
   providerId: string
   status: ClaimStatus
   name: string
   updatedAt?: Date | null
+  identity?: {
+    __typename?: 'Identity'
+    createdAt?: Date | null
+    expired?: boolean | null
+    id: string
+    name?: string | null
+    profile?: any | null
+    provider: IdentityProvider
+    providerId: string
+    updatedAt?: Date | null
+    url?: string | null
+    verified?: boolean | null
+  } | null
+  community?: {
+    __typename?: 'Community'
+    createdAt?: Date | null
+    id: string
+    name: string
+    slug: string
+    description: string
+    imageUrl?: string | null
+    publicUrl?: string | null
+    updatedAt?: Date | null
+  } | null
+  minter?: {
+    __typename?: 'TokenGatorMinter'
+    publicKey: string
+    bump: number
+    communityId: string
+    name: string
+    description: string
+    imageUrl: string
+    feePayer: string
+    authorities: Array<string>
+    paymentConfig: {
+      __typename?: 'TokenGatorMinterPaymentConfig'
+      mint: string
+      days: number
+      amount: number
+      expiresAt: string
+      price: string
+    }
+    minterConfig: {
+      __typename?: 'TokenGatorMinterConfig'
+      mint: string
+      applicationConfig: {
+        __typename?: 'TokenGatorMinterApplicationConfig'
+        identities: Array<IdentityProvider>
+        paymentConfig: {
+          __typename?: 'TokenGatorMinterPaymentConfig'
+          mint: string
+          days: number
+          amount: number
+          expiresAt: string
+          price: string
+        }
+      }
+      metadataConfig: {
+        __typename?: 'TokenGatorMinterMetadataConfig'
+        metadata: Array<Array<string>>
+        name: string
+        symbol: string
+        uri: string
+      }
+    }
+  } | null
 }
 
 export type AdminFindManyClaimQueryVariables = Exact<{
@@ -1119,14 +1194,80 @@ export type AdminFindManyClaimQuery = {
       createdAt?: Date | null
       id: string
       communityId: string
+      account: string
       amount: string
-      minter: string
       signature?: string | null
       provider: IdentityProvider
       providerId: string
       status: ClaimStatus
       name: string
       updatedAt?: Date | null
+      identity?: {
+        __typename?: 'Identity'
+        createdAt?: Date | null
+        expired?: boolean | null
+        id: string
+        name?: string | null
+        profile?: any | null
+        provider: IdentityProvider
+        providerId: string
+        updatedAt?: Date | null
+        url?: string | null
+        verified?: boolean | null
+      } | null
+      community?: {
+        __typename?: 'Community'
+        createdAt?: Date | null
+        id: string
+        name: string
+        slug: string
+        description: string
+        imageUrl?: string | null
+        publicUrl?: string | null
+        updatedAt?: Date | null
+      } | null
+      minter?: {
+        __typename?: 'TokenGatorMinter'
+        publicKey: string
+        bump: number
+        communityId: string
+        name: string
+        description: string
+        imageUrl: string
+        feePayer: string
+        authorities: Array<string>
+        paymentConfig: {
+          __typename?: 'TokenGatorMinterPaymentConfig'
+          mint: string
+          days: number
+          amount: number
+          expiresAt: string
+          price: string
+        }
+        minterConfig: {
+          __typename?: 'TokenGatorMinterConfig'
+          mint: string
+          applicationConfig: {
+            __typename?: 'TokenGatorMinterApplicationConfig'
+            identities: Array<IdentityProvider>
+            paymentConfig: {
+              __typename?: 'TokenGatorMinterPaymentConfig'
+              mint: string
+              days: number
+              amount: number
+              expiresAt: string
+              price: string
+            }
+          }
+          metadataConfig: {
+            __typename?: 'TokenGatorMinterMetadataConfig'
+            metadata: Array<Array<string>>
+            name: string
+            symbol: string
+            uri: string
+          }
+        }
+      } | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -1152,14 +1293,80 @@ export type AdminFindOneClaimQuery = {
     createdAt?: Date | null
     id: string
     communityId: string
+    account: string
     amount: string
-    minter: string
     signature?: string | null
     provider: IdentityProvider
     providerId: string
     status: ClaimStatus
     name: string
     updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
   } | null
 }
 
@@ -1174,14 +1381,80 @@ export type AdminCreateClaimMutation = {
     createdAt?: Date | null
     id: string
     communityId: string
+    account: string
     amount: string
-    minter: string
     signature?: string | null
     provider: IdentityProvider
     providerId: string
     status: ClaimStatus
     name: string
     updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
   } | null
 }
 
@@ -1197,14 +1470,80 @@ export type AdminUpdateClaimMutation = {
     createdAt?: Date | null
     id: string
     communityId: string
+    account: string
     amount: string
-    minter: string
     signature?: string | null
     provider: IdentityProvider
     providerId: string
     status: ClaimStatus
     name: string
     updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
   } | null
 }
 
@@ -1227,14 +1566,80 @@ export type UserFindManyClaimQuery = {
       createdAt?: Date | null
       id: string
       communityId: string
+      account: string
       amount: string
-      minter: string
       signature?: string | null
       provider: IdentityProvider
       providerId: string
       status: ClaimStatus
       name: string
       updatedAt?: Date | null
+      identity?: {
+        __typename?: 'Identity'
+        createdAt?: Date | null
+        expired?: boolean | null
+        id: string
+        name?: string | null
+        profile?: any | null
+        provider: IdentityProvider
+        providerId: string
+        updatedAt?: Date | null
+        url?: string | null
+        verified?: boolean | null
+      } | null
+      community?: {
+        __typename?: 'Community'
+        createdAt?: Date | null
+        id: string
+        name: string
+        slug: string
+        description: string
+        imageUrl?: string | null
+        publicUrl?: string | null
+        updatedAt?: Date | null
+      } | null
+      minter?: {
+        __typename?: 'TokenGatorMinter'
+        publicKey: string
+        bump: number
+        communityId: string
+        name: string
+        description: string
+        imageUrl: string
+        feePayer: string
+        authorities: Array<string>
+        paymentConfig: {
+          __typename?: 'TokenGatorMinterPaymentConfig'
+          mint: string
+          days: number
+          amount: number
+          expiresAt: string
+          price: string
+        }
+        minterConfig: {
+          __typename?: 'TokenGatorMinterConfig'
+          mint: string
+          applicationConfig: {
+            __typename?: 'TokenGatorMinterApplicationConfig'
+            identities: Array<IdentityProvider>
+            paymentConfig: {
+              __typename?: 'TokenGatorMinterPaymentConfig'
+              mint: string
+              days: number
+              amount: number
+              expiresAt: string
+              price: string
+            }
+          }
+          metadataConfig: {
+            __typename?: 'TokenGatorMinterMetadataConfig'
+            metadata: Array<Array<string>>
+            name: string
+            symbol: string
+            uri: string
+          }
+        }
+      } | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -1249,6 +1654,180 @@ export type UserFindManyClaimQuery = {
   }
 }
 
+export type UserGetClaimQueryVariables = Exact<{
+  claimId: Scalars['String']['input']
+}>
+
+export type UserGetClaimQuery = {
+  __typename?: 'Query'
+  item: {
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    account: string
+    amount: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
+  }
+}
+
+export type UserGetClaimsQueryVariables = Exact<{ [key: string]: never }>
+
+export type UserGetClaimsQuery = {
+  __typename?: 'Query'
+  items: Array<{
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    account: string
+    amount: string
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
+  }>
+}
+
 export type UserFindOneClaimQueryVariables = Exact<{
   claimId: Scalars['String']['input']
 }>
@@ -1260,14 +1839,80 @@ export type UserFindOneClaimQuery = {
     createdAt?: Date | null
     id: string
     communityId: string
+    account: string
     amount: string
-    minter: string
     signature?: string | null
     provider: IdentityProvider
     providerId: string
     status: ClaimStatus
     name: string
     updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
   } | null
 }
 
@@ -1282,14 +1927,80 @@ export type UserCreateClaimMutation = {
     createdAt?: Date | null
     id: string
     communityId: string
+    account: string
     amount: string
-    minter: string
     signature?: string | null
     provider: IdentityProvider
     providerId: string
     status: ClaimStatus
     name: string
     updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
   } | null
 }
 
@@ -1305,14 +2016,80 @@ export type UserUpdateClaimMutation = {
     createdAt?: Date | null
     id: string
     communityId: string
+    account: string
     amount: string
-    minter: string
     signature?: string | null
     provider: IdentityProvider
     providerId: string
     status: ClaimStatus
     name: string
     updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      imageUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
   } | null
 }
 
@@ -1933,14 +2710,14 @@ export type CurrenciesQuery = {
 
 export type IdentityDetailsFragment = {
   __typename?: 'Identity'
-  createdAt: Date
+  createdAt?: Date | null
   expired?: boolean | null
   id: string
   name?: string | null
   profile?: any | null
   provider: IdentityProvider
   providerId: string
-  updatedAt: Date
+  updatedAt?: Date | null
   url?: string | null
   verified?: boolean | null
 }
@@ -1967,14 +2744,14 @@ export type AdminFindManyIdentityQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Identity'
-    createdAt: Date
+    createdAt?: Date | null
     expired?: boolean | null
     id: string
     name?: string | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
-    updatedAt: Date
+    updatedAt?: Date | null
     url?: string | null
     verified?: boolean | null
     challenges?: Array<{
@@ -2014,14 +2791,14 @@ export type AdminCreateIdentityMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Identity'
-    createdAt: Date
+    createdAt?: Date | null
     expired?: boolean | null
     id: string
     name?: string | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
-    updatedAt: Date
+    updatedAt?: Date | null
     url?: string | null
     verified?: boolean | null
   } | null
@@ -2041,14 +2818,14 @@ export type UserFindManyIdentityQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Identity'
-    createdAt: Date
+    createdAt?: Date | null
     expired?: boolean | null
     id: string
     name?: string | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
-    updatedAt: Date
+    updatedAt?: Date | null
     url?: string | null
     verified?: boolean | null
   }> | null
@@ -2110,14 +2887,14 @@ export type UserLinkIdentityMutation = {
   __typename?: 'Mutation'
   linked?: {
     __typename?: 'Identity'
-    createdAt: Date
+    createdAt?: Date | null
     expired?: boolean | null
     id: string
     name?: string | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
-    updatedAt: Date
+    updatedAt?: Date | null
     url?: string | null
     verified?: boolean | null
   } | null
@@ -2844,14 +3621,14 @@ export type AdminFindManyUserQuery = {
       username?: string | null
       identities?: Array<{
         __typename?: 'Identity'
-        createdAt: Date
+        createdAt?: Date | null
         expired?: boolean | null
         id: string
         name?: string | null
         profile?: any | null
         provider: IdentityProvider
         providerId: string
-        updatedAt: Date
+        updatedAt?: Date | null
         url?: string | null
         verified?: boolean | null
       }> | null
@@ -3201,83 +3978,6 @@ export type UserSetWalletFeepayerMutation = {
   } | null
 }
 
-export const ClaimDetailsFragmentDoc = gql`
-  fragment ClaimDetails on Claim {
-    createdAt
-    id
-    communityId
-    amount
-    minter
-    signature
-    provider
-    providerId
-    status
-    name
-    updatedAt
-  }
-`
-export const UserDetailsFragmentDoc = gql`
-  fragment UserDetails on User {
-    avatarUrl
-    createdAt
-    developer
-    id
-    name
-    profileUrl
-    role
-    status
-    updatedAt
-    username
-  }
-`
-export const CommunityMemberDetailsFragmentDoc = gql`
-  fragment CommunityMemberDetails on CommunityMember {
-    createdAt
-    id
-    userId
-    user {
-      ...UserDetails
-    }
-    communityId
-    role
-    updatedAt
-  }
-  ${UserDetailsFragmentDoc}
-`
-export const CommunityDetailsFragmentDoc = gql`
-  fragment CommunityDetails on Community {
-    createdAt
-    id
-    name
-    slug
-    description
-    imageUrl
-    publicUrl
-    updatedAt
-  }
-`
-export const AppConfigDetailsFragmentDoc = gql`
-  fragment AppConfigDetails on AppConfig {
-    authDiscordEnabled
-    authGithubEnabled
-    authGoogleEnabled
-    authPasswordEnabled
-    authRegisterEnabled
-    authSolanaEnabled
-    authTwitterEnabled
-  }
-`
-export const PagingMetaDetailsFragmentDoc = gql`
-  fragment PagingMetaDetails on PagingMeta {
-    currentPage
-    isFirstPage
-    isLastPage
-    nextPage
-    pageCount
-    previousPage
-    totalCount
-  }
-`
 export const IdentityDetailsFragmentDoc = gql`
   fragment IdentityDetails on Identity {
     createdAt
@@ -3292,57 +3992,17 @@ export const IdentityDetailsFragmentDoc = gql`
     verified
   }
 `
-export const IdentityChallengeDetailsFragmentDoc = gql`
-  fragment IdentityChallengeDetails on IdentityChallenge {
-    id
-    createdAt
-    updatedAt
-    provider
-    providerId
-    challenge
-    signature
-    ip
-    userAgent
-    verified
-  }
-`
-export const PresetDetailsFragmentDoc = gql`
-  fragment PresetDetails on Preset {
+export const CommunityDetailsFragmentDoc = gql`
+  fragment CommunityDetails on Community {
     createdAt
     id
     name
+    slug
     description
     imageUrl
-    color
-    config
+    publicUrl
     updatedAt
   }
-`
-export const CurrencyDetailsFragmentDoc = gql`
-  fragment CurrencyDetails on Currency {
-    decimals
-    address
-    programId
-    name
-    symbol
-  }
-`
-export const PriceDetailsFragmentDoc = gql`
-  fragment PriceDetails on Price {
-    createdAt
-    id
-    name
-    price
-    currency {
-      ...CurrencyDetails
-    }
-    active
-    days
-    assets
-    presetId
-    updatedAt
-  }
-  ${CurrencyDetailsFragmentDoc}
 `
 export const TokenGatorPaymentConfigDetailsFragmentDoc = gql`
   fragment TokenGatorPaymentConfigDetails on TokenGatorMinterPaymentConfig {
@@ -3402,6 +4062,135 @@ export const TokenGatorMinterDetailsFragmentDoc = gql`
   }
   ${TokenGatorPaymentConfigDetailsFragmentDoc}
   ${TokenGatorMinterConfigDetailsFragmentDoc}
+`
+export const ClaimDetailsFragmentDoc = gql`
+  fragment ClaimDetails on Claim {
+    createdAt
+    id
+    communityId
+    account
+    amount
+    signature
+    provider
+    providerId
+    status
+    name
+    updatedAt
+    identity {
+      ...IdentityDetails
+    }
+    community {
+      ...CommunityDetails
+    }
+    minter {
+      ...TokenGatorMinterDetails
+    }
+  }
+  ${IdentityDetailsFragmentDoc}
+  ${CommunityDetailsFragmentDoc}
+  ${TokenGatorMinterDetailsFragmentDoc}
+`
+export const UserDetailsFragmentDoc = gql`
+  fragment UserDetails on User {
+    avatarUrl
+    createdAt
+    developer
+    id
+    name
+    profileUrl
+    role
+    status
+    updatedAt
+    username
+  }
+`
+export const CommunityMemberDetailsFragmentDoc = gql`
+  fragment CommunityMemberDetails on CommunityMember {
+    createdAt
+    id
+    userId
+    user {
+      ...UserDetails
+    }
+    communityId
+    role
+    updatedAt
+  }
+  ${UserDetailsFragmentDoc}
+`
+export const AppConfigDetailsFragmentDoc = gql`
+  fragment AppConfigDetails on AppConfig {
+    authDiscordEnabled
+    authGithubEnabled
+    authGoogleEnabled
+    authPasswordEnabled
+    authRegisterEnabled
+    authSolanaEnabled
+    authTwitterEnabled
+  }
+`
+export const PagingMetaDetailsFragmentDoc = gql`
+  fragment PagingMetaDetails on PagingMeta {
+    currentPage
+    isFirstPage
+    isLastPage
+    nextPage
+    pageCount
+    previousPage
+    totalCount
+  }
+`
+export const IdentityChallengeDetailsFragmentDoc = gql`
+  fragment IdentityChallengeDetails on IdentityChallenge {
+    id
+    createdAt
+    updatedAt
+    provider
+    providerId
+    challenge
+    signature
+    ip
+    userAgent
+    verified
+  }
+`
+export const PresetDetailsFragmentDoc = gql`
+  fragment PresetDetails on Preset {
+    createdAt
+    id
+    name
+    description
+    imageUrl
+    color
+    config
+    updatedAt
+  }
+`
+export const CurrencyDetailsFragmentDoc = gql`
+  fragment CurrencyDetails on Currency {
+    decimals
+    address
+    programId
+    name
+    symbol
+  }
+`
+export const PriceDetailsFragmentDoc = gql`
+  fragment PriceDetails on Price {
+    createdAt
+    id
+    name
+    price
+    currency {
+      ...CurrencyDetails
+    }
+    active
+    days
+    assets
+    presetId
+    updatedAt
+  }
+  ${CurrencyDetailsFragmentDoc}
 `
 export const WalletDetailsFragmentDoc = gql`
   fragment WalletDetails on Wallet {
@@ -3503,6 +4292,22 @@ export const UserFindManyClaimDocument = gql`
   }
   ${ClaimDetailsFragmentDoc}
   ${PagingMetaDetailsFragmentDoc}
+`
+export const UserGetClaimDocument = gql`
+  query userGetClaim($claimId: String!) {
+    item: userGetClaim(claimId: $claimId) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const UserGetClaimsDocument = gql`
+  query userGetClaims {
+    items: userGetClaims {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
 `
 export const UserFindOneClaimDocument = gql`
   query userFindOneClaim($claimId: String!) {
@@ -4186,6 +4991,8 @@ const AdminCreateClaimDocumentString = print(AdminCreateClaimDocument)
 const AdminUpdateClaimDocumentString = print(AdminUpdateClaimDocument)
 const AdminDeleteClaimDocumentString = print(AdminDeleteClaimDocument)
 const UserFindManyClaimDocumentString = print(UserFindManyClaimDocument)
+const UserGetClaimDocumentString = print(UserGetClaimDocument)
+const UserGetClaimsDocumentString = print(UserGetClaimsDocument)
 const UserFindOneClaimDocumentString = print(UserFindOneClaimDocument)
 const UserCreateClaimDocumentString = print(UserCreateClaimDocument)
 const UserUpdateClaimDocumentString = print(UserUpdateClaimDocument)
@@ -4453,6 +5260,48 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userFindManyClaim',
+        'query',
+        variables,
+      )
+    },
+    userGetClaim(
+      variables: UserGetClaimQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserGetClaimQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserGetClaimQuery>(UserGetClaimDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userGetClaim',
+        'query',
+        variables,
+      )
+    },
+    userGetClaims(
+      variables?: UserGetClaimsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserGetClaimsQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserGetClaimsQuery>(UserGetClaimsDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userGetClaims',
         'query',
         variables,
       )
@@ -6236,9 +7085,9 @@ export function AnonFindManyCommunityInputSchema(): z.ZodObject<Properties<AnonF
 
 export function ClaimAdminCreateInputSchema(): z.ZodObject<Properties<ClaimAdminCreateInput>> {
   return z.object({
+    account: z.string(),
     amount: z.string().nullish(),
     communityId: z.string(),
-    minter: z.string(),
     provider: IdentityProviderSchema,
     providerId: z.string(),
   })
@@ -6263,9 +7112,9 @@ export function ClaimAdminUpdateInputSchema(): z.ZodObject<Properties<ClaimAdmin
 
 export function ClaimUserCreateInputSchema(): z.ZodObject<Properties<ClaimUserCreateInput>> {
   return z.object({
+    account: z.string(),
     amount: z.string().nullish(),
     communityId: z.string(),
-    minter: z.string(),
     provider: IdentityProviderSchema,
     providerId: z.string(),
   })
@@ -6273,9 +7122,9 @@ export function ClaimUserCreateInputSchema(): z.ZodObject<Properties<ClaimUserCr
 
 export function ClaimUserFindManyInputSchema(): z.ZodObject<Properties<ClaimUserFindManyInput>> {
   return z.object({
+    account: z.string().nullish(),
     communityId: z.string(),
     limit: z.number().nullish(),
-    minter: z.string().nullish(),
     page: z.number().nullish(),
     provider: IdentityProviderSchema.nullish(),
     providerId: z.string().nullish(),
