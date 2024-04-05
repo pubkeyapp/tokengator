@@ -239,6 +239,7 @@ export type Mutation = {
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   userDeleteWallet?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
+  userSetWalletFeepayer?: Maybe<Wallet>
   userUpdateCommunity?: Maybe<Community>
   userUpdateCommunityMember?: Maybe<CommunityMember>
   userUpdateUser?: Maybe<User>
@@ -379,11 +380,15 @@ export type MutationUserDeleteIdentityArgs = {
 }
 
 export type MutationUserDeleteWalletArgs = {
-  walletId: Scalars['String']['input']
+  publicKey: Scalars['String']['input']
 }
 
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
+}
+
+export type MutationUserSetWalletFeepayerArgs = {
+  publicKey: Scalars['String']['input']
 }
 
 export type MutationUserUpdateCommunityArgs = {
@@ -402,7 +407,7 @@ export type MutationUserUpdateUserArgs = {
 
 export type MutationUserUpdateWalletArgs = {
   input: WalletUserUpdateInput
-  walletId: Scalars['String']['input']
+  publicKey: Scalars['String']['input']
 }
 
 export type MutationUserVerifyIdentityChallengeArgs = {
@@ -662,7 +667,7 @@ export type QueryUserFindOneUserArgs = {
 }
 
 export type QueryUserFindOneWalletArgs = {
-  walletId: Scalars['String']['input']
+  publicKey: Scalars['String']['input']
 }
 
 export type QueryUserGetMinterArgs = {
@@ -787,6 +792,7 @@ export type Wallet = {
   __typename?: 'Wallet'
   communityId?: Maybe<Scalars['String']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
+  feePayer: Scalars['Boolean']['output']
   id: Scalars['String']['output']
   name: Scalars['String']['output']
   publicKey: Scalars['String']['output']
@@ -2112,6 +2118,12 @@ export type SolanaGetTransactionsQueryVariables = Exact<{
 
 export type SolanaGetTransactionsQuery = { __typename?: 'Query'; items?: any | null }
 
+export type SolanaRequestAirdropMutationVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type SolanaRequestAirdropMutation = { __typename?: 'Mutation'; requested?: any | null }
+
 export type UserDetailsFragment = {
   __typename?: 'User'
   avatarUrl?: string | null
@@ -2325,6 +2337,7 @@ export type WalletDetailsFragment = {
   id: string
   name: string
   publicKey: string
+  feePayer: boolean
   updatedAt?: Date | null
   communityId?: string | null
 }
@@ -2343,6 +2356,7 @@ export type AdminFindManyWalletQuery = {
       id: string
       name: string
       publicKey: string
+      feePayer: boolean
       updatedAt?: Date | null
       communityId?: string | null
     }>
@@ -2371,6 +2385,7 @@ export type AdminFindOneWalletQuery = {
     id: string
     name: string
     publicKey: string
+    feePayer: boolean
     updatedAt?: Date | null
     communityId?: string | null
   } | null
@@ -2388,6 +2403,7 @@ export type AdminCreateWalletMutation = {
     id: string
     name: string
     publicKey: string
+    feePayer: boolean
     updatedAt?: Date | null
     communityId?: string | null
   } | null
@@ -2406,6 +2422,7 @@ export type AdminUpdateWalletMutation = {
     id: string
     name: string
     publicKey: string
+    feePayer: boolean
     updatedAt?: Date | null
     communityId?: string | null
   } | null
@@ -2431,6 +2448,7 @@ export type UserFindManyWalletQuery = {
       id: string
       name: string
       publicKey: string
+      feePayer: boolean
       updatedAt?: Date | null
       communityId?: string | null
     }>
@@ -2448,7 +2466,7 @@ export type UserFindManyWalletQuery = {
 }
 
 export type UserFindOneWalletQueryVariables = Exact<{
-  walletId: Scalars['String']['input']
+  publicKey: Scalars['String']['input']
 }>
 
 export type UserFindOneWalletQuery = {
@@ -2459,6 +2477,7 @@ export type UserFindOneWalletQuery = {
     id: string
     name: string
     publicKey: string
+    feePayer: boolean
     updatedAt?: Date | null
     communityId?: string | null
   } | null
@@ -2476,13 +2495,14 @@ export type UserCreateWalletMutation = {
     id: string
     name: string
     publicKey: string
+    feePayer: boolean
     updatedAt?: Date | null
     communityId?: string | null
   } | null
 }
 
 export type UserUpdateWalletMutationVariables = Exact<{
-  walletId: Scalars['String']['input']
+  publicKey: Scalars['String']['input']
   input: WalletUserUpdateInput
 }>
 
@@ -2494,16 +2514,35 @@ export type UserUpdateWalletMutation = {
     id: string
     name: string
     publicKey: string
+    feePayer: boolean
     updatedAt?: Date | null
     communityId?: string | null
   } | null
 }
 
 export type UserDeleteWalletMutationVariables = Exact<{
-  walletId: Scalars['String']['input']
+  publicKey: Scalars['String']['input']
 }>
 
 export type UserDeleteWalletMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type UserSetWalletFeepayerMutationVariables = Exact<{
+  publicKey: Scalars['String']['input']
+}>
+
+export type UserSetWalletFeepayerMutation = {
+  __typename?: 'Mutation'
+  set?: {
+    __typename?: 'Wallet'
+    createdAt?: Date | null
+    id: string
+    name: string
+    publicKey: string
+    feePayer: boolean
+    updatedAt?: Date | null
+    communityId?: string | null
+  } | null
+}
 
 export const UserDetailsFragmentDoc = gql`
   fragment UserDetails on User {
@@ -2636,6 +2675,7 @@ export const WalletDetailsFragmentDoc = gql`
     id
     name
     publicKey
+    feePayer
     updatedAt
     communityId
   }
@@ -3122,6 +3162,11 @@ export const SolanaGetTransactionsDocument = gql`
     items: solanaGetTransactions(account: $account)
   }
 `
+export const SolanaRequestAirdropDocument = gql`
+  mutation solanaRequestAirdrop($account: String!) {
+    requested: solanaRequestAirdrop(account: $account)
+  }
+`
 export const AdminCreateUserDocument = gql`
   mutation adminCreateUser($input: AdminCreateUserInput!) {
     created: adminCreateUser(input: $input) {
@@ -3257,8 +3302,8 @@ export const UserFindManyWalletDocument = gql`
   ${PagingMetaDetailsFragmentDoc}
 `
 export const UserFindOneWalletDocument = gql`
-  query userFindOneWallet($walletId: String!) {
-    item: userFindOneWallet(walletId: $walletId) {
+  query userFindOneWallet($publicKey: String!) {
+    item: userFindOneWallet(publicKey: $publicKey) {
       ...WalletDetails
     }
   }
@@ -3273,17 +3318,25 @@ export const UserCreateWalletDocument = gql`
   ${WalletDetailsFragmentDoc}
 `
 export const UserUpdateWalletDocument = gql`
-  mutation userUpdateWallet($walletId: String!, $input: WalletUserUpdateInput!) {
-    updated: userUpdateWallet(walletId: $walletId, input: $input) {
+  mutation userUpdateWallet($publicKey: String!, $input: WalletUserUpdateInput!) {
+    updated: userUpdateWallet(publicKey: $publicKey, input: $input) {
       ...WalletDetails
     }
   }
   ${WalletDetailsFragmentDoc}
 `
 export const UserDeleteWalletDocument = gql`
-  mutation userDeleteWallet($walletId: String!) {
-    deleted: userDeleteWallet(walletId: $walletId)
+  mutation userDeleteWallet($publicKey: String!) {
+    deleted: userDeleteWallet(publicKey: $publicKey)
   }
+`
+export const UserSetWalletFeepayerDocument = gql`
+  mutation userSetWalletFeepayer($publicKey: String!) {
+    set: userSetWalletFeepayer(publicKey: $publicKey) {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetailsFragmentDoc}
 `
 
 export type SdkFunctionWrapper = <T>(
@@ -3354,6 +3407,7 @@ const UserFindManyPriceDocumentString = print(UserFindManyPriceDocument)
 const SolanaGetBalanceDocumentString = print(SolanaGetBalanceDocument)
 const SolanaGetTokenAccountsDocumentString = print(SolanaGetTokenAccountsDocument)
 const SolanaGetTransactionsDocumentString = print(SolanaGetTransactionsDocument)
+const SolanaRequestAirdropDocumentString = print(SolanaRequestAirdropDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -3372,6 +3426,7 @@ const UserFindOneWalletDocumentString = print(UserFindOneWalletDocument)
 const UserCreateWalletDocumentString = print(UserCreateWalletDocument)
 const UserUpdateWalletDocumentString = print(UserUpdateWalletDocument)
 const UserDeleteWalletDocumentString = print(UserDeleteWalletDocument)
+const UserSetWalletFeepayerDocumentString = print(UserSetWalletFeepayerDocument)
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
     login(
@@ -4595,6 +4650,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    solanaRequestAirdrop(
+      variables: SolanaRequestAirdropMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: SolanaRequestAirdropMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<SolanaRequestAirdropMutation>(SolanaRequestAirdropDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'solanaRequestAirdrop',
+        'mutation',
+        variables,
+      )
+    },
     adminCreateUser(
       variables: AdminCreateUserMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -4969,6 +5045,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userDeleteWallet',
+        'mutation',
+        variables,
+      )
+    },
+    userSetWalletFeepayer(
+      variables: UserSetWalletFeepayerMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserSetWalletFeepayerMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserSetWalletFeepayerMutation>(UserSetWalletFeepayerDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userSetWalletFeepayer',
         'mutation',
         variables,
       )

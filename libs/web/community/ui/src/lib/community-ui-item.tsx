@@ -27,12 +27,12 @@ export function CommunityUiItem({
             <Text size="lg" fw={500}>
               {community?.name}
             </Text>
+            <Text c="dimmed" size="xs">
+              {community?.description}
+            </Text>
           </Stack>
         </Group>
       </UiAnchor>
-      <Text c="dimmed" size="xs">
-        {community?.description}
-      </Text>
     </UiStack>
   )
 }

@@ -1,13 +1,13 @@
-import { WalletUserUpdateInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
+import { WalletUserUpdateInput } from '@tokengator-mint/sdk'
+import { useSdk } from '@tokengator-mint/web-core-data-access'
 
-export function useUserFindOneWallet({ walletId }: { walletId: string }) {
+export function useUserFindOneWallet({ publicKey }: { publicKey: string }) {
   const sdk = useSdk()
   const query = useQuery({
-    queryKey: ['user', 'find-one-wallet', walletId],
-    queryFn: () => sdk.userFindOneWallet({ walletId }).then((res) => res.data),
+    queryKey: ['user', 'find-one-wallet', publicKey],
+    queryFn: () => sdk.userFindOneWallet({ publicKey }).then((res) => res.data),
     retry: 0,
   })
   const item = query.data?.item ?? undefined
@@ -17,7 +17,7 @@ export function useUserFindOneWallet({ walletId }: { walletId: string }) {
     query,
     updateWallet: async (input: WalletUserUpdateInput) =>
       sdk
-        .userUpdateWallet({ walletId, input })
+        .userUpdateWallet({ publicKey, input })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {

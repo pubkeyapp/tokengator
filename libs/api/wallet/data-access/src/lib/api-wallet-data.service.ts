@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import { CommunityMemberRole, Prisma } from '@prisma/client'
 import { Keypair } from '@solana/web3.js'
 import { ApiCoreService, ellipsify, PagingInputFields } from '@tokengator-mint/api-core-data-access'
 import { WalletPaging } from './entity/wallet.entity'
@@ -32,13 +32,19 @@ export class ApiWalletDataService {
     return !!deleted
   }
 
+  async deleteByPublicKey(publicKey: string) {
+    await this.findOneByPublicKey(publicKey)
+    const deleted = await this.core.data.wallet.delete({ where: { publicKey } })
+    return !!deleted
+  }
+
   async findMany({
     limit = 10,
     page = 1,
     ...input
   }: Prisma.WalletFindManyArgs & PagingInputFields): Promise<WalletPaging> {
     return this.core.data.wallet
-      .paginate(input)
+      .paginate({ ...input, orderBy: [{ feePayer: 'desc' }, { name: 'asc' }] })
       .withPages({ limit, page })
       .then(([data, meta]) => ({ data, meta }))
   }
@@ -51,12 +57,48 @@ export class ApiWalletDataService {
     return found
   }
 
-  async update(walletId: string, input: Prisma.WalletUpdateInput) {
-    const found = await this.findOne(walletId)
-    if (input.publicKey) {
-      throw new Error('Cannot update publicKey')
+  async findOneByPublicKey(publicKey: string) {
+    const found = await this.core.data.wallet.findUnique({ where: { publicKey } })
+    if (!found) {
+      throw new Error('Wallet not found')
     }
+    return found
+  }
+
+  async update(walletId: string, input: Pick<Prisma.WalletUpdateInput, 'name'>) {
+    const found = await this.findOne(walletId)
     const name = input.name || ellipsify(found.publicKey, 10)
     return this.core.data.wallet.update({ where: { id: walletId }, data: { ...input, name } })
+  }
+
+  async updateByPublicKey(publicKey: string, input: Pick<Prisma.WalletUpdateInput, 'name'>) {
+    const found = await this.findOneByPublicKey(publicKey)
+    const name = input.name || ellipsify(found.publicKey, 10)
+    return this.core.data.wallet.update({ where: { publicKey }, data: { ...input, name } })
+  }
+
+  async setFeepayer(publicKey: string) {
+    const wallet = await this.findOneByPublicKey(publicKey)
+    if (!wallet) {
+      throw new Error('Wallet not found')
+    }
+    if (wallet.feePayer) {
+      throw new Error('Wallet is already a fee payer')
+    }
+    // Update all other wallets to not be fee payers
+    await this.core.data.wallet.updateMany({ where: { publicKey: { not: publicKey } }, data: { feePayer: false } })
+    // Update the selected wallet to be a fee payer
+    return this.core.data.wallet.update({ where: { publicKey }, data: { feePayer: true } })
+  }
+
+  async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
+    const found = await this.core.data.communityMember.findFirst({
+      where: { communityId, userId, role: CommunityMemberRole.Admin },
+      include: { community: true, user: true },
+    })
+    if (!found) {
+      throw new Error('You must be a community admin to perform this action')
+    }
+    return found
   }
 }

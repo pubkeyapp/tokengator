@@ -19,6 +19,7 @@ export class ApiCommunityDataService {
           : {
               create: {
                 name: 'Fee Payer',
+                feePayer: true,
                 publicKey: kp.publicKey.toBase58(),
                 secretKey: JSON.stringify(Array.from(kp.secretKey)),
               },

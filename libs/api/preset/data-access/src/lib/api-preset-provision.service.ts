@@ -38,7 +38,7 @@ export class ApiPresetProvisionService {
   }
 
   private async provisionPreset(input: Prisma.PresetCreateInput) {
-    const id = input.id ?? slugifyId(input.name)
+    const id = input.id ?? slugifyId(input.name).toLowerCase()
     const existing = await this.core.data.preset.count({ where: { id } })
     if (existing < 1) {
       await this.core.data.preset.create({ data: { ...input, id } })

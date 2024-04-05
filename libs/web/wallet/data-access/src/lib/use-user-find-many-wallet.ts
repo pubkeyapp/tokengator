@@ -45,8 +45,8 @@ export function useUserFindManyWallet(props: Partial<WalletUserFindManyInput> & 
           toastError(err.message)
           return undefined
         }),
-    deleteWallet: (walletId: string) =>
-      sdk.userDeleteWallet({ walletId }).then(() => {
+    deleteWallet: (publicKey: string) =>
+      sdk.userDeleteWallet({ publicKey }).then(() => {
         toastSuccess('Wallet deleted')
         return query.refetch()
       }),

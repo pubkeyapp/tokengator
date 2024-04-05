@@ -15,6 +15,8 @@ export class Wallet {
   publicKey!: string
   @Field({ nullable: true })
   communityId?: string | null
+  @Field()
+  feePayer!: boolean
 }
 
 @ObjectType()

@@ -9,6 +9,6 @@ export default function UserWalletRoutes({ communityId }: { communityId: string 
   return useRoutes([
     { path: '', element: <List communityId={communityId} /> },
     { path: 'create', element: <Create communityId={communityId} /> },
-    { path: ':walletId/*', element: <Detail /> },
+    { path: ':publicKey/*', element: <Detail /> },
   ])
 }

@@ -1,5 +1,5 @@
 import { ActionIcon, Button, Group, Loader, Table, Text } from '@mantine/core'
-import { UiError, UiInfo, UiStack } from '@pubkey-ui/core'
+import { UiDebugModal, UiError, UiInfo, UiStack } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -56,7 +56,8 @@ export function WalletUiSolTokenAccounts({ wallet }: { wallet: Wallet }) {
                   <Table.Tr>
                     <Table.Th>Public Key</Table.Th>
                     <Table.Th>Mint</Table.Th>
-                    <Table.Th align="right">Balance</Table.Th>
+                    <Table.Th ta="right">Balance</Table.Th>
+                    <Table.Th />
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
@@ -83,6 +84,9 @@ export function WalletUiSolTokenAccounts({ wallet }: { wallet: Wallet }) {
                           />
                         </Table.Td>
                         <Table.Td align="right">{account.data.parsed.info.tokenAmount.uiAmount} </Table.Td>
+                        <Table.Td align="right">
+                          <UiDebugModal data={account} />
+                        </Table.Td>
                       </Table.Tr>
                     ))}
 

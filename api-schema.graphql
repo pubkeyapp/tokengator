@@ -216,12 +216,13 @@ type Mutation {
   userDeleteCommunity(communityId: String!): Boolean
   userDeleteCommunityMember(communityMemberId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
-  userDeleteWallet(walletId: String!): Boolean
+  userDeleteWallet(publicKey: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userSetWalletFeepayer(publicKey: String!): Wallet
   userUpdateCommunity(communityId: String!, input: UserUpdateCommunityInput!): Community
   userUpdateCommunityMember(communityMemberId: String!, input: UserUpdateCommunityMemberInput!): CommunityMember
   userUpdateUser(input: UserUpdateUserInput!): User
-  userUpdateWallet(input: WalletUserUpdateInput!, walletId: String!): Wallet
+  userUpdateWallet(input: WalletUserUpdateInput!, publicKey: String!): Wallet
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
 
@@ -344,7 +345,7 @@ type Query {
   userFindOneCommunityMember(communityMemberId: String!): CommunityMember
   userFindOnePreset(presetId: String!): Preset
   userFindOneUser(username: String!): User
-  userFindOneWallet(walletId: String!): Wallet
+  userFindOneWallet(publicKey: String!): Wallet
   userGetMinter(account: String!): JSON!
   userGetMinterAssets(account: String!): JSON!
   userGetMinters: JSON!
@@ -455,6 +456,7 @@ input VerifyIdentityChallengeInput {
 type Wallet {
   communityId: String
   createdAt: DateTime
+  feePayer: Boolean!
   id: String!
   name: String!
   publicKey: String!

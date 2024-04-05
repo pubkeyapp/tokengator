@@ -266,22 +266,13 @@ export class ApiPresetMinterService {
   private async getKeypairFromCommunity(communitySlug: string): Promise<Keypair> {
     const community = await this.core.data.community.findUnique({
       where: { slug: communitySlug },
-      include: {
-        wallets: {
-          where: {
-            // TODO: Add feePayer boolean to Wallet model
-            name: 'Fee Payer',
-          },
-        },
-      },
+      include: { wallets: { where: { feePayer: true } } },
     })
     if (!community) {
       throw new Error(`Community not found: ${communitySlug}`)
     }
     if (!community.wallets.length) {
-      throw new Error(
-        `Community has no wallets: ${communitySlug}. Please add a wallet with the name 'Fee Payer' to the community.`,
-      )
+      throw new Error(`Community has no wallets: ${communitySlug}. Please set a fee payer wallet for the community.`)
     }
     const wallet = community.wallets[0]
     return Keypair.fromSecretKey(Uint8Array.from(JSON.parse(wallet.secretKey)))

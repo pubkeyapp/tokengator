@@ -29,7 +29,7 @@ export function UserCommunityDetailMinterListTab({ community }: { community: Com
         <Button
           onClick={() => {
             modals.open({
-              title: 'Create Minter',
+              title: 'Create Collection',
               children: (
                 <Modal
                   presets={presets}
@@ -86,7 +86,7 @@ function Modal({
           })
         }}
       >
-        Create Minter
+        Create Collection
       </Button>
       <UiDebug data={{ presetId }} />
     </UiStack>

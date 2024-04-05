@@ -8,3 +8,7 @@ query solanaGetTokenAccounts($account: String!) {
 query solanaGetTransactions($account: String!) {
   items: solanaGetTransactions(account: $account)
 }
+
+mutation solanaRequestAirdrop($account: String!) {
+  requested: solanaRequestAirdrop(account: $account)
+}

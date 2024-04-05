@@ -117,6 +117,7 @@ model Wallet {
   updatedAt   DateTime   @updatedAt
   community   Community? @relation(fields: [communityId], references: [id], onDelete: SetNull)
   communityId String?
+  feePayer    Boolean    @default(false)
   name        String
   publicKey   String     @unique
   secretKey   String

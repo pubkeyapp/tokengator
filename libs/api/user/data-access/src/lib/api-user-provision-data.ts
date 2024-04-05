@@ -8,8 +8,22 @@ export const provisionUsers: Prisma.UserCreateInput[] = [
     developer: true,
     identities: {
       create: [
+        { provider: IdentityProvider.GitHub, providerId: '36491' },
         { provider: IdentityProvider.Discord, providerId: '386584531353862154' },
         { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
+      ],
+    },
+  },
+  {
+    username: 'sundeep',
+    role: UserRole.Admin,
+    avatarUrl: 'https://avatars.githubusercontent.com/u/32637757',
+    developer: true,
+    identities: {
+      create: [
+        { provider: IdentityProvider.GitHub, providerId: '32637757' },
+        { provider: IdentityProvider.Discord, providerId: '185307556032413697' },
+        { provider: IdentityProvider.Solana, providerId: '81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn' },
       ],
     },
   },

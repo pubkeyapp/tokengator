@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
+import { ApiWalletDataService } from './api-wallet-data.service'
 import { WalletAdminCreateInput } from './dto/wallet-admin-create.input'
 import { WalletAdminFindManyInput } from './dto/wallet-admin-find-many.input'
 import { WalletAdminUpdateInput } from './dto/wallet-admin-update.input'
 import { WalletPaging } from './entity/wallet.entity'
 import { getWalletWhereAdminInput } from './helpers/get-wallet-where-admin.input'
-import { ApiWalletDataService } from './api-wallet-data.service'
 
 @Injectable()
 export class ApiWalletDataAdminService {
@@ -20,7 +20,6 @@ export class ApiWalletDataAdminService {
 
   async findManyWallet(input: WalletAdminFindManyInput): Promise<WalletPaging> {
     return this.data.findMany({
-      orderBy: { createdAt: 'desc' },
       where: getWalletWhereAdminInput(input),
       limit: input.limit,
       page: input.page,

@@ -1,12 +1,12 @@
-import { AppConfig, IdentityProvider } from '@tokengator-mint/sdk'
 import { toastError } from '@pubkey-ui/core'
+import { AppConfig, IdentityProvider } from '@tokengator-mint/sdk'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
 
 // This is provided by /api/__/env.js included in index.html
 const appConfig: AppConfig = (window as unknown as { __env: AppConfig }).__env
 
 if (!appConfig) {
-  toastError('App config not found')
+  toastError('App config not found. Is the api running?')
 }
 
 export interface AuthProviderContext {

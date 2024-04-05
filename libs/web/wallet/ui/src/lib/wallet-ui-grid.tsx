@@ -11,6 +11,8 @@ export function WalletUiGrid({
   page,
   totalRecords,
   limit,
+  requestAirdrop,
+  setFeepayer,
   setLimit,
   setPage,
 }: {
@@ -19,6 +21,8 @@ export function WalletUiGrid({
   totalRecords: number
   onPageChange: (page: number) => void
   limit: number
+  requestAirdrop: (account: string) => void
+  setFeepayer: (publicKey: string) => void
   setLimit: (limit: number) => void
   setPage: (page: number) => void
 }) {
@@ -27,7 +31,13 @@ export function WalletUiGrid({
     <UiStack>
       <SimpleGrid cols={{ base: 1 }} spacing="md">
         {wallets.map((wallet) => (
-          <WalletUiGridItem key={wallet.id} to={wallet.id} wallet={wallet} />
+          <WalletUiGridItem
+            key={wallet.id}
+            to={wallet.publicKey}
+            wallet={wallet}
+            setFeepayer={setFeepayer}
+            requestAirdrop={requestAirdrop}
+          />
         ))}
       </SimpleGrid>
       <UiGroup>

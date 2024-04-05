@@ -1,7 +1,8 @@
 import { Anchor, Button, Group, Text } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useUserFindManyWallet } from '@tokengator-mint/web-wallet-data-access'
+import { useSolanaRequestAirdrop } from '@tokengator-mint/web-solana-data-access'
+import { useUserFindManyWallet, useUserSetWalletFeepayer } from '@tokengator-mint/web-wallet-data-access'
 import { WalletUiGrid } from '@tokengator-mint/web-wallet-ui'
 import { Link } from 'react-router-dom'
 
@@ -10,6 +11,9 @@ export default function UserWalletListFeature({ communityId }: { communityId: st
     limit: 12,
     communityId,
   })
+
+  const requestAirdropMutation = useSolanaRequestAirdrop()
+  const setFeepayerMutation = useUserSetWalletFeepayer()
 
   return (
     <UiStack>
@@ -24,16 +28,17 @@ export default function UserWalletListFeature({ communityId }: { communityId: st
         title="About Wallets"
         message={
           <UiStack>
+            <Text>Wallets are used to pay fees for storage and transactions and receive payments.</Text>
             <Text>
-              Wallets are used to pay fees for storage and transactions and receive payments. Wallets are associated
-              with a community.
-            </Text>
-            <Text>
-              Go to{' '}
+              Request an airdrop or go to{' '}
               <Anchor href="https://faucet.solana.com" target="_blank">
                 faucet.solana.com
               </Anchor>{' '}
-              to get some SOL for your wallet.
+              (SOL) and{' '}
+              <Anchor href="https://faucet.circle.com" target="_blank">
+                faucet.circle.com
+              </Anchor>{' '}
+              (USDC/EURC) to fund your wallet.
             </Text>
           </UiStack>
         }
@@ -45,6 +50,8 @@ export default function UserWalletListFeature({ communityId }: { communityId: st
         <WalletUiGrid
           wallets={items}
           page={pagination.page}
+          setFeepayer={(publicKey) => setFeepayerMutation.mutateAsync({ publicKey })}
+          requestAirdrop={(account) => requestAirdropMutation.mutateAsync({ account })}
           totalRecords={pagination.total}
           onPageChange={pagination.setPage}
           limit={pagination.limit}

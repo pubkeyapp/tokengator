@@ -3,6 +3,7 @@ fragment WalletDetails on Wallet {
   id
   name
   publicKey
+  feePayer
   updatedAt
   communityId
 }
@@ -51,8 +52,8 @@ query userFindManyWallet($input: WalletUserFindManyInput!) {
   }
 }
 
-query userFindOneWallet($walletId: String!) {
-  item: userFindOneWallet(walletId: $walletId) {
+query userFindOneWallet($publicKey: String!) {
+  item: userFindOneWallet(publicKey: $publicKey) {
     ...WalletDetails
   }
 }
@@ -63,12 +64,18 @@ mutation userCreateWallet($input: WalletUserCreateInput!) {
   }
 }
 
-mutation userUpdateWallet($walletId: String!, $input: WalletUserUpdateInput!) {
-  updated: userUpdateWallet(walletId: $walletId, input: $input) {
+mutation userUpdateWallet($publicKey: String!, $input: WalletUserUpdateInput!) {
+  updated: userUpdateWallet(publicKey: $publicKey, input: $input) {
     ...WalletDetails
   }
 }
 
-mutation userDeleteWallet($walletId: String!) {
-  deleted: userDeleteWallet(walletId: $walletId)
+mutation userDeleteWallet($publicKey: String!) {
+  deleted: userDeleteWallet(publicKey: $publicKey)
+}
+
+mutation userSetWalletFeepayer($publicKey: String!) {
+  set: userSetWalletFeepayer(publicKey: $publicKey) {
+    ...WalletDetails
+  }
 }
