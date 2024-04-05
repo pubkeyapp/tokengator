@@ -4,7 +4,6 @@ import { IconCoinFilled, IconDashboard, IconSettings, IconUsers, IconWallet } fr
 import { useUserFindOneCommunity } from '@tokengator-mint/web-community-data-access'
 import { UserCommunityMemberFeature } from '@tokengator-mint/web-community-member-feature'
 import { CommunityUiItem } from '@tokengator-mint/web-community-ui'
-import { UserMintFeature } from '@tokengator-mint/web-mint-feature'
 import { UserWalletFeature } from '@tokengator-mint/web-wallet-feature'
 import { useParams } from 'react-router-dom'
 import { UserCommunityDetailDashboardTab } from './user-community-detail-dashboard-tab'
@@ -40,12 +39,6 @@ export function UserCommunityDetailFeature() {
     {
       path: 'minters/:account',
       element: <UserCommunityDetailMinterDetailTab community={item} />,
-    },
-    {
-      path: 'mints',
-      label: 'Mints',
-      element: <UserMintFeature communityId={communityId} />,
-      leftSection: <IconCoinFilled size={20} />,
     },
     {
       path: 'members',

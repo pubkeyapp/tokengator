@@ -15,7 +15,6 @@ model Community {
   slug        String            @unique
   description String
   imageUrl    String?
-  mints       Mint[]
   members     CommunityMember[]
   wallets     Wallet[]
 }
@@ -71,22 +70,6 @@ model IdentityChallenge {
   identity   Identity         @relation(fields: [provider, providerId], references: [provider, providerId], onDelete: Cascade)
   provider   IdentityProvider
   providerId String
-}
-
-model Mint {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String
-  symbol      String
-  decimals    Int       @default(0)
-  imageUrl    String?
-  uri         String?
-  metadata    Json?
-  publicKey   String    @unique
-  secretKey   String
-  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  communityId String
 }
 
 model Preset {

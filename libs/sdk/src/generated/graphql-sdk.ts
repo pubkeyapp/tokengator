@@ -60,13 +60,6 @@ export type AdminFindManyIdentityInput = {
   provider?: InputMaybe<IdentityProvider>
 }
 
-export type AdminFindManyMintInput = {
-  communityId: Scalars['String']['input']
-  limit?: InputMaybe<Scalars['Int']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
 export type AdminFindManyUserInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
@@ -83,14 +76,6 @@ export type AdminUpdateCommunityInput = {
 
 export type AdminUpdateCommunityMemberInput = {
   role?: InputMaybe<CommunityMemberRole>
-}
-
-export type AdminUpdateMintInput = {
-  decimals?: InputMaybe<Scalars['Float']['input']>
-  imageUrl?: InputMaybe<Scalars['String']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
-  secretKey?: InputMaybe<Scalars['String']['input']>
-  symbol?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminUpdateUserInput = {
@@ -218,24 +203,6 @@ export type LoginInput = {
   username: Scalars['String']['input']
 }
 
-export type Mint = {
-  __typename?: 'Mint'
-  createdAt?: Maybe<Scalars['DateTime']['output']>
-  decimals: Scalars['Float']['output']
-  id: Scalars['String']['output']
-  imageUrl?: Maybe<Scalars['String']['output']>
-  name: Scalars['String']['output']
-  publicKey: Scalars['String']['output']
-  symbol: Scalars['String']['output']
-  updatedAt?: Maybe<Scalars['DateTime']['output']>
-}
-
-export type MintPaging = {
-  __typename?: 'MintPaging'
-  data: Array<Mint>
-  meta: PagingMeta
-}
-
 export type Mutation = {
   __typename?: 'Mutation'
   adminCreateCommunityMember?: Maybe<CommunityMember>
@@ -247,14 +214,12 @@ export type Mutation = {
   adminDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
-  adminDeleteMint?: Maybe<Scalars['Boolean']['output']>
   adminDeletePreset?: Maybe<Scalars['Boolean']['output']>
   adminDeletePrice?: Maybe<Scalars['Boolean']['output']>
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
   adminDeleteWallet?: Maybe<Scalars['Boolean']['output']>
   adminUpdateCommunity?: Maybe<Community>
   adminUpdateCommunityMember?: Maybe<CommunityMember>
-  adminUpdateMint?: Maybe<Mint>
   adminUpdatePreset?: Maybe<Preset>
   adminUpdatePrice?: Maybe<Price>
   adminUpdateUser?: Maybe<User>
@@ -266,20 +231,16 @@ export type Mutation = {
   solanaRequestAirdrop?: Maybe<Scalars['JSON']['output']>
   userCreateCommunity?: Maybe<Community>
   userCreateCommunityMember?: Maybe<CommunityMember>
-  userCreateMint?: Maybe<Mint>
   userCreateMintFromMinter?: Maybe<Scalars['String']['output']>
   userCreateMintFromPreset?: Maybe<Scalars['String']['output']>
   userCreateWallet?: Maybe<Wallet>
   userDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   userDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
-  userDeleteMint?: Maybe<Scalars['Boolean']['output']>
   userDeleteWallet?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
-  userMintToIdentity?: Maybe<Scalars['JSON']['output']>
   userUpdateCommunity?: Maybe<Community>
   userUpdateCommunityMember?: Maybe<CommunityMember>
-  userUpdateMint?: Maybe<Mint>
   userUpdateUser?: Maybe<User>
   userUpdateWallet?: Maybe<Wallet>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
@@ -321,10 +282,6 @@ export type MutationAdminDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
-export type MutationAdminDeleteMintArgs = {
-  mintId: Scalars['String']['input']
-}
-
 export type MutationAdminDeletePresetArgs = {
   presetId: Scalars['String']['input']
 }
@@ -349,11 +306,6 @@ export type MutationAdminUpdateCommunityArgs = {
 export type MutationAdminUpdateCommunityMemberArgs = {
   communityMemberId: Scalars['String']['input']
   input: AdminUpdateCommunityMemberInput
-}
-
-export type MutationAdminUpdateMintArgs = {
-  input: AdminUpdateMintInput
-  mintId: Scalars['String']['input']
 }
 
 export type MutationAdminUpdatePresetArgs = {
@@ -400,10 +352,6 @@ export type MutationUserCreateCommunityMemberArgs = {
   input: UserCreateCommunityMemberInput
 }
 
-export type MutationUserCreateMintArgs = {
-  input: UserCreateMintInput
-}
-
 export type MutationUserCreateMintFromMinterArgs = {
   account: Scalars['String']['input']
   communitySlug: Scalars['String']['input']
@@ -430,21 +378,12 @@ export type MutationUserDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
-export type MutationUserDeleteMintArgs = {
-  mintId: Scalars['String']['input']
-}
-
 export type MutationUserDeleteWalletArgs = {
   walletId: Scalars['String']['input']
 }
 
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
-}
-
-export type MutationUserMintToIdentityArgs = {
-  identityId: Scalars['String']['input']
-  mintId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateCommunityArgs = {
@@ -455,11 +394,6 @@ export type MutationUserUpdateCommunityArgs = {
 export type MutationUserUpdateCommunityMemberArgs = {
   communityMemberId: Scalars['String']['input']
   input: UserUpdateCommunityMemberInput
-}
-
-export type MutationUserUpdateMintArgs = {
-  input: UserUpdateMintInput
-  mintId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateUserArgs = {
@@ -568,14 +502,12 @@ export type Query = {
   adminFindManyCommunity: CommunityPaging
   adminFindManyCommunityMember: CommunityMemberPaging
   adminFindManyIdentity?: Maybe<Array<Identity>>
-  adminFindManyMint: MintPaging
   adminFindManyPreset: PresetPaging
   adminFindManyPrice: Array<Price>
   adminFindManyUser: UserPaging
   adminFindManyWallet: WalletPaging
   adminFindOneCommunity?: Maybe<Community>
   adminFindOneCommunityMember?: Maybe<CommunityMember>
-  adminFindOneMint?: Maybe<Mint>
   adminFindOnePreset?: Maybe<Preset>
   adminFindOnePrice?: Maybe<Price>
   adminFindOneUser?: Maybe<User>
@@ -593,18 +525,15 @@ export type Query = {
   userFindManyCommunity: CommunityPaging
   userFindManyCommunityMember: CommunityMemberPaging
   userFindManyIdentity?: Maybe<Array<Identity>>
-  userFindManyMint: MintPaging
   userFindManyPreset: PresetPaging
   userFindManyPrice: Array<Price>
   userFindManyUser: UserPaging
   userFindManyWallet: WalletPaging
   userFindOneCommunity?: Maybe<Community>
   userFindOneCommunityMember?: Maybe<CommunityMember>
-  userFindOneMint?: Maybe<Mint>
   userFindOnePreset?: Maybe<Preset>
   userFindOneUser?: Maybe<User>
   userFindOneWallet?: Maybe<Wallet>
-  userGetMintAccount?: Maybe<Scalars['JSON']['output']>
   userGetMinter: Scalars['JSON']['output']
   userGetMinterAssets: Scalars['JSON']['output']
   userGetMinters: Scalars['JSON']['output']
@@ -622,10 +551,6 @@ export type QueryAdminFindManyCommunityMemberArgs = {
 
 export type QueryAdminFindManyIdentityArgs = {
   input: AdminFindManyIdentityInput
-}
-
-export type QueryAdminFindManyMintArgs = {
-  input: AdminFindManyMintInput
 }
 
 export type QueryAdminFindManyPresetArgs = {
@@ -650,10 +575,6 @@ export type QueryAdminFindOneCommunityArgs = {
 
 export type QueryAdminFindOneCommunityMemberArgs = {
   communityMemberId: Scalars['String']['input']
-}
-
-export type QueryAdminFindOneMintArgs = {
-  mintId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOnePresetArgs = {
@@ -708,10 +629,6 @@ export type QueryUserFindManyIdentityArgs = {
   input: UserFindManyIdentityInput
 }
 
-export type QueryUserFindManyMintArgs = {
-  input: UserFindManyMintInput
-}
-
 export type QueryUserFindManyPresetArgs = {
   input: PresetUserFindManyInput
 }
@@ -736,10 +653,6 @@ export type QueryUserFindOneCommunityMemberArgs = {
   communityMemberId: Scalars['String']['input']
 }
 
-export type QueryUserFindOneMintArgs = {
-  mintId: Scalars['String']['input']
-}
-
 export type QueryUserFindOnePresetArgs = {
   presetId: Scalars['String']['input']
 }
@@ -750,10 +663,6 @@ export type QueryUserFindOneUserArgs = {
 
 export type QueryUserFindOneWalletArgs = {
   walletId: Scalars['String']['input']
-}
-
-export type QueryUserGetMintAccountArgs = {
-  mintId: Scalars['String']['input']
 }
 
 export type QueryUserGetMinterArgs = {
@@ -809,15 +718,6 @@ export type UserCreateCommunityMemberInput = {
   userId: Scalars['String']['input']
 }
 
-export type UserCreateMintInput = {
-  communityId: Scalars['String']['input']
-  decimals?: InputMaybe<Scalars['Float']['input']>
-  imageUrl?: InputMaybe<Scalars['String']['input']>
-  name: Scalars['String']['input']
-  secretKey?: InputMaybe<Scalars['String']['input']>
-  symbol: Scalars['String']['input']
-}
-
 export type UserFindManyCommunityInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
@@ -834,13 +734,6 @@ export type UserFindManyCommunityMemberInput = {
 
 export type UserFindManyIdentityInput = {
   username: Scalars['String']['input']
-}
-
-export type UserFindManyMintInput = {
-  communityId: Scalars['String']['input']
-  limit?: InputMaybe<Scalars['Int']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
-  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserFindManyUserInput = {
@@ -874,14 +767,6 @@ export type UserUpdateCommunityInput = {
 
 export type UserUpdateCommunityMemberInput = {
   role?: InputMaybe<CommunityMemberRole>
-}
-
-export type UserUpdateMintInput = {
-  decimals?: InputMaybe<Scalars['Float']['input']>
-  imageUrl?: InputMaybe<Scalars['String']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
-  secretKey?: InputMaybe<Scalars['String']['input']>
-  symbol?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserUpdateUserInput = {
@@ -1867,204 +1752,6 @@ export type AnonVerifyIdentityChallengeMutation = {
   } | null
 }
 
-export type MintDetailsFragment = {
-  __typename?: 'Mint'
-  createdAt?: Date | null
-  id: string
-  name: string
-  symbol: string
-  decimals: number
-  imageUrl?: string | null
-  publicKey: string
-  updatedAt?: Date | null
-}
-
-export type UserFindManyMintQueryVariables = Exact<{
-  input: UserFindManyMintInput
-}>
-
-export type UserFindManyMintQuery = {
-  __typename?: 'Query'
-  paging: {
-    __typename?: 'MintPaging'
-    data: Array<{
-      __typename?: 'Mint'
-      createdAt?: Date | null
-      id: string
-      name: string
-      symbol: string
-      decimals: number
-      imageUrl?: string | null
-      publicKey: string
-      updatedAt?: Date | null
-    }>
-    meta: {
-      __typename?: 'PagingMeta'
-      currentPage: number
-      isFirstPage: boolean
-      isLastPage: boolean
-      nextPage?: number | null
-      pageCount?: number | null
-      previousPage?: number | null
-      totalCount?: number | null
-    }
-  }
-}
-
-export type UserFindOneMintQueryVariables = Exact<{
-  mintId: Scalars['String']['input']
-}>
-
-export type UserFindOneMintQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'Mint'
-    createdAt?: Date | null
-    id: string
-    name: string
-    symbol: string
-    decimals: number
-    imageUrl?: string | null
-    publicKey: string
-    updatedAt?: Date | null
-  } | null
-}
-
-export type UserGetMintAccountQueryVariables = Exact<{
-  mintId: Scalars['String']['input']
-}>
-
-export type UserGetMintAccountQuery = { __typename?: 'Query'; item?: any | null }
-
-export type UserCreateMintMutationVariables = Exact<{
-  input: UserCreateMintInput
-}>
-
-export type UserCreateMintMutation = {
-  __typename?: 'Mutation'
-  created?: {
-    __typename?: 'Mint'
-    createdAt?: Date | null
-    id: string
-    name: string
-    symbol: string
-    decimals: number
-    imageUrl?: string | null
-    publicKey: string
-    updatedAt?: Date | null
-  } | null
-}
-
-export type UserMintToIdentityMutationVariables = Exact<{
-  mintId: Scalars['String']['input']
-  identityId: Scalars['String']['input']
-}>
-
-export type UserMintToIdentityMutation = { __typename?: 'Mutation'; minted?: any | null }
-
-export type UserUpdateMintMutationVariables = Exact<{
-  mintId: Scalars['String']['input']
-  input: UserUpdateMintInput
-}>
-
-export type UserUpdateMintMutation = {
-  __typename?: 'Mutation'
-  updated?: {
-    __typename?: 'Mint'
-    createdAt?: Date | null
-    id: string
-    name: string
-    symbol: string
-    decimals: number
-    imageUrl?: string | null
-    publicKey: string
-    updatedAt?: Date | null
-  } | null
-}
-
-export type UserDeleteMintMutationVariables = Exact<{
-  mintId: Scalars['String']['input']
-}>
-
-export type UserDeleteMintMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
-
-export type AdminFindManyMintQueryVariables = Exact<{
-  input: AdminFindManyMintInput
-}>
-
-export type AdminFindManyMintQuery = {
-  __typename?: 'Query'
-  paging: {
-    __typename?: 'MintPaging'
-    data: Array<{
-      __typename?: 'Mint'
-      createdAt?: Date | null
-      id: string
-      name: string
-      symbol: string
-      decimals: number
-      imageUrl?: string | null
-      publicKey: string
-      updatedAt?: Date | null
-    }>
-    meta: {
-      __typename?: 'PagingMeta'
-      currentPage: number
-      isFirstPage: boolean
-      isLastPage: boolean
-      nextPage?: number | null
-      pageCount?: number | null
-      previousPage?: number | null
-      totalCount?: number | null
-    }
-  }
-}
-
-export type AdminFindOneMintQueryVariables = Exact<{
-  mintId: Scalars['String']['input']
-}>
-
-export type AdminFindOneMintQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'Mint'
-    createdAt?: Date | null
-    id: string
-    name: string
-    symbol: string
-    decimals: number
-    imageUrl?: string | null
-    publicKey: string
-    updatedAt?: Date | null
-  } | null
-}
-
-export type AdminUpdateMintMutationVariables = Exact<{
-  mintId: Scalars['String']['input']
-  input: AdminUpdateMintInput
-}>
-
-export type AdminUpdateMintMutation = {
-  __typename?: 'Mutation'
-  updated?: {
-    __typename?: 'Mint'
-    createdAt?: Date | null
-    id: string
-    name: string
-    symbol: string
-    decimals: number
-    imageUrl?: string | null
-    publicKey: string
-    updatedAt?: Date | null
-  } | null
-}
-
-export type AdminDeleteMintMutationVariables = Exact<{
-  mintId: Scalars['String']['input']
-}>
-
-export type AdminDeleteMintMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
-
 export type PresetDetailsFragment = {
   __typename?: 'Preset'
   createdAt?: Date | null
@@ -2908,18 +2595,6 @@ export const IdentityChallengeDetailsFragmentDoc = gql`
     verified
   }
 `
-export const MintDetailsFragmentDoc = gql`
-  fragment MintDetails on Mint {
-    createdAt
-    id
-    name
-    symbol
-    decimals
-    imageUrl
-    publicKey
-    updatedAt
-  }
-`
 export const PresetDetailsFragmentDoc = gql`
   fragment PresetDetails on Preset {
     createdAt
@@ -3292,94 +2967,6 @@ export const AnonVerifyIdentityChallengeDocument = gql`
   }
   ${IdentityChallengeDetailsFragmentDoc}
 `
-export const UserFindManyMintDocument = gql`
-  query userFindManyMint($input: UserFindManyMintInput!) {
-    paging: userFindManyMint(input: $input) {
-      data {
-        ...MintDetails
-      }
-      meta {
-        ...PagingMetaDetails
-      }
-    }
-  }
-  ${MintDetailsFragmentDoc}
-  ${PagingMetaDetailsFragmentDoc}
-`
-export const UserFindOneMintDocument = gql`
-  query userFindOneMint($mintId: String!) {
-    item: userFindOneMint(mintId: $mintId) {
-      ...MintDetails
-    }
-  }
-  ${MintDetailsFragmentDoc}
-`
-export const UserGetMintAccountDocument = gql`
-  query userGetMintAccount($mintId: String!) {
-    item: userGetMintAccount(mintId: $mintId)
-  }
-`
-export const UserCreateMintDocument = gql`
-  mutation userCreateMint($input: UserCreateMintInput!) {
-    created: userCreateMint(input: $input) {
-      ...MintDetails
-    }
-  }
-  ${MintDetailsFragmentDoc}
-`
-export const UserMintToIdentityDocument = gql`
-  mutation userMintToIdentity($mintId: String!, $identityId: String!) {
-    minted: userMintToIdentity(mintId: $mintId, identityId: $identityId)
-  }
-`
-export const UserUpdateMintDocument = gql`
-  mutation userUpdateMint($mintId: String!, $input: UserUpdateMintInput!) {
-    updated: userUpdateMint(mintId: $mintId, input: $input) {
-      ...MintDetails
-    }
-  }
-  ${MintDetailsFragmentDoc}
-`
-export const UserDeleteMintDocument = gql`
-  mutation userDeleteMint($mintId: String!) {
-    deleted: userDeleteMint(mintId: $mintId)
-  }
-`
-export const AdminFindManyMintDocument = gql`
-  query adminFindManyMint($input: AdminFindManyMintInput!) {
-    paging: adminFindManyMint(input: $input) {
-      data {
-        ...MintDetails
-      }
-      meta {
-        ...PagingMetaDetails
-      }
-    }
-  }
-  ${MintDetailsFragmentDoc}
-  ${PagingMetaDetailsFragmentDoc}
-`
-export const AdminFindOneMintDocument = gql`
-  query adminFindOneMint($mintId: String!) {
-    item: adminFindOneMint(mintId: $mintId) {
-      ...MintDetails
-    }
-  }
-  ${MintDetailsFragmentDoc}
-`
-export const AdminUpdateMintDocument = gql`
-  mutation adminUpdateMint($mintId: String!, $input: AdminUpdateMintInput!) {
-    updated: adminUpdateMint(mintId: $mintId, input: $input) {
-      ...MintDetails
-    }
-  }
-  ${MintDetailsFragmentDoc}
-`
-export const AdminDeleteMintDocument = gql`
-  mutation adminDeleteMint($mintId: String!) {
-    deleted: adminDeleteMint(mintId: $mintId)
-  }
-`
 export const AdminFindManyPresetDocument = gql`
   query adminFindManyPreset($input: PresetAdminFindManyInput!) {
     paging: adminFindManyPreset(input: $input) {
@@ -3745,17 +3332,6 @@ const UserVerifyIdentityChallengeDocumentString = print(UserVerifyIdentityChalle
 const UserLinkIdentityDocumentString = print(UserLinkIdentityDocument)
 const AnonRequestIdentityChallengeDocumentString = print(AnonRequestIdentityChallengeDocument)
 const AnonVerifyIdentityChallengeDocumentString = print(AnonVerifyIdentityChallengeDocument)
-const UserFindManyMintDocumentString = print(UserFindManyMintDocument)
-const UserFindOneMintDocumentString = print(UserFindOneMintDocument)
-const UserGetMintAccountDocumentString = print(UserGetMintAccountDocument)
-const UserCreateMintDocumentString = print(UserCreateMintDocument)
-const UserMintToIdentityDocumentString = print(UserMintToIdentityDocument)
-const UserUpdateMintDocumentString = print(UserUpdateMintDocument)
-const UserDeleteMintDocumentString = print(UserDeleteMintDocument)
-const AdminFindManyMintDocumentString = print(AdminFindManyMintDocument)
-const AdminFindOneMintDocumentString = print(AdminFindOneMintDocument)
-const AdminUpdateMintDocumentString = print(AdminUpdateMintDocument)
-const AdminDeleteMintDocumentString = print(AdminDeleteMintDocument)
 const AdminFindManyPresetDocumentString = print(AdminFindManyPresetDocument)
 const AdminFindOnePresetDocumentString = print(AdminFindOnePresetDocument)
 const AdminCreatePresetDocumentString = print(AdminCreatePresetDocument)
@@ -4553,237 +4129,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'anonVerifyIdentityChallenge',
-        'mutation',
-        variables,
-      )
-    },
-    userFindManyMint(
-      variables: UserFindManyMintQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserFindManyMintQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindManyMintQuery>(UserFindManyMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindManyMint',
-        'query',
-        variables,
-      )
-    },
-    userFindOneMint(
-      variables: UserFindOneMintQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserFindOneMintQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindOneMintQuery>(UserFindOneMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindOneMint',
-        'query',
-        variables,
-      )
-    },
-    userGetMintAccount(
-      variables: UserGetMintAccountQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserGetMintAccountQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserGetMintAccountQuery>(UserGetMintAccountDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userGetMintAccount',
-        'query',
-        variables,
-      )
-    },
-    userCreateMint(
-      variables: UserCreateMintMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserCreateMintMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserCreateMintMutation>(UserCreateMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userCreateMint',
-        'mutation',
-        variables,
-      )
-    },
-    userMintToIdentity(
-      variables: UserMintToIdentityMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserMintToIdentityMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserMintToIdentityMutation>(UserMintToIdentityDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userMintToIdentity',
-        'mutation',
-        variables,
-      )
-    },
-    userUpdateMint(
-      variables: UserUpdateMintMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserUpdateMintMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserUpdateMintMutation>(UserUpdateMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userUpdateMint',
-        'mutation',
-        variables,
-      )
-    },
-    userDeleteMint(
-      variables: UserDeleteMintMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserDeleteMintMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserDeleteMintMutation>(UserDeleteMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userDeleteMint',
-        'mutation',
-        variables,
-      )
-    },
-    adminFindManyMint(
-      variables: AdminFindManyMintQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminFindManyMintQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminFindManyMintQuery>(AdminFindManyMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminFindManyMint',
-        'query',
-        variables,
-      )
-    },
-    adminFindOneMint(
-      variables: AdminFindOneMintQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminFindOneMintQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminFindOneMintQuery>(AdminFindOneMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminFindOneMint',
-        'query',
-        variables,
-      )
-    },
-    adminUpdateMint(
-      variables: AdminUpdateMintMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminUpdateMintMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminUpdateMintMutation>(AdminUpdateMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminUpdateMint',
-        'mutation',
-        variables,
-      )
-    },
-    adminDeleteMint(
-      variables: AdminDeleteMintMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminDeleteMintMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminDeleteMintMutation>(AdminDeleteMintDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminDeleteMint',
         'mutation',
         variables,
       )
@@ -5698,15 +5043,6 @@ export function AdminFindManyIdentityInputSchema(): z.ZodObject<Properties<Admin
   })
 }
 
-export function AdminFindManyMintInputSchema(): z.ZodObject<Properties<AdminFindManyMintInput>> {
-  return z.object({
-    communityId: z.string(),
-    limit: z.number().nullish(),
-    page: z.number().nullish(),
-    search: z.string().nullish(),
-  })
-}
-
 export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFindManyUserInput>> {
   return z.object({
     limit: z.number().nullish(),
@@ -5728,16 +5064,6 @@ export function AdminUpdateCommunityInputSchema(): z.ZodObject<Properties<AdminU
 export function AdminUpdateCommunityMemberInputSchema(): z.ZodObject<Properties<AdminUpdateCommunityMemberInput>> {
   return z.object({
     role: CommunityMemberRoleSchema.nullish(),
-  })
-}
-
-export function AdminUpdateMintInputSchema(): z.ZodObject<Properties<AdminUpdateMintInput>> {
-  return z.object({
-    decimals: z.number().nullish(),
-    imageUrl: z.string().nullish(),
-    name: z.string().nullish(),
-    secretKey: z.string().nullish(),
-    symbol: z.string().nullish(),
   })
 }
 
@@ -5866,17 +5192,6 @@ export function UserCreateCommunityMemberInputSchema(): z.ZodObject<Properties<U
   })
 }
 
-export function UserCreateMintInputSchema(): z.ZodObject<Properties<UserCreateMintInput>> {
-  return z.object({
-    communityId: z.string(),
-    decimals: z.number().nullish(),
-    imageUrl: z.string().nullish(),
-    name: z.string(),
-    secretKey: z.string().nullish(),
-    symbol: z.string(),
-  })
-}
-
 export function UserFindManyCommunityInputSchema(): z.ZodObject<Properties<UserFindManyCommunityInput>> {
   return z.object({
     limit: z.number().nullish(),
@@ -5901,15 +5216,6 @@ export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFi
   })
 }
 
-export function UserFindManyMintInputSchema(): z.ZodObject<Properties<UserFindManyMintInput>> {
-  return z.object({
-    communityId: z.string(),
-    limit: z.number().nullish(),
-    page: z.number().nullish(),
-    search: z.string().nullish(),
-  })
-}
-
 export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindManyUserInput>> {
   return z.object({
     limit: z.number().nullish(),
@@ -5929,16 +5235,6 @@ export function UserUpdateCommunityInputSchema(): z.ZodObject<Properties<UserUpd
 export function UserUpdateCommunityMemberInputSchema(): z.ZodObject<Properties<UserUpdateCommunityMemberInput>> {
   return z.object({
     role: CommunityMemberRoleSchema.nullish(),
-  })
-}
-
-export function UserUpdateMintInputSchema(): z.ZodObject<Properties<UserUpdateMintInput>> {
-  return z.object({
-    decimals: z.number().nullish(),
-    imageUrl: z.string().nullish(),
-    name: z.string().nullish(),
-    secretKey: z.string().nullish(),
-    symbol: z.string().nullish(),
   })
 }
 
