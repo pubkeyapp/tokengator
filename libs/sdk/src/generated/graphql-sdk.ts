@@ -640,6 +640,7 @@ export type Query = {
   appConfig: AppConfig
   currencies: Array<Currency>
   me?: Maybe<User>
+  metadataAll?: Maybe<Scalars['JSON']['output']>
   solanaGetBalance?: Maybe<Scalars['String']['output']>
   solanaGetTokenAccounts?: Maybe<Scalars['JSON']['output']>
   solanaGetTransactions?: Maybe<Scalars['JSON']['output']>
@@ -737,6 +738,10 @@ export type QueryAnonFindOneCommunityArgs = {
 
 export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
+}
+
+export type QueryMetadataAllArgs = {
+  account: Scalars['String']['input']
 }
 
 export type QuerySolanaGetBalanceArgs = {
@@ -2942,6 +2947,12 @@ export type AnonVerifyIdentityChallengeMutation = {
   } | null
 }
 
+export type MetadataAllQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type MetadataAllQuery = { __typename?: 'Query'; item?: any | null }
+
 export type PresetDetailsFragment = {
   __typename?: 'Preset'
   createdAt?: Date | null
@@ -4632,6 +4643,11 @@ export const AnonVerifyIdentityChallengeDocument = gql`
   }
   ${IdentityChallengeDetailsFragmentDoc}
 `
+export const MetadataAllDocument = gql`
+  query metadataAll($account: String!) {
+    item: metadataAll(account: $account)
+  }
+`
 export const AdminFindManyPresetDocument = gql`
   query adminFindManyPreset($input: PresetAdminFindManyInput!) {
     paging: adminFindManyPreset(input: $input) {
@@ -5031,6 +5047,7 @@ const UserVerifyIdentityChallengeDocumentString = print(UserVerifyIdentityChalle
 const UserLinkIdentityDocumentString = print(UserLinkIdentityDocument)
 const AnonRequestIdentityChallengeDocumentString = print(AnonRequestIdentityChallengeDocument)
 const AnonVerifyIdentityChallengeDocumentString = print(AnonVerifyIdentityChallengeDocument)
+const MetadataAllDocumentString = print(MetadataAllDocument)
 const AdminFindManyPresetDocumentString = print(AdminFindManyPresetDocument)
 const AdminFindOnePresetDocumentString = print(AdminFindOnePresetDocument)
 const AdminCreatePresetDocumentString = print(AdminCreatePresetDocument)
@@ -6083,6 +6100,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
           }),
         'anonVerifyIdentityChallenge',
         'mutation',
+        variables,
+      )
+    },
+    metadataAll(
+      variables: MetadataAllQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: MetadataAllQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<MetadataAllQuery>(MetadataAllDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'metadataAll',
+        'query',
         variables,
       )
     },

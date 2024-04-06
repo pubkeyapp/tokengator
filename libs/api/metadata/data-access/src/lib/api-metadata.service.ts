@@ -3,6 +3,7 @@ import { PublicKey } from '@solana/web3.js'
 import { ApiCoreService } from '@tokengator/api-core-data-access'
 import { ApiSolanaService, SolanaAccountInfo } from '@tokengator/api-solana-data-access'
 import { LRUCache } from 'lru-cache'
+import { ApiMetadataImageService } from './api-metadata-image.service'
 
 export interface CantFindTheRightTypeScrewItHackathonMode {
   extension: 'tokenMetadata'
@@ -18,6 +19,7 @@ export interface CantFindTheRightTypeScrewItHackathonMode {
 
 export interface ExternalMetadata {
   image: string
+  description: string
   [key: string]: string
 }
 
@@ -35,7 +37,6 @@ const TEN_MINUTES = 1000 * 60 * 10
 @Injectable()
 export class ApiMetadataService {
   private readonly logger = new Logger(ApiMetadataService.name)
-
   private readonly externalMetadataCache = new LRUCache<string, ExternalMetadata>({
     max: 1000,
     ttl: ONE_HOUR,
@@ -83,8 +84,7 @@ export class ApiMetadataService {
     fetchMethod: async (account: string) => {
       const image = `${this.core.config.apiUrl}/metadata/image/${account}`
       const metadata = await this.accountMetadataCache.fetch(account)
-
-      const { name, symbol, description, external_url } = defaults()
+      const external_url = `${this.core.config.apiUrl}/metadata/redirect/${account}`
 
       if (metadata) {
         // The metadata is external, fetch it and return
@@ -95,62 +95,80 @@ export class ApiMetadataService {
           if (!externalMetadata) {
             throw new Error(`Failed to fetch external metadata for ${metadata.state.uri}`)
           }
+
           if (externalMetadata.image) {
             return {
-              name: metadata.state.name ?? name,
-              symbol: metadata.state.symbol ?? symbol,
-              description: metadata.state.uri ?? description,
-              external_url: metadata.state.uri ?? external_url,
+              name: metadata.state.name,
+              symbol: metadata.state.symbol,
               image: externalMetadata.image,
+              description: externalMetadata.description,
+              external_url,
             }
           }
         }
 
         // The metadata is on the account, return it
         return {
-          name: metadata.state.name ?? name,
-          symbol: metadata.state.symbol ?? symbol,
-          description: metadata.state.uri ?? description,
-          external_url: metadata.state.uri ?? external_url,
+          name: metadata.state.name,
+          symbol: metadata.state.symbol,
+          description: metadata.state.name,
           image,
+          external_url,
+          attributes: metadata.state.additionalMetadata?.map(([trait_type, value]) => ({
+            trait_type,
+            value,
+          })),
         }
       }
-
-      return {
-        name,
-        symbol,
-        description,
-        external_url,
-        image,
-      }
+      throw new Error(`Failed to fetch metadata for ${account}`)
     },
   })
 
-  constructor(private readonly core: ApiCoreService, private readonly solana: ApiSolanaService) {}
+  constructor(
+    private readonly core: ApiCoreService,
+    private readonly image: ApiMetadataImageService,
+    private readonly solana: ApiSolanaService,
+  ) {}
 
-  async getImage(account: string): Promise<string> {
+  async getImage(account: string): Promise<Buffer | string> {
+    this.logger.verbose(`Fetching metadata image for ${account}`)
     const accountMetadata = await this.accountMetadataCache.fetch(account)
     if (!accountMetadata) {
       throw new Error(`Failed to fetch metadata for ${account}`)
     }
-    const externalMetadata = await this.externalMetadataCache.fetch(accountMetadata.state.uri)
-    if (!externalMetadata) {
-      throw new Error(`Failed to fetch external metadata for ${accountMetadata.state.uri}`)
+
+    if (!accountMetadata.state.uri?.startsWith(this.core.config.apiUrl)) {
+      const externalMetadata = await this.externalMetadataCache.fetch(accountMetadata.state.uri)
+      if (!externalMetadata) {
+        throw new Error(`Failed to fetch external metadata for ${accountMetadata.state.uri}`)
+      }
+
+      return externalMetadata.image
     }
 
-    return externalMetadata.image
+    return this.image.generate(accountMetadata)
   }
 
   async getJson(account: string) {
+    this.logger.verbose(`Fetching metadata json for ${account}`)
     return this.jsonCache.fetch(account)
   }
-}
 
-function defaults() {
-  const name = `Unknown Name`
-  const symbol = `Unknown Symbol`
-  const description = `Unknown Description`
-  const external_url = `https://example.com`
+  async getRedirect(account: string) {
+    return `${this.core.config.webUrl}/assets/${account}`
+  }
 
-  return { name, symbol, description, external_url }
+  async getAll(account: string) {
+    const [json, accountMetadata, accountInfo] = await Promise.all([
+      this.getJson(account),
+      this.accountMetadataCache.fetch(account),
+      this.accountCache.fetch(account),
+    ])
+
+    return {
+      json,
+      accountMetadata,
+      accountInfo,
+    }
+  }
 }

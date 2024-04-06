@@ -8,13 +8,29 @@ export class ApiMetadataController {
 
   @Get('image/:account')
   async image(@Param('account') account: string, @Res() res: Response) {
-    const imageUrl = await this.service.getImage(account)
+    const result = await this.service.getImage(account)
 
-    return res.redirect(imageUrl)
+    if (!result) {
+      return res.status(404).send('Not found')
+    }
+
+    if (typeof result === 'string') {
+      return res.redirect(result)
+    }
+
+    res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': result.length })
+    res.end(result)
   }
 
   @Get('json/:account')
   async json(@Param('account') account: string) {
     return this.service.getJson(account)
+  }
+
+  @Get('redirect/:account')
+  async redirect(@Param('account') account: string, @Res() res: Response) {
+    const url = await this.service.getRedirect(account)
+
+    res.redirect(url)
   }
 }

@@ -1,5 +1,6 @@
 import { UiContainer, UiDashboardGrid, UiDashboardItem, UiNotFound } from '@pubkey-ui/core'
 import { IconAdjustmentsX, IconSettings, IconUsersGroup } from '@tabler/icons-react'
+import { UserAssetFeature } from '@tokengator/web-asset-feature'
 import { UserClaimPageFeature } from '@tokengator/web-claim-feature'
 import { UserCommunityFeature } from '@tokengator/web-community-feature'
 import { UserPresetFeature } from '@tokengator/web-preset-feature'
@@ -20,6 +21,7 @@ const routes: RouteObject[] = [
   // User Dashboard Routes are added by the web-crud generator
   { path: '/dashboard', element: <Dashboard /> },
   { path: '/settings/*', element: <SettingsFeature /> },
+  { path: '/assets/*', element: <UserAssetFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
   { path: '/u/*', element: <UserFeature /> },
   { path: '/claims/*', element: <UserClaimPageFeature /> },

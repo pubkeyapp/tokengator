@@ -36,6 +36,10 @@ export class ApiPresetMinterService {
     this.logger.debug(`Program ID: ${this.programId.toString()}`)
   }
 
+  getMetadataUrl(account: string) {
+    return `${this.core.config.apiUrl}/metadata/json/${account}`
+  }
+
   getProgramTokenMinter(provider: AnchorProvider = this.solana.getAnchorProvider()) {
     return new Program(TokengatorMinterIDL, this.programId, provider)
   }
@@ -66,7 +70,7 @@ export class ApiPresetMinterService {
         applicationConfig: { paymentConfig: appPaymentConfig },
         metadataConfig,
       },
-    } = getPresetConfig({ communitySlug, mintPublicKey: mintKeypair.publicKey.toString(), preset })
+    } = getPresetConfig({ communitySlug, url: this.getMetadataUrl(mintKeypair.publicKey.toString()), preset })
 
     // BELOW HERE WILL MOVE TO THE SDK AT SOME POINT
     const [minter] = getMinterPda({ name, mint: mintKeypair.publicKey, programId: this.programId })
@@ -153,7 +157,7 @@ export class ApiPresetMinterService {
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
     const { name, symbol, uri } = {
-      uri: `https://devnet.tokengator.app/api/metadata/json/${memberMintKeypair.publicKey.toString()}`,
+      uri: this.getMetadataUrl(memberMintKeypair.publicKey.toString()),
       name: 'test',
       symbol: 'HI',
     }
@@ -272,15 +276,7 @@ export class ApiPresetMinterService {
   }
 }
 
-function getPresetConfig({
-  communitySlug,
-  mintPublicKey,
-  preset,
-}: {
-  communitySlug: string
-  mintPublicKey: string
-  preset: Preset
-}) {
+function getPresetConfig({ communitySlug, url, preset }: { communitySlug: string; url: string; preset: Preset }) {
   return {
     name: preset.name,
     description: preset.description ?? '',
@@ -292,7 +288,7 @@ function getPresetConfig({
     }),
     minterConfig: {
       metadataConfig: {
-        uri: `https://devnet.tokengator.app/api/metadata/json/${mintPublicKey}.json`,
+        uri: url,
         name: preset.name,
         symbol: 'TGC',
         metadata: [

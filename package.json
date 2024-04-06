@@ -25,7 +25,8 @@
     "prestart": "pnpm prisma db push",
     "setup": "pnpm nx generate setup",
     "start": "NODE_ENV=production node dist/apps/api/main.js",
-    "test:all": "nx run-many --target=test --all"
+    "test:all": "nx run-many --target=test --all",
+    "tunnel": "npx localtunnel --port 3000 -s tokengator --print-requests"
   },
   "private": true,
   "dependencies": {
@@ -174,6 +175,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "lint-staged": "^15.2.0",
+    "localtunnel": "^2.0.2",
     "nx": "17.2.8",
     "pg": "^8.11.3",
     "pluralize": "^8.0.0",

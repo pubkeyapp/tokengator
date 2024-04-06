@@ -1,0 +1,3 @@
+query metadataAll($account: String!) {
+  item: metadataAll(account: $account)
+}

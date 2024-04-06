@@ -415,6 +415,7 @@ type Query {
   appConfig: AppConfig!
   currencies: [Currency!]!
   me: User
+  metadataAll(account: String!): JSON
   solanaGetBalance(account: String!): String
   solanaGetTokenAccounts(account: String!): JSON
   solanaGetTransactions(account: String!): JSON
