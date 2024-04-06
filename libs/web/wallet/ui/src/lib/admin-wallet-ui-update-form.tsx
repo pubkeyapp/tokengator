@@ -1,7 +1,7 @@
 import { Button, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { Wallet, WalletAdminUpdateInput } from '@tokengator-mint/sdk'
+import { Wallet, WalletAdminUpdateInput } from '@tokengator/sdk'
 
 export function AdminWalletUiUpdateForm({
   submit,

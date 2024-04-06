@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiSolanaDataAccessModule } from '@tokengator-mint/api-solana-data-access'
+import { ApiSolanaDataAccessModule } from '@tokengator/api-solana-data-access'
 import { ApiSolanaResolver } from './api-solana.resolver'
 
 @Module({

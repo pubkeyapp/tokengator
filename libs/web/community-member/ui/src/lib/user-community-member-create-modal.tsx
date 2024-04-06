@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { UserCreateCommunityMemberInput } from '@tokengator-mint/sdk'
+import { UserCreateCommunityMemberInput } from '@tokengator/sdk'
 
 import { UserCommunityMemberCreateForm } from './user-community-member-create-form'
 

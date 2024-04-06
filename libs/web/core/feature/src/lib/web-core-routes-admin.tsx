@@ -1,9 +1,9 @@
 import { UiContainer, UiDashboardGrid, UiDashboardItem, UiNotFound } from '@pubkey-ui/core'
 import { IconAdjustmentsX, IconSettings, IconUsers, IconUsersGroup } from '@tabler/icons-react'
-import { AdminCommunityFeature } from '@tokengator-mint/web-community-feature'
-import { DevAdminRoutes } from '@tokengator-mint/web-dev-feature'
-import { AdminPresetFeature } from '@tokengator-mint/web-preset-feature'
-import { AdminUserFeature } from '@tokengator-mint/web-user-feature'
+import { AdminCommunityFeature } from '@tokengator/web-community-feature'
+import { DevAdminRoutes } from '@tokengator/web-dev-feature'
+import { AdminPresetFeature } from '@tokengator/web-preset-feature'
+import { AdminUserFeature } from '@tokengator/web-user-feature'
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
 const links: UiDashboardItem[] = [

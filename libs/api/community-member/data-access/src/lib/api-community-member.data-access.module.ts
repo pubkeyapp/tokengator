@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiCoreDataAccessModule } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreDataAccessModule } from '@tokengator/api-core-data-access'
 import { ApiCommunityMemberDataAdminService } from './api-community-member-data-admin.service'
 import { ApiCommunityMemberDataUserService } from './api-community-member-data-user.service'
 import { ApiCommunityMemberDataService } from './api-community-member-data.service'

@@ -1,6 +1,6 @@
 import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { IconPencil, IconTrash } from '@tabler/icons-react'
-import { CommunityMember } from '@tokengator-mint/sdk'
+import { CommunityMember } from '@tokengator/sdk'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
 import { CommunityMemberUiItem } from './community-member-ui-item'

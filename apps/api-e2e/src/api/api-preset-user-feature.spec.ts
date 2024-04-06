@@ -1,4 +1,4 @@
-import { PresetUserCreateInput, PresetUserFindManyInput, PresetUserUpdateInput, Preset } from '@tokengator-mint/sdk'
+import { PresetUserCreateInput, PresetUserFindManyInput, PresetUserUpdateInput, Preset } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-preset-feature', () => {

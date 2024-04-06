@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { PriceUserFindManyInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { PriceUserFindManyInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useUserFindManyPrice(props: Partial<PriceUserFindManyInput> & { presetId: string }) {
   const sdk = useSdk()

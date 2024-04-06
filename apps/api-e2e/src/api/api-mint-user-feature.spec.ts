@@ -1,4 +1,4 @@
-import { UserCreateMintInput, UserFindManyMintInput, UserUpdateMintInput, Mint } from '@tokengator-mint/sdk'
+import { UserCreateMintInput, UserFindManyMintInput, UserUpdateMintInput, Mint } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-mint-feature', () => {

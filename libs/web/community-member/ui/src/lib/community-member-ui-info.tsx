@@ -1,5 +1,5 @@
 import { UiInfoItems, UiInfoTable, UiTime } from '@pubkey-ui/core'
-import { CommunityMember } from '@tokengator-mint/sdk'
+import { CommunityMember } from '@tokengator/sdk'
 import { CommunityMemberUiRoleBadge } from './community-member-ui-role-badge'
 
 export function CommunityMemberUiInfo({ communityMember }: { communityMember?: CommunityMember }) {

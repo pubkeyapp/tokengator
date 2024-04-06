@@ -1,7 +1,7 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { PriceAdminCreateInput, PriceAdminFindManyInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { PriceAdminCreateInput, PriceAdminFindManyInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useAdminFindManyPrice(props: Partial<PriceAdminFindManyInput> & { presetId: string }) {
   const sdk = useSdk()

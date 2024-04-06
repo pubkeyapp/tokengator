@@ -1,5 +1,5 @@
 import { ActionIcon, Badge, Code, Group, Menu, Text } from '@mantine/core'
-import { ellipsify, Identity } from '@tokengator-mint/sdk'
+import { ellipsify, Identity } from '@tokengator/sdk'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import { IdentityUiAvatar } from './identity-ui-avatar'

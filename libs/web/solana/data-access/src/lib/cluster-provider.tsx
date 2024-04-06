@@ -44,8 +44,8 @@ export const defaultClusters: Cluster[] = [
   },
 ]
 
-const clusterAtom = atomWithStorage<Cluster>('tokengator-mint-cluster', defaultClusters[0])
-const clustersAtom = atomWithStorage<Cluster[]>('tokengator-mint-clusters', defaultClusters)
+const clusterAtom = atomWithStorage<Cluster>('tokengator-cluster', defaultClusters[0])
+const clustersAtom = atomWithStorage<Cluster[]>('tokengator-clusters', defaultClusters)
 
 const activeClustersAtom = atom<Cluster[]>((get) => {
   const clusters = get(clustersAtom)

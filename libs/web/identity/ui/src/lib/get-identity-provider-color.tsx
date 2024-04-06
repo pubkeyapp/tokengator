@@ -1,4 +1,4 @@
-import { IdentityProvider } from '@tokengator-mint/sdk'
+import { IdentityProvider } from '@tokengator/sdk'
 
 export function getIdentityProviderColor(provider: IdentityProvider) {
   switch (provider) {

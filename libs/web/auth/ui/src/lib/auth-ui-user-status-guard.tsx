@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
-import { UserStatus } from '@tokengator-mint/sdk'
-import { useAuth } from '@tokengator-mint/web-auth-data-access'
+import { UserStatus } from '@tokengator/sdk'
+import { useAuth } from '@tokengator/web-auth-data-access'
 import { UiStack, UiWarning } from '@pubkey-ui/core'
 import { Outlet } from 'react-router-dom'
 import { AuthUiFull } from './auth-ui-full'

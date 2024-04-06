@@ -3,9 +3,9 @@ import { UiDebugModal, UiError, UiInfo, UiStack } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Wallet } from '@tokengator-mint/sdk'
-import { useSolanaGetTokenAccounts, useSolanaLabel } from '@tokengator-mint/web-solana-data-access'
-import { SolanaUiExplorerLink } from '@tokengator-mint/web-solana-ui'
+import { Wallet } from '@tokengator/sdk'
+import { useSolanaGetTokenAccounts, useSolanaLabel } from '@tokengator/web-solana-data-access'
+import { SolanaUiExplorerLink } from '@tokengator/web-solana-ui'
 import { useMemo, useState } from 'react'
 
 export function WalletUiSolTokenAccounts({ wallet }: { wallet: Wallet }) {

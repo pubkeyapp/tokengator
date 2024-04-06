@@ -1,6 +1,6 @@
 import { Group, type GroupProps } from '@mantine/core'
-import { CommunityMember } from '@tokengator-mint/sdk'
-import { UserUiItem } from '@tokengator-mint/web-user-ui'
+import { CommunityMember } from '@tokengator/sdk'
+import { UserUiItem } from '@tokengator/web-user-ui'
 import { CommunityMemberUiRoleBadge } from './community-member-ui-role-badge'
 
 export function CommunityMemberUiItem({

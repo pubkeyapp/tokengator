@@ -1,6 +1,6 @@
 import { AvatarProps, Stack, StackProps, Text } from '@mantine/core'
 import { UiAnchorProps } from '@pubkey-ui/core'
-import { Price } from '@tokengator-mint/sdk'
+import { Price } from '@tokengator/sdk'
 import { PriceUiAvatar } from './price-ui-avatar'
 
 export function PriceUiItem({

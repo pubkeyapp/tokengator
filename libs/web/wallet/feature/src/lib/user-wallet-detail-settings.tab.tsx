@@ -1,6 +1,6 @@
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
-import { useUserFindOneWallet } from '@tokengator-mint/web-wallet-data-access'
-import { UserWalletUiUpdateForm } from '@tokengator-mint/web-wallet-ui'
+import { useUserFindOneWallet } from '@tokengator/web-wallet-data-access'
+import { UserWalletUiUpdateForm } from '@tokengator/web-wallet-ui'
 
 export function UserWalletDetailSettingsTab({ publicKey }: { publicKey: string }) {
   const { item, query, updateWallet } = useUserFindOneWallet({ publicKey })

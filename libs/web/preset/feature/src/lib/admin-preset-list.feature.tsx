@@ -1,8 +1,8 @@
 import { Button, Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { UiPageLimit, UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useAdminFindManyPreset } from '@tokengator-mint/web-preset-data-access'
-import { AdminPresetUiTable } from '@tokengator-mint/web-preset-ui'
+import { UiPageLimit, UiSearchField } from '@tokengator/web-core-ui'
+import { useAdminFindManyPreset } from '@tokengator/web-preset-data-access'
+import { AdminPresetUiTable } from '@tokengator/web-preset-ui'
 import { Link } from 'react-router-dom'
 
 export default function AdminPresetListFeature() {

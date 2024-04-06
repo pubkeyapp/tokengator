@@ -1,6 +1,6 @@
 import { SimpleGrid, Text } from '@mantine/core'
-import type { User } from '@tokengator-mint/sdk'
-import { AdminUserUiSearch, UserUiAvatar, UserUiItem, UserUiSearch } from '@tokengator-mint/web-user-ui'
+import type { User } from '@tokengator/sdk'
+import { AdminUserUiSearch, UserUiAvatar, UserUiItem, UserUiSearch } from '@tokengator/web-user-ui'
 import { UiCard, UiDebug, UiInfo, UiStack } from '@pubkey-ui/core'
 import { useState } from 'react'
 

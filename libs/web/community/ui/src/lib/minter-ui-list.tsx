@@ -1,5 +1,5 @@
 import { UiStack } from '@pubkey-ui/core'
-import { TokenGatorMinter } from '@tokengator-mint/sdk'
+import { TokenGatorMinter } from '@tokengator/sdk'
 
 import { MinterUiCard } from './minter-ui-card'
 

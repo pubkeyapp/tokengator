@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { ApiCoreDataAccessModule } from '@tokengator-mint/api-core-data-access'
-import { ApiSolanaDataAccessModule } from '@tokengator-mint/api-solana-data-access'
+import { ApiCoreDataAccessModule } from '@tokengator/api-core-data-access'
+import { ApiSolanaDataAccessModule } from '@tokengator/api-solana-data-access'
 import { ApiPresetDataAdminService } from './api-preset-data-admin.service'
 import { ApiPresetDataUserService } from './api-preset-data-user.service'
 import { ApiPresetDataService } from './api-preset-data.service'

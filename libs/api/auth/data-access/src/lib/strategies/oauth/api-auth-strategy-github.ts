@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { AuthGuard, PassportStrategy } from '@nestjs/passport'
 import { IdentityProvider } from '@prisma/client'
-import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService } from '@tokengator/api-core-data-access'
 import { Profile, Strategy } from 'passport-github'
 import type { ApiAuthRequest } from '../../interfaces/api-auth.request'
 import { ApiAuthStrategyService } from '../api-auth-strategy.service'

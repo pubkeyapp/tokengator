@@ -1,12 +1,12 @@
 import { Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useUserFindManyCommunityMember } from '@tokengator-mint/web-community-member-data-access'
+import { useUserFindManyCommunityMember } from '@tokengator/web-community-member-data-access'
 import {
   CommunityMemberUiRoleSelect,
   UserCommunityMemberCreateModal,
   UserCommunityMemberUiTable,
-} from '@tokengator-mint/web-community-member-ui'
-import { UiSearchField } from '@tokengator-mint/web-core-ui'
+} from '@tokengator/web-community-member-ui'
+import { UiSearchField } from '@tokengator/web-core-ui'
 
 export function UserCommunityMemberListFeature({ communityId }: { communityId: string }) {
   const { createCommunityMember, deleteCommunityMember, items, pagination, query, role, setRole, setSearch } =

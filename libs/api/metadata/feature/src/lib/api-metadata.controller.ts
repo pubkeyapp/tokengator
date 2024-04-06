@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common'
-import { ApiMetadataService } from '@tokengator-mint/api-metadata-data-access'
+import { ApiMetadataService } from '@tokengator/api-metadata-data-access'
 import { Response } from 'express-serve-static-core'
 
 @Controller('metadata')

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { PublicKey } from '@solana/web3.js'
-import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
-import { ApiSolanaService, SolanaAccountInfo } from '@tokengator-mint/api-solana-data-access'
+import { ApiCoreService } from '@tokengator/api-core-data-access'
+import { ApiSolanaService, SolanaAccountInfo } from '@tokengator/api-solana-data-access'
 import { LRUCache } from 'lru-cache'
 
 export interface CantFindTheRightTypeScrewItHackathonMode {

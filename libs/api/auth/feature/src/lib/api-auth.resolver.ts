@@ -7,9 +7,9 @@ import {
   CtxUser,
   LoginInput,
   RegisterInput,
-} from '@tokengator-mint/api-auth-data-access'
-import { AppContext } from '@tokengator-mint/api-core-data-access'
-import { User } from '@tokengator-mint/api-user-data-access'
+} from '@tokengator/api-auth-data-access'
+import { AppContext } from '@tokengator/api-core-data-access'
+import { User } from '@tokengator/api-user-data-access'
 
 @Resolver()
 export class ApiAuthResolver {

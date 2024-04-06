@@ -1,5 +1,5 @@
-import { Claim } from '@tokengator-mint/sdk'
 import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
+import { Claim } from '@tokengator/sdk'
 
 export type ClaimUiAvatarProps = UiAvatarProps & {
   claim?: Claim

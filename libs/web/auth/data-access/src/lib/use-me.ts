@@ -1,4 +1,4 @@
-import { Sdk } from '@tokengator-mint/sdk'
+import { Sdk } from '@tokengator/sdk'
 import { useQuery } from '@tanstack/react-query'
 
 export function useMe(sdk: Sdk) {

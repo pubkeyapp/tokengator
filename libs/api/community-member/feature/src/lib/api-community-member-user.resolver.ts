@@ -1,6 +1,6 @@
 import { Resolver } from '@nestjs/graphql'
-import { ApiCommunityMemberService } from '@tokengator-mint/api-community-member-data-access'
-import { ApiAuthGraphQLUserGuard } from '@tokengator-mint/api-auth-data-access'
+import { ApiCommunityMemberService } from '@tokengator/api-community-member-data-access'
+import { ApiAuthGraphQLUserGuard } from '@tokengator/api-auth-data-access'
 import { Mutation, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,7 +9,7 @@ import {
   CommunityMember,
   CommunityMemberPaging,
   UserUpdateCommunityMemberInput,
-} from '@tokengator-mint/api-community-member-data-access'
+} from '@tokengator/api-community-member-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)

@@ -1,7 +1,7 @@
 import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core'
-import { UserCreateCommunityInput } from '@tokengator-mint/sdk'
-import { useUserFindManyCommunity } from '@tokengator-mint/web-community-data-access'
-import { UserCommunityUiCreateForm } from '@tokengator-mint/web-community-ui'
+import { UserCreateCommunityInput } from '@tokengator/sdk'
+import { useUserFindManyCommunity } from '@tokengator/web-community-data-access'
+import { UserCommunityUiCreateForm } from '@tokengator/web-community-ui'
 import { useNavigate } from 'react-router-dom'
 
 export function UserCommunityCreateFeature() {

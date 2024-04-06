@@ -1,6 +1,6 @@
 import { ActionIcon, Tooltip } from '@mantine/core'
 import { IconSelector } from '@tabler/icons-react'
-import { Wallet } from '@tokengator-mint/sdk'
+import { Wallet } from '@tokengator/sdk'
 
 export function WalletUiSetFeepayer({
   setFeepayer,

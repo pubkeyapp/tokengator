@@ -3,7 +3,7 @@ import {
   UserFindManyCommunityMemberInput,
   UserUpdateCommunityMemberInput,
   CommunityMember,
-} from '@tokengator-mint/sdk'
+} from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-community-member-feature', () => {

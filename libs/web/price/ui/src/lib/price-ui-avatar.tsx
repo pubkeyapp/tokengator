@@ -1,4 +1,4 @@
-import { Price } from '@tokengator-mint/sdk'
+import { Price } from '@tokengator/sdk'
 import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
 
 export type PriceUiAvatarProps = UiAvatarProps & {

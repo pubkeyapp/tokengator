@@ -1,7 +1,7 @@
 import { Button, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { WalletUserCreateInput } from '@tokengator-mint/sdk'
+import { WalletUserCreateInput } from '@tokengator/sdk'
 
 export function UserWalletUiCreateForm({ submit }: { submit: (res: WalletUserCreateInput) => Promise<boolean> }) {
   const form = useForm<WalletUserCreateInput>({

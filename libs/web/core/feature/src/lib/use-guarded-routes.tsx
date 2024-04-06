@@ -1,5 +1,5 @@
-import { UserRole, UserStatus } from '@tokengator-mint/sdk'
-import { AuthUiRouteGuard, AuthUiUserRoleGuard, AuthUiUserStatusGuard } from '@tokengator-mint/web-auth-ui'
+import { UserRole, UserStatus } from '@tokengator/sdk'
+import { AuthUiRouteGuard, AuthUiUserRoleGuard, AuthUiUserStatusGuard } from '@tokengator/web-auth-ui'
 import { UiLoader } from '@pubkey-ui/core'
 
 import { Navigate, Outlet, RouteObject, useRoutes } from 'react-router-dom'

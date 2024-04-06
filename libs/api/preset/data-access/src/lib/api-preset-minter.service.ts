@@ -5,8 +5,8 @@ import { Preset } from '@prisma/client'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
 import { Keypair, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from '@solana/web3.js'
-import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
-import { ApiSolanaService } from '@tokengator-mint/api-solana-data-access'
+import { ApiCoreService } from '@tokengator/api-core-data-access'
+import { ApiSolanaService } from '@tokengator/api-solana-data-access'
 import {
   getCommunityPda,
   getIdentityProviders,
@@ -20,7 +20,7 @@ import {
   TokengatorMinterIDL,
   WEN_NEW_STANDARD_PROGRAM_ID,
   WenNewStandardIDL,
-} from '@tokengator-mint/api-solana-util'
+} from '@tokengator/api-solana-util'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { TokenGatorMinter } from './entity/token-gator-minter.entity'
 import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'

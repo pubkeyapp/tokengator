@@ -1,6 +1,6 @@
 import { UiNotFound } from '@pubkey-ui/core'
-import { AuthLoginFeature, AuthRegisterFeature } from '@tokengator-mint/web-auth-feature'
-import { webHomeRoutes } from '@tokengator-mint/web-home-feature'
+import { AuthLoginFeature, AuthRegisterFeature } from '@tokengator/web-auth-feature'
+import { webHomeRoutes } from '@tokengator/web-home-feature'
 import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useGuardedRoutes } from './use-guarded-routes'

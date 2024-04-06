@@ -1,5 +1,5 @@
 import { Button, Group } from '@mantine/core'
-import { AdminUpdateCommunityInput, Community } from '@tokengator-mint/sdk'
+import { AdminUpdateCommunityInput, Community } from '@tokengator/sdk'
 import { formFieldText, UiForm, UiFormField } from '@pubkey-ui/core'
 
 export function AdminCommunityUiUpdateForm({

@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@mantine/core'
-import { IdentityProvider } from '@tokengator-mint/sdk'
+import { IdentityProvider } from '@tokengator/sdk'
 import { getIdentityProviderColor } from './get-identity-provider-color'
 import { IdentityUiIcon } from './identity-ui-icon'
 

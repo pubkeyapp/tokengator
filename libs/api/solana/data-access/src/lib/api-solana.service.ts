@@ -6,8 +6,8 @@ import { AnchorKeypairWallet } from '@pubkey-program-library/sdk'
 import { getMint, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { TokenMetadata } from '@solana/spl-token-metadata'
 import { AccountInfo, Connection, Keypair, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { ApiCoreService, CORE_APP_STARTED } from '@tokengator-mint/api-core-data-access'
-import { MINT_EURC, MINT_USDC, requestCircleAirdrop } from '@tokengator-mint/api-solana-util'
+import { ApiCoreService, CORE_APP_STARTED } from '@tokengator/api-core-data-access'
+import { MINT_EURC, MINT_USDC, requestCircleAirdrop } from '@tokengator/api-solana-util'
 
 export type SolanaAccountInfo = AccountInfo<ParsedAccountData>
 

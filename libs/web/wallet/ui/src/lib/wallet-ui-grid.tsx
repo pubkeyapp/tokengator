@@ -1,7 +1,7 @@
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
 import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
-import { Wallet } from '@tokengator-mint/sdk'
-import { gridLimits, UiPageLimit } from '@tokengator-mint/web-core-ui'
+import { Wallet } from '@tokengator/sdk'
+import { gridLimits, UiPageLimit } from '@tokengator/web-core-ui'
 import { DataTableProps } from 'mantine-datatable'
 import { WalletUiGridItem } from './wallet-ui-grid-item'
 

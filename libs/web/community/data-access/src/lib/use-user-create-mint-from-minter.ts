@@ -1,7 +1,7 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
-import { uiToastLink, useCluster } from '@tokengator-mint/web-solana-data-access'
+import { useSdk } from '@tokengator/web-core-data-access'
+import { uiToastLink, useCluster } from '@tokengator/web-solana-data-access'
 
 export function useUserCreateMintFromMinter({ account, communitySlug }: { account: string; communitySlug: string }) {
   const sdk = useSdk()

@@ -1,7 +1,7 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { WalletUserCreateInput, WalletUserFindManyInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { WalletUserCreateInput, WalletUserFindManyInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useState } from 'react'
 
 export function useUserFindManyWallet(props: Partial<WalletUserFindManyInput> & { communityId: string }) {

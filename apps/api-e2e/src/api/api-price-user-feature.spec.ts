@@ -1,4 +1,4 @@
-import { PriceUserCreateInput, PriceUserFindManyInput, PriceUserUpdateInput, Price } from '@tokengator-mint/sdk'
+import { PriceUserCreateInput, PriceUserFindManyInput, PriceUserUpdateInput, Price } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-price-feature', () => {

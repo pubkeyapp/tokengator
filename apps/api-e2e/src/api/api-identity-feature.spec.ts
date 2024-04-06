@@ -1,4 +1,4 @@
-import { IdentityProvider } from '@tokengator-mint/sdk'
+import { IdentityProvider } from '@tokengator/sdk'
 import * as bs58 from 'bs58'
 import { alice, getAliceCookie, getIdentityChallenge, sdk, signMessage } from '../support'
 import { breakStringSolana } from '../support/break-string'

@@ -1,5 +1,5 @@
 import { Alert } from '@mantine/core'
-import { useAuth } from '@tokengator-mint/web-auth-data-access'
+import { useAuth } from '@tokengator/web-auth-data-access'
 import { ReactElement } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 

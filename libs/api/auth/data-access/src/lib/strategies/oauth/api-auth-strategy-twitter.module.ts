@@ -1,5 +1,5 @@
 import { type DynamicModule, Logger, Module } from '@nestjs/common'
-import { ApiCoreDataAccessModule } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreDataAccessModule } from '@tokengator/api-core-data-access'
 import { ApiAuthStrategyService } from '../api-auth-strategy.service'
 import { ApiAuthStrategyTwitter } from './api-auth-strategy-twitter'
 

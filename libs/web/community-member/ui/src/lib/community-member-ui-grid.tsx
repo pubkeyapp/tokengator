@@ -1,6 +1,6 @@
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
-import { CommunityMember } from '@tokengator-mint/sdk'
-import { gridLimits, UiPageLimit } from '@tokengator-mint/web-core-ui'
+import { CommunityMember } from '@tokengator/sdk'
+import { gridLimits, UiPageLimit } from '@tokengator/web-core-ui'
 import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'
 import { CommunityMemberUiGridItem } from './community-member-ui-grid-item'

@@ -7,9 +7,9 @@ export default function HomePage() {
   return (
     <Container size={800}>
       <UiStack gap="xl" my="xl">
-        <Title>Welcome to TokenGator Mint.</Title>
+        <Title>Welcome to TokenGator.</Title>
 
-        <Text c="dimmed">This is the TokenGator Mint starter project.</Text>
+        <Text c="dimmed">This is the TokenGator project website.</Text>
         <Group>
           <Button component={Link} to="/dashboard" size="xl" color="brand" leftSection={<IconRocket />}>
             Get started
@@ -20,7 +20,7 @@ export default function HomePage() {
 
           <Button
             component={'a'}
-            href="https://github.com/pubkeyapp/tokengator-mint"
+            href="https://github.com/pubkeyapp/tokengator"
             size="xl"
             variant="default"
             leftSection={<IconBrandGithub />}

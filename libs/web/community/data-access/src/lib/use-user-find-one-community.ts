@@ -1,8 +1,8 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { Community, UserUpdateCommunityInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
-import { uiToastLink, useCluster } from '@tokengator-mint/web-solana-data-access'
+import { Community, UserUpdateCommunityInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
+import { uiToastLink, useCluster } from '@tokengator/web-solana-data-access'
 
 export function useUserFindOneCommunity({ slug }: { slug: string }) {
   const sdk = useSdk()

@@ -1,4 +1,4 @@
-import { AnonCommunityFeature } from '@tokengator-mint/web-community-feature'
+import { AnonCommunityFeature } from '@tokengator/web-community-feature'
 import { RouteObject } from 'react-router-dom'
 
 export const webCoreRoutesAnon: RouteObject[] = [

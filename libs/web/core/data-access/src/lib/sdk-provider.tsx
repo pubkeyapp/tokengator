@@ -1,4 +1,4 @@
-import { getGraphQLSdk, Sdk } from '@tokengator-mint/sdk'
+import { getGraphQLSdk, Sdk } from '@tokengator/sdk'
 import { createContext, ReactNode, useContext } from 'react'
 
 const Context = createContext<Sdk>({} as Sdk)

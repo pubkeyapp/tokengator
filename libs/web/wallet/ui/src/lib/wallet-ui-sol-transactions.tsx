@@ -2,9 +2,9 @@ import { ActionIcon, Badge, Button, Group, Loader, Table, Text } from '@mantine/
 import { UiError, UiInfo, UiStack, UiTime } from '@pubkey-ui/core'
 import { ConfirmedSignatureInfo } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'
-import { ellipsify, Wallet } from '@tokengator-mint/sdk'
-import { useSolanaGetTransactions } from '@tokengator-mint/web-solana-data-access'
-import { SolanaUiExplorerLink } from '@tokengator-mint/web-solana-ui'
+import { ellipsify, Wallet } from '@tokengator/sdk'
+import { useSolanaGetTransactions } from '@tokengator/web-solana-data-access'
+import { SolanaUiExplorerLink } from '@tokengator/web-solana-ui'
 import { useMemo, useState } from 'react'
 
 export function WalletUiSolTransactions({ wallet }: { wallet: Wallet }) {

@@ -1,5 +1,5 @@
-import { useAdminFindOneClaim } from '@tokengator-mint/web-claim-data-access'
-import { AdminClaimUiUpdateForm } from '@tokengator-mint/web-claim-ui'
+import { useAdminFindOneClaim } from '@tokengator/web-claim-data-access'
+import { AdminClaimUiUpdateForm } from '@tokengator/web-claim-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function AdminClaimDetailSettingsTab({ claimId }: { claimId: string }) {

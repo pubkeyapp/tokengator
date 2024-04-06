@@ -1,7 +1,7 @@
 import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core'
-import { WalletAdminCreateInput } from '@tokengator-mint/sdk'
-import { useAdminFindManyWallet } from '@tokengator-mint/web-wallet-data-access'
-import { AdminWalletUiCreateForm } from '@tokengator-mint/web-wallet-ui'
+import { WalletAdminCreateInput } from '@tokengator/sdk'
+import { useAdminFindManyWallet } from '@tokengator/web-wallet-data-access'
+import { AdminWalletUiCreateForm } from '@tokengator/web-wallet-ui'
 import { useNavigate } from 'react-router-dom'
 
 export default function AdminWalletCreateFeature({ communityId }: { communityId: string }) {

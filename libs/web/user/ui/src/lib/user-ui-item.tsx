@@ -1,5 +1,5 @@
 import { AvatarProps, Group, type GroupProps, Stack, Text } from '@mantine/core'
-import { User } from '@tokengator-mint/sdk'
+import { User } from '@tokengator/sdk'
 import { UiAnchor, type UiAnchorProps } from '@pubkey-ui/core'
 import { UserUiAvatar } from './user-ui-avatar'
 

@@ -1,5 +1,5 @@
-import { AdminCreateUserInput, AdminFindManyUserInput, UserRole, UserStatus } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { AdminCreateUserInput, AdminFindManyUserInput, UserRole, UserStatus } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'

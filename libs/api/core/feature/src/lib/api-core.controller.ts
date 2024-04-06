@@ -1,5 +1,5 @@
 import { Controller, Get, Res } from '@nestjs/common'
-import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService } from '@tokengator/api-core-data-access'
 import { Response } from 'express-serve-static-core'
 
 @Controller()

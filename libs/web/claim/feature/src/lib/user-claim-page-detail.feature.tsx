@@ -1,7 +1,7 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiCard, UiDebugModal, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useUserGetClaim } from '@tokengator-mint/web-claim-data-access'
-import { ClaimUiInfo, ClaimUiItem } from '@tokengator-mint/web-claim-ui'
+import { useUserGetClaim } from '@tokengator/web-claim-data-access'
+import { ClaimUiInfo, ClaimUiItem } from '@tokengator/web-claim-ui'
 import { useParams } from 'react-router-dom'
 
 export default function UserClaimDetailFeature() {

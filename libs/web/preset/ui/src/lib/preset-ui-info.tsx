@@ -1,5 +1,5 @@
 import { UiInfoItems, UiInfoTable, UiTime } from '@pubkey-ui/core'
-import { Preset } from '@tokengator-mint/sdk'
+import { Preset } from '@tokengator/sdk'
 
 export function PresetUiInfo({ preset }: { preset?: Preset }) {
   if (!preset) return null

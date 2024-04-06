@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { PagingResponse } from '@tokengator-mint/api-core-data-access'
+import { PagingResponse } from '@tokengator/api-core-data-access'
 
 @ObjectType()
 export class Wallet {

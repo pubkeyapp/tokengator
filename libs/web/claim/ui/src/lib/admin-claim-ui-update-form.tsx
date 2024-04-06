@@ -1,7 +1,7 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { getEnumOptions, UiStack } from '@pubkey-ui/core'
-import { Claim, ClaimAdminUpdateInput, ClaimStatus } from '@tokengator-mint/sdk'
+import { Claim, ClaimAdminUpdateInput, ClaimStatus } from '@tokengator/sdk'
 
 export function AdminClaimUiUpdateForm({
   submit,

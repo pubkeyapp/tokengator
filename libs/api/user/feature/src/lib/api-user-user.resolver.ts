@@ -1,13 +1,13 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLUserGuard, CtxUserId } from '@tokengator-mint/api-auth-data-access'
+import { ApiAuthGraphQLUserGuard, CtxUserId } from '@tokengator/api-auth-data-access'
 import {
   ApiUserService,
   User,
   UserFindManyUserInput,
   UserPaging,
   UserUpdateUserInput,
-} from '@tokengator-mint/api-user-data-access'
+} from '@tokengator/api-user-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)

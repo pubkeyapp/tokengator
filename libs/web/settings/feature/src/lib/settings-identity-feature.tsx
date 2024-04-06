@@ -1,6 +1,6 @@
-import { useAuth } from '@tokengator-mint/web-auth-data-access'
-import { useUserFindManyIdentity } from '@tokengator-mint/web-identity-data-access'
-import { IdentityUiGroupList } from '@tokengator-mint/web-identity-ui'
+import { useAuth } from '@tokengator/web-auth-data-access'
+import { useUserFindManyIdentity } from '@tokengator/web-identity-data-access'
+import { IdentityUiGroupList } from '@tokengator/web-identity-ui'
 import { UiLoader, UiStack } from '@pubkey-ui/core'
 
 export function SettingsIdentityFeature() {

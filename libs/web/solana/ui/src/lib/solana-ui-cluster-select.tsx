@@ -1,5 +1,5 @@
 import { Button, Menu } from '@mantine/core'
-import { useCluster } from '@tokengator-mint/web-solana-data-access'
+import { useCluster } from '@tokengator/web-solana-data-access'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { IconCurrencySolana, IconSettings } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'

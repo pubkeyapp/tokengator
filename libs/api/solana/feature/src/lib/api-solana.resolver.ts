@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLUserGuard } from '@tokengator-mint/api-auth-data-access'
-import { ApiSolanaService } from '@tokengator-mint/api-solana-data-access'
+import { ApiAuthGraphQLUserGuard } from '@tokengator/api-auth-data-access'
+import { ApiSolanaService } from '@tokengator/api-solana-data-access'
 import { GraphQLJSON } from 'graphql-scalars'
 
 @Resolver()

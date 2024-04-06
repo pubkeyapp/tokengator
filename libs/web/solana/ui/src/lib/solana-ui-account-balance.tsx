@@ -1,5 +1,5 @@
 import { Box, TitleProps } from '@mantine/core'
-import { useGetBalance } from '@tokengator-mint/web-solana-data-access'
+import { useGetBalance } from '@tokengator/web-solana-data-access'
 import { PublicKey } from '@solana/web3.js'
 import { SolanaUiBalanceSol } from './solana-ui-balance-sol'
 

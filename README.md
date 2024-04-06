@@ -1,4 +1,4 @@
-# TokenGator Mint
+# TokenGator
 
 ## Getting Started
 
@@ -13,8 +13,8 @@
 Clone the repo and install dependencies:
 
 ```shell
-git clone git@github.com:pubkeyapp/tokengator-mint.git
-cd tokengator-mint
+git clone git@github.com:pubkeyapp/tokengator.git
+cd tokengator
 pnpm
 ```
 
@@ -87,7 +87,7 @@ pnpm nx g prisma-model company
 Output:
 
 ```shell
-> NX Generating @tokengator-mint/tools:prisma-model
+> NX Generating @tokengator/tools:prisma-model
 
 UPDATE prisma/schema.prisma
 ```
@@ -105,7 +105,7 @@ pnpm nx g api-feature company
 Output:
 
 ```shell
-> NX Generating @tokengator-mint/tools:api-feature
+> NX Generating @tokengator/tools:api-feature
 
 CREATE libs/api/company/data-access/...
 CREATE libs/api/company/feature/...
@@ -127,7 +127,7 @@ pnpm nx g web-feature company
 Output:
 
 ```shell
-> NX Generating @tokengator-mint/tools:web-feature
+> NX Generating @tokengator/tools:web-feature
 
 CREATE libs/web/company/data-access/...
 CREATE libs/web/company/feature/...

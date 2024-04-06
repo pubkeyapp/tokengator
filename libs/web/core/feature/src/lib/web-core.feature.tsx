@@ -2,9 +2,9 @@ import { BACKGROUND_COLORS, themeWithBrand, toastError, UiThemeLink, UiThemeProv
 import '@pubkey-ui/core/index.esm.css'
 import 'mantine-datatable/styles.layer.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AuthProvider } from '@tokengator-mint/web-auth-data-access'
-import { AppConfigProvider, SdkProvider } from '@tokengator-mint/web-core-data-access'
-import { SolanaClusterProvider } from '@tokengator-mint/web-solana-data-access'
+import { AuthProvider } from '@tokengator/web-auth-data-access'
+import { AppConfigProvider, SdkProvider } from '@tokengator/web-core-data-access'
+import { SolanaClusterProvider } from '@tokengator/web-solana-data-access'
 import { BrowserRouter, Link } from 'react-router-dom'
 import { WebCoreRoutes } from './web-core-routes'
 

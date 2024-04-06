@@ -1,5 +1,5 @@
 import { toastError } from '@pubkey-ui/core'
-import { AppConfig, IdentityProvider } from '@tokengator-mint/sdk'
+import { AppConfig, IdentityProvider } from '@tokengator/sdk'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
 
 // This is provided by /api/__/env.js included in index.html

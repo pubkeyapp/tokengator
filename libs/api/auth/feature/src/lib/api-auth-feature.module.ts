@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiAuthDataAccessModule } from '@tokengator-mint/api-auth-data-access'
+import { ApiAuthDataAccessModule } from '@tokengator/api-auth-data-access'
 import { ApiAuthStrategyDiscordController } from './api-auth-strategy-discord.controller'
 import { ApiAuthStrategyGithubController } from './api-auth-strategy-github.controller'
 import { ApiAuthStrategyGoogleController } from './api-auth-strategy-google.controller'

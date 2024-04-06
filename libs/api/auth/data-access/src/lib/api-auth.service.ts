@@ -7,7 +7,7 @@ import {
   hashPassword,
   slugifyId,
   validatePassword,
-} from '@tokengator-mint/api-core-data-access'
+} from '@tokengator/api-core-data-access'
 import { Response } from 'express-serve-static-core'
 import { LoginInput } from './dto/login.input'
 import { RegisterInput } from './dto/register.input'

@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { IdentityProvider } from '@tokengator-mint/api-identity-data-access'
+import { IdentityProvider } from '@tokengator/api-identity-data-access'
 import { TokenGatorMinter } from '../entity/token-gator-minter.entity'
 
 export interface FormatTokenGatorMinterInput {

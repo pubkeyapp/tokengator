@@ -1,4 +1,4 @@
-import { RegisterInput, UserRole, UserStatus } from '@tokengator-mint/sdk'
+import { RegisterInput, UserRole, UserStatus } from '@tokengator/sdk'
 import { sdk, uniqueId } from '../support'
 
 describe('api-auth-feature', () => {

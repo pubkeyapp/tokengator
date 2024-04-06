@@ -1,8 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Community } from '@tokengator-mint/api-community-data-access'
-import { PagingResponse } from '@tokengator-mint/api-core-data-access'
-import { Identity, IdentityProvider } from '@tokengator-mint/api-identity-data-access'
-import { TokenGatorMinter } from '@tokengator-mint/api-preset-data-access'
+import { Community } from '@tokengator/api-community-data-access'
+import { PagingResponse } from '@tokengator/api-core-data-access'
+import { Identity, IdentityProvider } from '@tokengator/api-identity-data-access'
+import { TokenGatorMinter } from '@tokengator/api-preset-data-access'
 import { ClaimStatus } from './claim-status.enum'
 
 @ObjectType()

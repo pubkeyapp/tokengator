@@ -1,5 +1,5 @@
 {
-  "name": "@tokengator-mint/source",
+  "name": "@tokengator/source",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -16,9 +16,9 @@
     "dev:services": "docker compose up",
     "dev:services:stop": "docker compose down",
     "dev:web": "nx serve web",
-    "docker:build:api": "docker build . -t ghcr.io/pubkeyapp/tokengator-mint",
-    "docker:push:api": "docker push ghcr.io/pubkeyapp/tokengator-mint",
-    "docker:run:api": "docker run -it -p 8000:3000 ghcr.io/pubkeyapp/tokengator-mint",
+    "docker:build:api": "docker build . -t ghcr.io/pubkeyapp/tokengator",
+    "docker:push:api": "docker push ghcr.io/pubkeyapp/tokengator",
+    "docker:run:api": "docker run -it -p 8000:3000 ghcr.io/pubkeyapp/tokengator",
     "e2e:all": "nx run-many --target=e2e --all",
     "format:all": "nx format:write --all",
     "lint:all": "nx run-many --target=lint --all",

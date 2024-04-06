@@ -1,6 +1,6 @@
 import { Box, Group } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
-import { AppLogoType } from '@tokengator-mint/web-core-ui'
+import { AppLogoType } from '@tokengator/web-core-ui'
 import { ReactNode } from 'react'
 import { AuthUiEnabled } from './auth-ui-enabled'
 import { AuthUiFull } from './auth-ui-full'

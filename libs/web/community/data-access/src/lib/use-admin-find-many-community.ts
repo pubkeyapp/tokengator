@@ -1,7 +1,7 @@
 import { toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { AdminFindManyCommunityInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { AdminFindManyCommunityInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useState } from 'react'
 
 export function useAdminFindManyCommunity(props?: Partial<AdminFindManyCommunityInput>) {

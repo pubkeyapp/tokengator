@@ -1,6 +1,6 @@
 import { ActionIcon, Group, ScrollArea } from '@mantine/core'
-import { User } from '@tokengator-mint/sdk'
-import { IdentityUiAvatarGroup } from '@tokengator-mint/web-identity-ui'
+import { User } from '@tokengator/sdk'
+import { IdentityUiAvatarGroup } from '@tokengator/web-identity-ui'
 import { IconPencil, IconTrash, IconUser } from '@tabler/icons-react'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'

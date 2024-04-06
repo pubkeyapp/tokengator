@@ -1,5 +1,5 @@
 import { Stack, type StackProps } from '@mantine/core'
-import { IdentityProvider } from '@tokengator-mint/sdk'
+import { IdentityProvider } from '@tokengator/sdk'
 import { IdentityUiLoginButton } from './identity-ui-login-button'
 
 export function IdentityUiLoginButtons({

@@ -1,11 +1,11 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { BaseContext } from '@tokengator-mint/api-core-data-access'
+import { BaseContext } from '@tokengator/api-core-data-access'
 import {
   ApiIdentityService,
   IdentityChallenge,
   RequestIdentityChallengeInput,
   VerifyIdentityChallengeInput,
-} from '@tokengator-mint/api-identity-data-access'
+} from '@tokengator/api-identity-data-access'
 
 @Resolver()
 export class ApiIdentityAnonResolver {

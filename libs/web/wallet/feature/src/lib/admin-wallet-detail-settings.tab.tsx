@@ -1,5 +1,5 @@
-import { useAdminFindOneWallet } from '@tokengator-mint/web-wallet-data-access'
-import { AdminWalletUiUpdateForm } from '@tokengator-mint/web-wallet-ui'
+import { useAdminFindOneWallet } from '@tokengator/web-wallet-data-access'
+import { AdminWalletUiUpdateForm } from '@tokengator/web-wallet-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function AdminWalletDetailSettingsTab({ walletId }: { walletId: string }) {

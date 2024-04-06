@@ -1,8 +1,8 @@
 import { Button, Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useUserFindManyClaim } from '@tokengator-mint/web-claim-data-access'
-import { UserClaimUiTable } from '@tokengator-mint/web-claim-ui'
-import { UiSearchField } from '@tokengator-mint/web-core-ui'
+import { useUserFindManyClaim } from '@tokengator/web-claim-data-access'
+import { UserClaimUiTable } from '@tokengator/web-claim-ui'
+import { UiSearchField } from '@tokengator/web-core-ui'
 import { Link } from 'react-router-dom'
 
 export default function UserClaimListFeature({ communityId, account }: { communityId: string; account: string }) {

@@ -1,4 +1,4 @@
-import { Community } from '@tokengator-mint/sdk'
+import { Community } from '@tokengator/sdk'
 import { UiInfoItems, UiInfoTable, UiTime } from '@pubkey-ui/core'
 
 export function CommunityUiInfo({ community }: { community?: Community }) {

@@ -1,5 +1,5 @@
 import { Float, Query, Resolver } from '@nestjs/graphql'
-import { ApiCoreService, AppConfig, Currency } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService, AppConfig, Currency } from '@tokengator/api-core-data-access'
 
 @Resolver()
 export class ApiCoreResolver {

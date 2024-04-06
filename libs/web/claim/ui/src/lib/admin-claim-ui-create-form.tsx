@@ -1,7 +1,7 @@
 import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { getEnumOptions, UiStack } from '@pubkey-ui/core'
-import { ClaimAdminCreateInput, IdentityProvider } from '@tokengator-mint/sdk'
+import { ClaimAdminCreateInput, IdentityProvider } from '@tokengator/sdk'
 
 export function AdminClaimUiCreateForm({ submit }: { submit: (res: ClaimAdminCreateInput) => Promise<boolean> }) {
   const form = useForm<ClaimAdminCreateInput>({

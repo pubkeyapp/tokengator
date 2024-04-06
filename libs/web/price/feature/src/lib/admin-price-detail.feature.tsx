@@ -1,7 +1,7 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiPage } from '@pubkey-ui/core'
-import { useAdminFindOnePrice } from '@tokengator-mint/web-price-data-access'
-import { PriceUiItem } from '@tokengator-mint/web-price-ui'
+import { useAdminFindOnePrice } from '@tokengator/web-price-data-access'
+import { PriceUiItem } from '@tokengator/web-price-ui'
 import { useParams } from 'react-router-dom'
 import { AdminPriceDetailSettingsTab } from './admin-price-detail-settings.tab'
 

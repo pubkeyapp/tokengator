@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { CommunityMemberRole, Prisma } from '@prisma/client'
 import { Keypair } from '@solana/web3.js'
-import { ApiCoreService, PagingInputFields, slugifyId } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService, PagingInputFields, slugifyId } from '@tokengator/api-core-data-access'
 import { CommunityPaging } from './entity/community.entity'
 
 @Injectable()

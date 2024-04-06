@@ -1,6 +1,6 @@
 import { AvatarProps, Group, GroupProps, Stack, Text } from '@mantine/core'
-import { Claim } from '@tokengator-mint/sdk'
 import { UiAnchor, UiAnchorProps } from '@pubkey-ui/core'
+import { Claim } from '@tokengator/sdk'
 import { ClaimUiAvatar } from './claim-ui-avatar'
 
 export function ClaimUiItem({

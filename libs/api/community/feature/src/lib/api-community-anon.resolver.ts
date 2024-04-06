@@ -4,7 +4,7 @@ import {
   ApiCommunityService,
   Community,
   CommunityPaging,
-} from '@tokengator-mint/api-community-data-access'
+} from '@tokengator/api-community-data-access'
 
 @Resolver()
 export class ApiCommunityAnonResolver {

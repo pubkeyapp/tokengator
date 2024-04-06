@@ -1,5 +1,5 @@
-import { Identity } from '@tokengator-mint/sdk'
-import { useIdentitySolana } from '@tokengator-mint/web-identity-data-access'
+import { Identity } from '@tokengator/sdk'
+import { useIdentitySolana } from '@tokengator/web-identity-data-access'
 import { toastError } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useState } from 'react'

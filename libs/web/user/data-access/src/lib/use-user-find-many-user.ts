@@ -1,5 +1,5 @@
-import { UserFindManyUserInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { UserFindManyUserInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 

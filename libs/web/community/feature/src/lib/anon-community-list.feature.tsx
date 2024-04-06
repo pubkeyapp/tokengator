@@ -1,8 +1,8 @@
 import { Button, Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { useAnonFindManyCommunity } from '@tokengator-mint/web-community-data-access'
-import { CommunityUiGrid } from '@tokengator-mint/web-community-ui'
-import { UiSearchField } from '@tokengator-mint/web-core-ui'
+import { useAnonFindManyCommunity } from '@tokengator/web-community-data-access'
+import { CommunityUiGrid } from '@tokengator/web-community-ui'
+import { UiSearchField } from '@tokengator/web-core-ui'
 import { Link } from 'react-router-dom'
 
 export function AnonCommunityListFeature() {

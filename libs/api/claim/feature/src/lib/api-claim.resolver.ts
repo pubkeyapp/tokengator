@@ -1,6 +1,6 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
-import { ApiClaimService, Claim } from '@tokengator-mint/api-claim-data-access'
-import { ellipsify } from '@tokengator-mint/api-core-data-access'
+import { ApiClaimService, Claim } from '@tokengator/api-claim-data-access'
+import { ellipsify } from '@tokengator/api-core-data-access'
 
 @Resolver(() => Claim)
 export class ApiClaimResolver {

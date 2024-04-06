@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiClaimDataAccessModule } from '@tokengator-mint/api-claim-data-access'
+import { ApiClaimDataAccessModule } from '@tokengator/api-claim-data-access'
 import { ApiClaimResolver } from './api-claim.resolver'
 import { ApiClaimAdminResolver } from './api-claim-admin.resolver'
 import { ApiClaimUserResolver } from './api-claim-user.resolver'

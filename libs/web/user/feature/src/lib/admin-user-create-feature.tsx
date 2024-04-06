@@ -1,6 +1,6 @@
-import { AdminCreateUserInput } from '@tokengator-mint/sdk'
-import { useAdminFindManyUser } from '@tokengator-mint/web-user-data-access'
-import { AdminUiCreateUserForm } from '@tokengator-mint/web-user-ui'
+import { AdminCreateUserInput } from '@tokengator/sdk'
+import { useAdminFindManyUser } from '@tokengator/web-user-data-access'
+import { AdminUiCreateUserForm } from '@tokengator/web-user-ui'
 import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 

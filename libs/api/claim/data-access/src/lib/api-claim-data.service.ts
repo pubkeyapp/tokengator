@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ClaimStatus, Identity, IdentityProvider, Prisma } from '@prisma/client'
-import { ApiCoreService, PagingInputFields } from '@tokengator-mint/api-core-data-access'
-import { ApiPresetService, TokenGatorMinter } from '@tokengator-mint/api-preset-data-access'
+import { ApiCoreService, PagingInputFields } from '@tokengator/api-core-data-access'
+import { ApiPresetService, TokenGatorMinter } from '@tokengator/api-preset-data-access'
 import { LRUCache } from 'lru-cache'
 import { ClaimPaging } from './entity/claim.entity'
 

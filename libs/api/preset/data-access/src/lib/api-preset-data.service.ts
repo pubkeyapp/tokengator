@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
-import { ApiCoreService, PagingInputFields, slugifyId } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService, PagingInputFields, slugifyId } from '@tokengator/api-core-data-access'
 import { PresetPaging } from './entity/preset.entity'
 
 @Injectable()

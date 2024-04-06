@@ -1,5 +1,5 @@
-import { useUserFindOnePreset } from '@tokengator-mint/web-preset-data-access'
-import { PresetUiInfo } from '@tokengator-mint/web-preset-ui'
+import { useUserFindOnePreset } from '@tokengator/web-preset-data-access'
+import { PresetUiInfo } from '@tokengator/web-preset-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function UserPresetDetailInfoTab({ presetId }: { presetId: string }) {

@@ -1,6 +1,6 @@
 import { AvatarProps, Group, GroupProps, Stack, Text } from '@mantine/core'
 import { UiAnchor, UiAnchorProps } from '@pubkey-ui/core'
-import { Wallet } from '@tokengator-mint/sdk'
+import { Wallet } from '@tokengator/sdk'
 import { WalletUiAvatar } from './wallet-ui-avatar'
 
 export function WalletUiItem({

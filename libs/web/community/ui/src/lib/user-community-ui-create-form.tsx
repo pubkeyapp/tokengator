@@ -1,6 +1,6 @@
 import { Button, Group } from '@mantine/core'
 import { formFieldText, UiForm, UiFormField } from '@pubkey-ui/core'
-import { UserCreateCommunityInput } from '@tokengator-mint/sdk'
+import { UserCreateCommunityInput } from '@tokengator/sdk'
 
 export function UserCommunityUiCreateForm({ submit }: { submit: (res: UserCreateCommunityInput) => Promise<boolean> }) {
   const model: UserCreateCommunityInput = {

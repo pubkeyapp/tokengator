@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { CommunityMemberRole, IdentityProvider, Prisma } from '@prisma/client'
-import { ApiCoreService, slugifyId } from '@tokengator-mint/api-core-data-access'
-import { USER_PROVISIONED } from '@tokengator-mint/api-user-data-access'
+import { ApiCoreService, slugifyId } from '@tokengator/api-core-data-access'
+import { USER_PROVISIONED } from '@tokengator/api-user-data-access'
 import { ApiCommunityDataService } from './api-community-data.service'
 
 export type ProvisionCommunityInput = Omit<Prisma.CommunityCreateInput, 'slug'>

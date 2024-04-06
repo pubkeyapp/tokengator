@@ -1,7 +1,7 @@
 import { Group } from '@mantine/core'
 import { UiAnchor, UiCard, UiCardTitle, UiDebugModal, UiGroup } from '@pubkey-ui/core'
-import { TokenGatorMinter } from '@tokengator-mint/sdk'
-import { SolanaExplorerIcon } from '@tokengator-mint/web-solana-ui'
+import { TokenGatorMinter } from '@tokengator/sdk'
+import { SolanaExplorerIcon } from '@tokengator/web-solana-ui'
 import { ReactNode } from 'react'
 
 export function MinterUiCard({ children, item }: { children?: ReactNode; item: TokenGatorMinter }) {

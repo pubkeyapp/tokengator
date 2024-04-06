@@ -1,5 +1,5 @@
 import { Badge } from '@mantine/core'
-import { UserRole } from '@tokengator-mint/sdk'
+import { UserRole } from '@tokengator/sdk'
 import { useUiColorScheme } from '@pubkey-ui/core'
 
 export const USER_ROLE_COLORS: Record<UserRole, string> = {

@@ -1,9 +1,9 @@
 import { Anchor, Button, Group, Text } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useSolanaRequestAirdrop } from '@tokengator-mint/web-solana-data-access'
-import { useUserFindManyWallet, useUserSetWalletFeepayer } from '@tokengator-mint/web-wallet-data-access'
-import { WalletUiGrid } from '@tokengator-mint/web-wallet-ui'
+import { UiSearchField } from '@tokengator/web-core-ui'
+import { useSolanaRequestAirdrop } from '@tokengator/web-solana-data-access'
+import { useUserFindManyWallet, useUserSetWalletFeepayer } from '@tokengator/web-wallet-data-access'
+import { WalletUiGrid } from '@tokengator/web-wallet-ui'
 import { Link } from 'react-router-dom'
 
 export default function UserWalletListFeature({ communityId }: { communityId: string }) {

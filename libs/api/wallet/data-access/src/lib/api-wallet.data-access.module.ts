@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiCoreDataAccessModule } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreDataAccessModule } from '@tokengator/api-core-data-access'
 import { ApiWalletService } from './api-wallet.service'
 import { ApiWalletDataService } from './api-wallet-data.service'
 import { ApiWalletDataAdminService } from './api-wallet-data-admin.service'

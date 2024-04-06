@@ -1,6 +1,6 @@
 import { SimpleGrid } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
-import { Price } from '@tokengator-mint/sdk'
+import { Price } from '@tokengator/sdk'
 import { PriceUiGridItem } from './price-ui-grid-item'
 
 export function PriceUiGrid({ prices = [] }: { prices: Price[] }) {

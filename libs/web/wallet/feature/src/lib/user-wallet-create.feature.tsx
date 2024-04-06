@@ -1,7 +1,7 @@
 import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core'
-import { WalletUserCreateInput } from '@tokengator-mint/sdk'
-import { useUserFindManyWallet } from '@tokengator-mint/web-wallet-data-access'
-import { UserWalletUiCreateForm } from '@tokengator-mint/web-wallet-ui'
+import { WalletUserCreateInput } from '@tokengator/sdk'
+import { useUserFindManyWallet } from '@tokengator/web-wallet-data-access'
+import { UserWalletUiCreateForm } from '@tokengator/web-wallet-ui'
 import { useNavigate } from 'react-router-dom'
 
 export default function UserWalletCreateFeature({ communityId }: { communityId: string }) {

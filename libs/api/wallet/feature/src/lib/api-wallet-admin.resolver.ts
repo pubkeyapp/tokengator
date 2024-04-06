@@ -1,6 +1,6 @@
 import { Resolver } from '@nestjs/graphql'
-import { ApiWalletService } from '@tokengator-mint/api-wallet-data-access'
-import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
+import { ApiWalletService } from '@tokengator/api-wallet-data-access'
+import { ApiAuthGraphQLAdminGuard } from '@tokengator/api-auth-data-access'
 import { Mutation, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,7 +9,7 @@ import {
   Wallet,
   WalletPaging,
   WalletAdminUpdateInput,
-} from '@tokengator-mint/api-wallet-data-access'
+} from '@tokengator/api-wallet-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)

@@ -1,14 +1,14 @@
 import { Button, Group } from '@mantine/core'
 import { UiInfo, UiLoader, UiStack, UiTabRoute, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
-import { Community } from '@tokengator-mint/sdk'
-import { UserClaimFeature } from '@tokengator-mint/web-claim-feature'
+import { Community } from '@tokengator/sdk'
+import { UserClaimFeature } from '@tokengator/web-claim-feature'
 import {
   useUserCreateMintFromMinter,
   useUserGetMinter,
   useUserGetMinterAssets,
-} from '@tokengator-mint/web-community-data-access'
-import { MinterUiAssets, MinterUiCard } from '@tokengator-mint/web-community-ui'
+} from '@tokengator/web-community-data-access'
+import { MinterUiAssets, MinterUiCard } from '@tokengator/web-community-ui'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 

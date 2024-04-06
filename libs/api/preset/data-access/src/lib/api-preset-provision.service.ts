@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { Prisma } from '@prisma/client'
-import { ApiCoreService, CORE_APP_STARTED, slugifyId } from '@tokengator-mint/api-core-data-access'
-import { MINT_EURC, MINT_USDC } from '@tokengator-mint/api-solana-util'
+import { ApiCoreService, CORE_APP_STARTED, slugifyId } from '@tokengator/api-core-data-access'
+import { MINT_EURC, MINT_USDC } from '@tokengator/api-solana-util'
 import { provisionPresets } from './api-preset-provision-data'
 import { PRESET_PROVISIONED } from './api-preset.events'
 

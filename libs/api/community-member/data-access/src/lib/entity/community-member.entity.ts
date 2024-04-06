@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { PagingResponse } from '@tokengator-mint/api-core-data-access'
-import { User } from '@tokengator-mint/api-user-data-access'
+import { PagingResponse } from '@tokengator/api-core-data-access'
+import { User } from '@tokengator/api-user-data-access'
 import { CommunityMemberRole } from './community-member-role.enum'
 
 @ObjectType()

@@ -1,6 +1,6 @@
 import { Button, Modal, Select, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { ClusterNetwork, useCluster } from '@tokengator-mint/web-solana-data-access'
+import { ClusterNetwork, useCluster } from '@tokengator/web-solana-data-access'
 import { UiStack } from '@pubkey-ui/core'
 import { useState } from 'react'
 

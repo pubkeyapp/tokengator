@@ -1,5 +1,5 @@
 import { ActionIcon, Anchor, Group, ScrollArea, Stack, Text } from '@mantine/core'
-import { ellipsify, Identity } from '@tokengator-mint/sdk'
+import { ellipsify, Identity } from '@tokengator/sdk'
 import { UiCopy, UiDebugModal } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 import { DataTable } from 'mantine-datatable'

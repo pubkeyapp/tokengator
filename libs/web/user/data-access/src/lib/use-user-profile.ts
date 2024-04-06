@@ -1,6 +1,6 @@
-import { UserUpdateUserInput } from '@tokengator-mint/sdk'
-import { useAuth, useMe } from '@tokengator-mint/web-auth-data-access'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { UserUpdateUserInput } from '@tokengator/sdk'
+import { useAuth, useMe } from '@tokengator/web-auth-data-access'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { toastError } from '@pubkey-ui/core'
 import { useUserFineOneUser } from './use-user-fine-one-user'
 

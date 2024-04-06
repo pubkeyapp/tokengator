@@ -1,6 +1,6 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common'
 
-import { ApiAnonJwtGuard, ApiAuthRequest, ApiAuthService } from '@tokengator-mint/api-auth-data-access'
+import { ApiAnonJwtGuard, ApiAuthRequest, ApiAuthService } from '@tokengator/api-auth-data-access'
 
 @Controller('auth')
 export class ApiAuthController {

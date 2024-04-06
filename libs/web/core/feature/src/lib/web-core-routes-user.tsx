@@ -1,11 +1,11 @@
 import { UiContainer, UiDashboardGrid, UiDashboardItem, UiNotFound } from '@pubkey-ui/core'
 import { IconAdjustmentsX, IconSettings, IconUsersGroup } from '@tabler/icons-react'
-import { UserClaimPageFeature } from '@tokengator-mint/web-claim-feature'
-import { UserCommunityFeature } from '@tokengator-mint/web-community-feature'
-import { UserPresetFeature } from '@tokengator-mint/web-preset-feature'
-import { SettingsFeature } from '@tokengator-mint/web-settings-feature'
-import { SolanaFeature } from '@tokengator-mint/web-solana-feature'
-import { UserFeature } from '@tokengator-mint/web-user-feature'
+import { UserClaimPageFeature } from '@tokengator/web-claim-feature'
+import { UserCommunityFeature } from '@tokengator/web-community-feature'
+import { UserPresetFeature } from '@tokengator/web-preset-feature'
+import { SettingsFeature } from '@tokengator/web-settings-feature'
+import { SolanaFeature } from '@tokengator/web-solana-feature'
+import { UserFeature } from '@tokengator/web-user-feature'
 import { RouteObject, useRoutes } from 'react-router-dom'
 
 const links: UiDashboardItem[] = [

@@ -1,5 +1,5 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql'
-import { PagingResponse } from '@tokengator-mint/api-core-data-access'
+import { PagingResponse } from '@tokengator/api-core-data-access'
 import { UserRole } from './user-role.enum'
 import { UserStatus } from './user-status.enum'
 

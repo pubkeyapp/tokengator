@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useSolanaGetTransactions({ account }: { account: string }) {
   const sdk = useSdk()

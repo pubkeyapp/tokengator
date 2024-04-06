@@ -10,10 +10,10 @@ import {
   UiTabRoute,
   UiTabRoutes,
 } from '@pubkey-ui/core'
-import { useUserFindManyCommunity } from '@tokengator-mint/web-community-data-access'
-import { useUserFindOnePreset } from '@tokengator-mint/web-preset-data-access'
-import { PresetUiItem } from '@tokengator-mint/web-preset-ui'
-import { UserPriceFeature } from '@tokengator-mint/web-price-feature'
+import { useUserFindManyCommunity } from '@tokengator/web-community-data-access'
+import { useUserFindOnePreset } from '@tokengator/web-preset-data-access'
+import { PresetUiItem } from '@tokengator/web-preset-ui'
+import { UserPriceFeature } from '@tokengator/web-price-feature'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { UserPresetDetailInfoTab } from './user-preset-detail-info.tab'

@@ -1,13 +1,13 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
+import { ApiAuthGraphQLAdminGuard } from '@tokengator/api-auth-data-access'
 import {
   AdminFindManyCommunityInput,
   AdminUpdateCommunityInput,
   ApiCommunityService,
   Community,
   CommunityPaging,
-} from '@tokengator-mint/api-community-data-access'
+} from '@tokengator/api-community-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)

@@ -1,5 +1,5 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
-import { ApiCommunityService, Community } from '@tokengator-mint/api-community-data-access'
+import { ApiCommunityService, Community } from '@tokengator/api-community-data-access'
 
 @Resolver(() => Community)
 export class ApiCommunityResolver {

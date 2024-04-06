@@ -1,4 +1,4 @@
-import { useAuth } from '@tokengator-mint/web-auth-data-access'
+import { useAuth } from '@tokengator/web-auth-data-access'
 import { UiWarning } from '@pubkey-ui/core'
 import { Route, Routes } from 'react-router-dom'
 import { UserUserDetailFeature } from './user-user-detail-feature'

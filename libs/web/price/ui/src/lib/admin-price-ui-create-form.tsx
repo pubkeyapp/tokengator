@@ -1,7 +1,7 @@
 import { Button, Group, NumberInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { PriceAdminCreateInput } from '@tokengator-mint/sdk'
+import { PriceAdminCreateInput } from '@tokengator/sdk'
 
 export function AdminPriceUiCreateForm({ submit }: { submit: (res: PriceAdminCreateInput) => Promise<boolean> }) {
   const form = useForm<PriceAdminCreateInput>({

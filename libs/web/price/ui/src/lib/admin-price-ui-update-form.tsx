@@ -1,7 +1,7 @@
 import { Button, Checkbox, Group, NumberInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { Price, PriceAdminUpdateInput } from '@tokengator-mint/sdk'
+import { Price, PriceAdminUpdateInput } from '@tokengator/sdk'
 
 export function AdminPriceUiUpdateForm({
   submit,

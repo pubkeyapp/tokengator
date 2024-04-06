@@ -1,6 +1,6 @@
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
-import { useAdminFindOneCommunity } from '@tokengator-mint/web-community-data-access'
-import { CommunityUiInfo } from '@tokengator-mint/web-community-ui'
+import { useAdminFindOneCommunity } from '@tokengator/web-community-data-access'
+import { CommunityUiInfo } from '@tokengator/web-community-ui'
 
 export function AdminCommunityDetailInfoTab({ communityId }: { communityId: string }) {
   const { item, query } = useAdminFindOneCommunity({ communityId })

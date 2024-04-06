@@ -1,6 +1,6 @@
 import { Button, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { PresetAdminUpdateInput, Preset } from '@tokengator-mint/sdk'
+import { PresetAdminUpdateInput, Preset } from '@tokengator/sdk'
 import { UiStack } from '@pubkey-ui/core'
 
 export function AdminPresetUiUpdateForm({

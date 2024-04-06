@@ -1,5 +1,5 @@
-import { ellipsify } from '@tokengator-mint/sdk'
-import { useCurrencies } from '@tokengator-mint/web-core-data-access'
+import { ellipsify } from '@tokengator/sdk'
+import { useCurrencies } from '@tokengator/web-core-data-access'
 import { createContext, ReactNode, useContext } from 'react'
 
 export interface SolanaLabelProviderContext {

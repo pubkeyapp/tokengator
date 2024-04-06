@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { PresetUserFindManyInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { PresetUserFindManyInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useState } from 'react'
 
 export function useUserFindManyPreset(props: Partial<PresetUserFindManyInput> = {}) {

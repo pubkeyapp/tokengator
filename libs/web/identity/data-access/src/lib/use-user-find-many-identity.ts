@@ -1,5 +1,5 @@
-import { Identity, IdentityProvider, type UserFindManyIdentityInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { Identity, IdentityProvider, type UserFindManyIdentityInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'

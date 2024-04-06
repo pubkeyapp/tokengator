@@ -1,5 +1,5 @@
-import { UserRole } from '@tokengator-mint/sdk'
-import { useAuth } from '@tokengator-mint/web-auth-data-access'
+import { UserRole } from '@tokengator/sdk'
+import { useAuth } from '@tokengator/web-auth-data-access'
 import { UiError } from '@pubkey-ui/core'
 import { Outlet } from 'react-router-dom'
 import { AuthUiFull } from './auth-ui-full'

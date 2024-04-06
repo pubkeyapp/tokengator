@@ -1,4 +1,4 @@
-import { Wallet } from '@tokengator-mint/sdk'
+import { Wallet } from '@tokengator/sdk'
 import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
 
 export type WalletUiAvatarProps = UiAvatarProps & {

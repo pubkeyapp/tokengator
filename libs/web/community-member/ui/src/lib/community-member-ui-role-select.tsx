@@ -1,6 +1,6 @@
 import { SelectProps } from '@mantine/core'
 import { getEnumOptions, UiSelectEnum } from '@pubkey-ui/core'
-import { CommunityMemberRole } from '@tokengator-mint/sdk'
+import { CommunityMemberRole } from '@tokengator/sdk'
 
 export function CommunityMemberUiRoleSelect({
   value,

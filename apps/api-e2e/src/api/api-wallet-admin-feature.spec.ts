@@ -1,4 +1,4 @@
-import { WalletAdminCreateInput, WalletAdminFindManyInput, WalletAdminUpdateInput, Wallet } from '@tokengator-mint/sdk'
+import { WalletAdminCreateInput, WalletAdminFindManyInput, WalletAdminUpdateInput, Wallet } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-wallet-feature', () => {

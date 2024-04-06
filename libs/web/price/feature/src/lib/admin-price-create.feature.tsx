@@ -1,7 +1,7 @@
 import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core'
-import { PriceAdminCreateInput } from '@tokengator-mint/sdk'
-import { useAdminFindManyPrice } from '@tokengator-mint/web-price-data-access'
-import { AdminPriceUiCreateForm } from '@tokengator-mint/web-price-ui'
+import { PriceAdminCreateInput } from '@tokengator/sdk'
+import { useAdminFindManyPrice } from '@tokengator/web-price-data-access'
+import { AdminPriceUiCreateForm } from '@tokengator/web-price-ui'
 import { useNavigate } from 'react-router-dom'
 
 export default function AdminPriceCreateFeature({ presetId }: { presetId: string }) {

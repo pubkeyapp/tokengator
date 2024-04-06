@@ -1,5 +1,5 @@
-import { useAdminFindOneCommunity } from '@tokengator-mint/web-community-data-access'
-import { AdminCommunityUiUpdateForm } from '@tokengator-mint/web-community-ui'
+import { useAdminFindOneCommunity } from '@tokengator/web-community-data-access'
+import { AdminCommunityUiUpdateForm } from '@tokengator/web-community-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function AdminCommunityDetailSettingsTab({ communityId }: { communityId: string }) {

@@ -1,5 +1,5 @@
-import { useAdminFindOneUser } from '@tokengator-mint/web-user-data-access'
-import { AdminUiUpdateUserForm } from '@tokengator-mint/web-user-ui'
+import { useAdminFindOneUser } from '@tokengator/web-user-data-access'
+import { AdminUiUpdateUserForm } from '@tokengator/web-user-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function AdminUserDetailFeatureSettings({ userId }: { userId: string }) {

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService } from '@tokengator/api-core-data-access'
 import { UserFindManyUserInput } from './dto/user-find-many-user.input'
 import { UserUpdateUserInput } from './dto/user-update-user.input'
 import { UserPaging } from './entity/user.entity'

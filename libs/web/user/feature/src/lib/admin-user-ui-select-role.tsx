@@ -1,4 +1,4 @@
-import { UserRole } from '@tokengator-mint/sdk'
+import { UserRole } from '@tokengator/sdk'
 import { getEnumOptions, UiSelectEnum } from '@pubkey-ui/core'
 
 export function AdminUserUiSelectRole({

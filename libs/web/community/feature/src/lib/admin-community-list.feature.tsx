@@ -1,7 +1,7 @@
 import { Button, Group } from '@mantine/core'
-import { UiPageLimit, UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useAdminFindManyCommunity } from '@tokengator-mint/web-community-data-access'
-import { AdminCommunityUiTable } from '@tokengator-mint/web-community-ui'
+import { UiPageLimit, UiSearchField } from '@tokengator/web-core-ui'
+import { useAdminFindManyCommunity } from '@tokengator/web-community-data-access'
+import { AdminCommunityUiTable } from '@tokengator/web-community-ui'
 import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 

@@ -1,8 +1,8 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useUserFindManyPreset } from '@tokengator-mint/web-preset-data-access'
-import { PresetUiGrid } from '@tokengator-mint/web-preset-ui'
+import { UiSearchField } from '@tokengator/web-core-ui'
+import { useUserFindManyPreset } from '@tokengator/web-preset-data-access'
+import { PresetUiGrid } from '@tokengator/web-preset-ui'
 
 export default function UserPresetListFeature() {
   const { items, pagination, query, setSearch } = useUserFindManyPreset({

@@ -1,6 +1,6 @@
 import { Badge } from '@mantine/core'
 import { useUiColorScheme } from '@pubkey-ui/core'
-import { CommunityMemberRole } from '@tokengator-mint/sdk'
+import { CommunityMemberRole } from '@tokengator/sdk'
 
 export const COMMUNITY_MEMBER_ROLE_COLORS: Record<CommunityMemberRole, string> = {
   [CommunityMemberRole.Admin]: 'pink',

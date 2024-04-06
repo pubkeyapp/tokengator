@@ -1,6 +1,6 @@
 import { Button, Group } from '@mantine/core'
 import { formFieldSelect, getEnumOptions, UiForm, UiFormField } from '@pubkey-ui/core'
-import { CommunityMember, CommunityMemberRole, UserUpdateCommunityMemberInput } from '@tokengator-mint/sdk'
+import { CommunityMember, CommunityMemberRole, UserUpdateCommunityMemberInput } from '@tokengator/sdk'
 
 export function UserCommunityMemberUiUpdateForm({
   submit,

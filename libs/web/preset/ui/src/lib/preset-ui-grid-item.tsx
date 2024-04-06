@@ -1,6 +1,6 @@
 import { Group, Paper, Stack, Text } from '@mantine/core'
 import { UiAnchor } from '@pubkey-ui/core'
-import { Preset } from '@tokengator-mint/sdk'
+import { Preset } from '@tokengator/sdk'
 import { PresetUiAvatar } from './preset-ui-avatar'
 
 export function PresetUiGridItem({ preset, to }: { preset: Preset; to?: string }) {

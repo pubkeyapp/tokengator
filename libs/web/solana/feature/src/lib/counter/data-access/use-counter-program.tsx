@@ -1,6 +1,6 @@
 import { Program } from '@coral-xyz/anchor'
-import { CounterIDL, getCounterProgramId } from '@tokengator-mint/anchor'
-import { useAnchorProvider, useCluster } from '@tokengator-mint/web-solana-data-access'
+import { CounterIDL, getCounterProgramId } from '@tokengator/anchor'
+import { useAnchorProvider, useCluster } from '@tokengator/web-solana-data-access'
 import { Cluster } from '@solana/web3.js'
 
 import { useMemo } from 'react'

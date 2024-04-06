@@ -1,6 +1,6 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useUserSetWalletFeepayer() {
   const sdk = useSdk()

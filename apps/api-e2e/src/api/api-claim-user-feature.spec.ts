@@ -1,4 +1,4 @@
-import { ClaimUserCreateInput, ClaimUserFindManyInput, ClaimUserUpdateInput, Claim } from '@tokengator-mint/sdk'
+import { ClaimUserCreateInput, ClaimUserFindManyInput, ClaimUserUpdateInput, Claim } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-claim-feature', () => {

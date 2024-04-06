@@ -1,5 +1,5 @@
 import { Button, Group } from '@mantine/core'
-import { AdminCreateIdentityInput, IdentityProvider } from '@tokengator-mint/sdk'
+import { AdminCreateIdentityInput, IdentityProvider } from '@tokengator/sdk'
 import { formFieldSelect, formFieldText, getEnumOptions, UiForm, UiFormField } from '@pubkey-ui/core'
 
 export function AuthUiIdentityCreateForm({ submit }: { submit: (res: AdminCreateIdentityInput) => Promise<boolean> }) {

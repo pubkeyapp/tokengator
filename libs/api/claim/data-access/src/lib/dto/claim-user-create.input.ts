@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { IdentityProvider } from '@tokengator-mint/api-identity-data-access'
+import { IdentityProvider } from '@tokengator/api-identity-data-access'
 
 @InputType()
 export class ClaimUserCreateInput {

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { PagingInput } from '@tokengator-mint/api-core-data-access'
+import { PagingInput } from '@tokengator/api-core-data-access'
 import { CommunityMemberRole } from '../entity/community-member-role.enum'
 
 @InputType()

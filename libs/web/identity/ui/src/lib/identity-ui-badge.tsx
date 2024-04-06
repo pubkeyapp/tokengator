@@ -1,5 +1,5 @@
 import { Group, Text } from '@mantine/core'
-import { IdentityProvider } from '@tokengator-mint/sdk'
+import { IdentityProvider } from '@tokengator/sdk'
 import { IdentityUiIcon } from './identity-ui-icon'
 
 export function IdentityUiBadge({ provider }: { provider: IdentityProvider }) {

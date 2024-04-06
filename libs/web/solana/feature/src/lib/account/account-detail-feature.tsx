@@ -1,12 +1,12 @@
 import { Group } from '@mantine/core'
-import { ellipsify } from '@tokengator-mint/sdk'
+import { ellipsify } from '@tokengator/sdk'
 import {
   SolanaUiAccountBalance,
   SolanaUiAccountButtons,
   SolanaUiAccountTokens,
   SolanaUiAccountTransactions,
   SolanaUiExplorerLink,
-} from '@tokengator-mint/web-solana-ui'
+} from '@tokengator/web-solana-ui'
 import { UiPage, UiStack } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'

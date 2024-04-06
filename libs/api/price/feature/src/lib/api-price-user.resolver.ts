@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLUserGuard } from '@tokengator-mint/api-auth-data-access'
-import { ApiPriceService, Price, PriceUserFindManyInput } from '@tokengator-mint/api-price-data-access'
+import { ApiAuthGraphQLUserGuard } from '@tokengator/api-auth-data-access'
+import { ApiPriceService, Price, PriceUserFindManyInput } from '@tokengator/api-price-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)

@@ -1,4 +1,4 @@
-import { Preset } from '@tokengator-mint/sdk'
+import { Preset } from '@tokengator/sdk'
 import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
 
 export type PresetUiAvatarProps = UiAvatarProps & {

@@ -1,6 +1,6 @@
 import { Button, Group, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { PresetAdminCreateInput } from '@tokengator-mint/sdk'
+import { PresetAdminCreateInput } from '@tokengator/sdk'
 import { UiStack } from '@pubkey-ui/core'
 
 export function AdminPresetUiCreateForm({ submit }: { submit: (res: PresetAdminCreateInput) => Promise<boolean> }) {

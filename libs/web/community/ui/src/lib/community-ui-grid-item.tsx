@@ -1,6 +1,6 @@
 import { Paper } from '@mantine/core'
 import { UiGroup } from '@pubkey-ui/core'
-import { Community } from '@tokengator-mint/sdk'
+import { Community } from '@tokengator/sdk'
 import { CommunityUiItem } from './community-ui-item'
 
 export function CommunityUiGridItem({ community, to }: { community: Community; to?: string }) {

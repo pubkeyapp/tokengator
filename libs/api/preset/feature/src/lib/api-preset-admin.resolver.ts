@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
+import { ApiAuthGraphQLAdminGuard } from '@tokengator/api-auth-data-access'
 import {
   ApiPresetService,
   Preset,
@@ -8,7 +8,7 @@ import {
   PresetAdminFindManyInput,
   PresetAdminUpdateInput,
   PresetPaging,
-} from '@tokengator-mint/api-preset-data-access'
+} from '@tokengator/api-preset-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)

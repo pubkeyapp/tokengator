@@ -1,7 +1,7 @@
 import { Group, Text } from '@mantine/core'
 import { UiLoader } from '@pubkey-ui/core'
-import { formatSol, Wallet } from '@tokengator-mint/sdk'
-import { useSolanaGetBalance } from '@tokengator-mint/web-solana-data-access'
+import { formatSol, Wallet } from '@tokengator/sdk'
+import { useSolanaGetBalance } from '@tokengator/web-solana-data-access'
 
 export function WalletUiSolBalance({ wallet }: { wallet: Wallet }) {
   const query = useSolanaGetBalance({ account: wallet.publicKey })

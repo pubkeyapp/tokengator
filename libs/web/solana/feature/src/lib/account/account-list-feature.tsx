@@ -1,5 +1,5 @@
 import { Group } from '@mantine/core'
-import { WalletButton } from '@tokengator-mint/web-solana-ui'
+import { WalletButton } from '@tokengator/web-solana-ui'
 import { UiPage } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Navigate } from 'react-router-dom'

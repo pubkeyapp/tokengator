@@ -1,7 +1,7 @@
 import { Button, Group } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
-import { CommunityMemberRole, User, UserCreateCommunityMemberInput } from '@tokengator-mint/sdk'
-import { UserUiSearch } from '@tokengator-mint/web-user-ui'
+import { CommunityMemberRole, User, UserCreateCommunityMemberInput } from '@tokengator/sdk'
+import { UserUiSearch } from '@tokengator/web-user-ui'
 import { useState } from 'react'
 import { CommunityMemberUiRoleSelect } from './community-member-ui-role-select'
 

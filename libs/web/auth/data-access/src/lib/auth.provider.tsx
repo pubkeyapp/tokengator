@@ -1,5 +1,5 @@
-import { LoginInput, RegisterInput, User } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { LoginInput, RegisterInput, User } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
 import { useMe } from './use-me'

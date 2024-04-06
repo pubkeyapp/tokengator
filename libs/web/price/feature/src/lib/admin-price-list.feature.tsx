@@ -1,7 +1,7 @@
 import { Button, Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useAdminFindManyPrice } from '@tokengator-mint/web-price-data-access'
-import { AdminPriceUiTable } from '@tokengator-mint/web-price-ui'
+import { useAdminFindManyPrice } from '@tokengator/web-price-data-access'
+import { AdminPriceUiTable } from '@tokengator/web-price-ui'
 import { Link } from 'react-router-dom'
 
 export default function AdminPriceListFeature({ presetId }: { presetId: string }) {

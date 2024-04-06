@@ -1,5 +1,5 @@
 import { Button, Group } from '@mantine/core'
-import { AdminUpdateUserInput, User, UserRole, UserStatus } from '@tokengator-mint/sdk'
+import { AdminUpdateUserInput, User, UserRole, UserStatus } from '@tokengator/sdk'
 import { formFieldCheckbox, formFieldSelect, formFieldText, getEnumOptions, UiForm, UiFormField } from '@pubkey-ui/core'
 
 export function AdminUiUpdateUserForm({

@@ -1,8 +1,8 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiCard, UiCopy, UiDebugModal, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
-import { useSolanaRequestAirdrop } from '@tokengator-mint/web-solana-data-access'
-import { SolanaExplorerIcon } from '@tokengator-mint/web-solana-ui'
-import { useUserFindOneWallet, useUserSetWalletFeepayer } from '@tokengator-mint/web-wallet-data-access'
+import { useSolanaRequestAirdrop } from '@tokengator/web-solana-data-access'
+import { SolanaExplorerIcon } from '@tokengator/web-solana-ui'
+import { useUserFindOneWallet, useUserSetWalletFeepayer } from '@tokengator/web-wallet-data-access'
 import {
   WalletUiItem,
   WalletUiRequestAirdrop,
@@ -10,7 +10,7 @@ import {
   WalletUiSolBalance,
   WalletUiSolTokenAccounts,
   WalletUiSolTransactions,
-} from '@tokengator-mint/web-wallet-ui'
+} from '@tokengator/web-wallet-ui'
 import { useParams } from 'react-router-dom'
 
 import { UserWalletDetailSettingsTab } from './user-wallet-detail-settings.tab'

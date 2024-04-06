@@ -1,6 +1,6 @@
 import { Group, Stack } from '@mantine/core'
-import { ellipsify } from '@tokengator-mint/sdk'
-import { SolanaUiExplorerLink } from '@tokengator-mint/web-solana-ui'
+import { ellipsify } from '@tokengator/sdk'
+import { SolanaUiExplorerLink } from '@tokengator/web-solana-ui'
 import { UiCard, UiDebugModal } from '@pubkey-ui/core'
 import { useCounterProgramAccount } from '../data-access/counter-program-account-provider'
 import { CounterCloseButton } from './counter-close-button'

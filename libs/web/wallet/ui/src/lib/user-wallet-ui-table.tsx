@@ -1,5 +1,5 @@
 import { ActionIcon, Anchor, Group, ScrollArea } from '@mantine/core'
-import { Wallet } from '@tokengator-mint/sdk'
+import { Wallet } from '@tokengator/sdk'
 import { IconPencil, IconTrash } from '@tabler/icons-react'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'

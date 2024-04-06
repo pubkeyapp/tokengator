@@ -1,9 +1,9 @@
 import { Group } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { UiBack, UiCard, UiDebugModal, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
-import { CommunityMember } from '@tokengator-mint/sdk'
-import { useUserFindOneCommunityMember } from '@tokengator-mint/web-community-member-data-access'
-import { CommunityMemberUiItem, UserCommunityMemberUiUpdateForm } from '@tokengator-mint/web-community-member-ui'
+import { CommunityMember } from '@tokengator/sdk'
+import { useUserFindOneCommunityMember } from '@tokengator/web-community-member-data-access'
+import { CommunityMemberUiItem, UserCommunityMemberUiUpdateForm } from '@tokengator/web-community-member-ui'
 import { useParams } from 'react-router-dom'
 import { UserCommunityMemberDetailInfoTab } from './user-community-member-detail-info.tab'
 

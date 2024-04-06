@@ -1,4 +1,4 @@
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useQuery } from '@tanstack/react-query'
 
 export function useUserFineOneUser({ username }: { username: string }) {

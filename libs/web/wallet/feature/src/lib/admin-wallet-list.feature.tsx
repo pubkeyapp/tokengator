@@ -1,8 +1,8 @@
 import { Button, Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { UiPageLimit, UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useAdminFindManyWallet } from '@tokengator-mint/web-wallet-data-access'
-import { AdminWalletUiTable } from '@tokengator-mint/web-wallet-ui'
+import { UiPageLimit, UiSearchField } from '@tokengator/web-core-ui'
+import { useAdminFindManyWallet } from '@tokengator/web-wallet-data-access'
+import { AdminWalletUiTable } from '@tokengator/web-wallet-ui'
 import { Link } from 'react-router-dom'
 
 export default function AdminWalletListFeature({ communityId }: { communityId: string }) {

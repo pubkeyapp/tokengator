@@ -1,5 +1,5 @@
-import { useUserFindOneClaim } from '@tokengator-mint/web-claim-data-access'
-import { UserClaimUiUpdateForm } from '@tokengator-mint/web-claim-ui'
+import { useUserFindOneClaim } from '@tokengator/web-claim-data-access'
+import { UserClaimUiUpdateForm } from '@tokengator/web-claim-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function UserClaimDetailSettingsTab({ claimId }: { claimId: string }) {

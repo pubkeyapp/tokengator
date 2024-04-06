@@ -1,5 +1,5 @@
 {
-  "name": "@tokengator-mint/tools",
+  "name": "@tokengator/tools",
   "version": "0.0.1",
   "dependencies": {
     "@nx/devkit": "17.2.8",

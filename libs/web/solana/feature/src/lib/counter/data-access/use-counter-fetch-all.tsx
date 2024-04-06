@@ -1,4 +1,4 @@
-import { useCluster } from '@tokengator-mint/web-solana-data-access'
+import { useCluster } from '@tokengator/web-solana-data-access'
 import { toastError } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useCounterProgram } from './use-counter-program'

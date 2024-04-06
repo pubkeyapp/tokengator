@@ -1,15 +1,15 @@
 import { Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiHeader, UiLayout, UiLoader } from '@pubkey-ui/core'
-import { useAuth } from '@tokengator-mint/web-auth-data-access'
-import { AppLogo, AppLogoType, UiHeaderProfile } from '@tokengator-mint/web-core-ui'
+import { useAuth } from '@tokengator/web-auth-data-access'
+import { AppLogo, AppLogoType, UiHeaderProfile } from '@tokengator/web-core-ui'
 import {
   SolanaUiAccountBalanceButton,
   SolanaUiAccountChecker,
   SolanaUiClusterChecker,
   SolanaUiClusterSelect,
   WalletIcon,
-} from '@tokengator-mint/web-solana-ui'
+} from '@tokengator/web-solana-ui'
 import { ReactNode, Suspense } from 'react'
 
 export function WebCoreLayout({ children }: { children: ReactNode }) {

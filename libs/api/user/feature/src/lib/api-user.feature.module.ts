@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiUserDataAccessModule } from '@tokengator-mint/api-user-data-access'
+import { ApiUserDataAccessModule } from '@tokengator/api-user-data-access'
 import { ApiUserAdminResolver } from './api-user-admin.resolver'
 import { ApiUserUserResolver } from './api-user-user.resolver'
 import { ApiUserResolver } from './api-user.resolver'

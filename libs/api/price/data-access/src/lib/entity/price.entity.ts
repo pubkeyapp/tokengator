@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
-import { Currency } from '@tokengator-mint/api-core-data-access'
-import { Preset } from '@tokengator-mint/api-preset-data-access'
+import { Currency } from '@tokengator/api-core-data-access'
+import { Preset } from '@tokengator/api-preset-data-access'
 
 @ObjectType()
 export class Price {

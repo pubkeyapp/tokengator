@@ -1,5 +1,5 @@
 import { UiInfoItems, UiInfoTable, UiTime } from '@pubkey-ui/core'
-import { Claim } from '@tokengator-mint/sdk'
+import { Claim } from '@tokengator/sdk'
 
 export function ClaimUiInfo({ claim }: { claim?: Claim }) {
   if (!claim) return null

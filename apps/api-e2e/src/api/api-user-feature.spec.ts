@@ -5,11 +5,11 @@ import {
   User,
   UserRole,
   UserStatus,
-} from '@tokengator-mint/sdk'
+} from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 function avatarUrl(name) {
-  return `https://source.boringavatars.com/pixel/120/tokengator-mint-${name}`
+  return `https://source.boringavatars.com/pixel/120/tokengator-${name}`
 }
 
 describe('api-user-feature', () => {

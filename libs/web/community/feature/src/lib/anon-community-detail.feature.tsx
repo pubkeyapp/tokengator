@@ -1,8 +1,8 @@
 import { Group } from '@mantine/core'
 import { UiBack, UiDebugModal, UiError, UiLoader, UiPage } from '@pubkey-ui/core'
-import { useAnonFindOneCommunity } from '@tokengator-mint/web-community-data-access'
+import { useAnonFindOneCommunity } from '@tokengator/web-community-data-access'
 
-import { CommunityUiInfo, CommunityUiItem } from '@tokengator-mint/web-community-ui'
+import { CommunityUiInfo, CommunityUiItem } from '@tokengator/web-community-ui'
 import { useParams } from 'react-router-dom'
 
 export function AnonCommunityDetailFeature() {

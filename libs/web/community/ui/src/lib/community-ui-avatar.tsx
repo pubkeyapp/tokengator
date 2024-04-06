@@ -1,5 +1,5 @@
 import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
-import { Community } from '@tokengator-mint/sdk'
+import { Community } from '@tokengator/sdk'
 
 export type CommunityUiAvatarProps = UiAvatarProps & {
   community?: Community

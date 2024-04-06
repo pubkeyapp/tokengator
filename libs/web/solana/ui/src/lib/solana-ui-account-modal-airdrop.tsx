@@ -1,6 +1,6 @@
 import { Button, ButtonProps, Modal, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { useRequestAirdrop } from '@tokengator-mint/web-solana-data-access'
+import { useRequestAirdrop } from '@tokengator/web-solana-data-access'
 import { PublicKey } from '@solana/web3.js'
 import { useState } from 'react'
 

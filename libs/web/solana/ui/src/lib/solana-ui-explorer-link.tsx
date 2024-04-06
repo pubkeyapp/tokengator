@@ -1,7 +1,7 @@
 import { ActionIcon, ActionIconProps, Anchor, AnchorProps, Group, Tooltip } from '@mantine/core'
 import { UiCopy } from '@pubkey-ui/core'
 import { IconWorld } from '@tabler/icons-react'
-import { useCluster } from '@tokengator-mint/web-solana-data-access'
+import { useCluster } from '@tokengator/web-solana-data-access'
 
 export function SolanaUiExplorerLink({
   label,

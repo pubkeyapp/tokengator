@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { IdentityProvider, UserRole, UserStatus } from '@prisma/client'
-import { ApiAuthService } from '@tokengator-mint/api-auth-data-access'
+import { ApiAuthService } from '@tokengator/api-auth-data-access'
 import {
   ApiCoreService,
   BaseContext,
   ellipsify,
   getRequestDetails,
   slugifyId,
-} from '@tokengator-mint/api-core-data-access'
+} from '@tokengator/api-core-data-access'
 import { ApiIdentitySolanaService } from './api-identity-solana.service'
 import { RequestIdentityChallengeInput } from './dto/request-identity-challenge.input'
 import { VerifyIdentityChallengeInput } from './dto/verify-identity-challenge-input'

@@ -1,7 +1,7 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { Community, UserCreateCommunityInput, UserFindManyCommunityInput } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { Community, UserCreateCommunityInput, UserFindManyCommunityInput } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useState } from 'react'
 
 export function useUserFindManyCommunity(props?: Partial<UserFindManyCommunityInput>) {

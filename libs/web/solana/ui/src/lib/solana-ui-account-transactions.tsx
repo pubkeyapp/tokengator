@@ -1,6 +1,6 @@
 import { ActionIcon, Badge, Button, Group, Loader, Table, Text } from '@mantine/core'
-import { ellipsify } from '@tokengator-mint/sdk'
-import { useGetSignatures } from '@tokengator-mint/web-solana-data-access'
+import { ellipsify } from '@tokengator/sdk'
+import { useGetSignatures } from '@tokengator/web-solana-data-access'
 import { UiError, UiInfo, UiStack, UiTime } from '@pubkey-ui/core'
 import { PublicKey } from '@solana/web3.js'
 import { IconRefresh } from '@tabler/icons-react'

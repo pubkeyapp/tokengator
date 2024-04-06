@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
-import { ApiCoreDataAccessModule, ApiCoreService } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreDataAccessModule, ApiCoreService } from '@tokengator/api-core-data-access'
 import { ApiAuthService } from './api-auth.service'
 import { ApiAuthGraphQLUserGuard } from './guards/api-auth-graphql-user-guard'
 import { ApiAuthStrategyJwt } from './strategies/api-auth-strategy-jwt'

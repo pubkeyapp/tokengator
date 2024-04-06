@@ -1,5 +1,5 @@
 import { Paper } from '@mantine/core'
-import { CommunityMember } from '@tokengator-mint/sdk'
+import { CommunityMember } from '@tokengator/sdk'
 import { UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { CommunityMemberUiItem } from './community-member-ui-item'
 

@@ -1,4 +1,4 @@
-import { getGraphQLSdk, IdentityProvider, Sdk } from '@tokengator-mint/sdk'
+import { getGraphQLSdk, IdentityProvider, Sdk } from '@tokengator/sdk'
 import { Keypair } from '@solana/web3.js'
 import * as nacl from 'tweetnacl'
 import { getApiUrl } from './get-api.url'

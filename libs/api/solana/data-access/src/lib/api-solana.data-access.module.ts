@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiCoreDataAccessModule } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreDataAccessModule } from '@tokengator/api-core-data-access'
 import { ApiSolanaService } from './api-solana.service'
 
 @Module({

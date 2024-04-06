@@ -1,5 +1,5 @@
-import { IdentityProvider } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { IdentityProvider } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { createContext, ReactNode, useContext } from 'react'

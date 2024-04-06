@@ -1,5 +1,5 @@
 import { UiInfoItems, UiInfoTable, UiTime } from '@pubkey-ui/core'
-import { Wallet } from '@tokengator-mint/sdk'
+import { Wallet } from '@tokengator/sdk'
 
 export function WalletUiInfo({ wallet }: { wallet?: Wallet }) {
   if (!wallet) return null

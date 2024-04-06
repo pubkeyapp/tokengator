@@ -1,6 +1,6 @@
 import { AvatarProps, Group, type GroupProps, Stack, Text } from '@mantine/core'
 import { UiAnchor, type UiAnchorProps, UiStack } from '@pubkey-ui/core'
-import { Community } from '@tokengator-mint/sdk'
+import { Community } from '@tokengator/sdk'
 import { CommunityUiAvatar } from './community-ui-avatar'
 
 export function CommunityUiItem({

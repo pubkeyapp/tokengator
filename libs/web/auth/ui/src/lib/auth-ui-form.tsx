@@ -1,4 +1,4 @@
-import { type LoginInput, RegisterInput } from '@tokengator-mint/sdk'
+import { type LoginInput, RegisterInput } from '@tokengator/sdk'
 import { formFieldPassword, formFieldText, UiForm, UiFormField } from '@pubkey-ui/core'
 import { ReactNode, useState } from 'react'
 

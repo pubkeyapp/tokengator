@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { IdentityProvider, Prisma, UserRole, UserStatus } from '@prisma/client'
-import { ApiCoreService } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService } from '@tokengator/api-core-data-access'
 
 import type { ApiAuthRequest } from '../interfaces/api-auth.request'
 

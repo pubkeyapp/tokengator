@@ -1,10 +1,10 @@
 import { Button, Group, Select } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { UiDebug, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { Community, Preset, TokenGatorMinter } from '@tokengator-mint/sdk'
-import { useUserFindOneCommunity, useUserGetMintersByCommunity } from '@tokengator-mint/web-community-data-access'
-import { MinterUiList } from '@tokengator-mint/web-community-ui'
-import { useUserFindManyPreset } from '@tokengator-mint/web-preset-data-access'
+import { Community, Preset, TokenGatorMinter } from '@tokengator/sdk'
+import { useUserFindOneCommunity, useUserGetMintersByCommunity } from '@tokengator/web-community-data-access'
+import { MinterUiList } from '@tokengator/web-community-ui'
+import { useUserFindManyPreset } from '@tokengator/web-preset-data-access'
 import { useState } from 'react'
 
 export function UserCommunityDetailMinterListTab({ community }: { community: Community }) {

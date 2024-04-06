@@ -1,8 +1,8 @@
 import { Program, ProgramAccount } from '@coral-xyz/anchor'
-import { Counter } from '@tokengator-mint/anchor'
+import { Counter } from '@tokengator/anchor'
 import { createContext, ReactNode, useContext } from 'react'
 import { useCounterProgram } from './use-counter-program'
-import { useCluster } from '@tokengator-mint/web-solana-data-access'
+import { useCluster } from '@tokengator/web-solana-data-access'
 import { useCounterFetch } from './use-counter-fetch'
 import { useCounterRefresh } from './use-counter-refresh'
 

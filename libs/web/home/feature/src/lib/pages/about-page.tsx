@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <Container size={700}>
       <UiStack gap="xl" my="xl">
-        <Title>About TokenGator Mint.</Title>
+        <Title>About TokenGator.</Title>
         <Text c="dimmed">This is an empty about page.</Text>
         <Group>
           <Button component={Link} to="/home" size="xl" color="brand" leftSection={<IconHome />}>

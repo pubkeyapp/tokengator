@@ -5,7 +5,7 @@ import {
   ApiAuthRequest,
   ApiAuthService,
   ApiAuthStrategyGoogleGuard,
-} from '@tokengator-mint/api-auth-data-access'
+} from '@tokengator/api-auth-data-access'
 import { Response } from 'express-serve-static-core'
 
 @Controller('auth/google')

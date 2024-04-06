@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { Keypair } from '@solana/web3.js'
-import { ApiCoreService, ellipsify, PagingInputFields } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService, ellipsify, PagingInputFields } from '@tokengator/api-core-data-access'
 import { WalletPaging } from './entity/wallet.entity'
 
 @Injectable()

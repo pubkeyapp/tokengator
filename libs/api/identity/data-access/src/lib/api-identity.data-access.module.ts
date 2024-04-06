@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { ApiAuthDataAccessModule } from '@tokengator-mint/api-auth-data-access'
-import { ApiCoreDataAccessModule } from '@tokengator-mint/api-core-data-access'
+import { ApiAuthDataAccessModule } from '@tokengator/api-auth-data-access'
+import { ApiCoreDataAccessModule } from '@tokengator/api-core-data-access'
 import { ApiIdentityDataAdminService } from './api-identity-data-admin.service'
 import { ApiIdentityDataAnonService } from './api-identity-data-anon.service'
 import { ApiIdentityDataUserService } from './api-identity-data-user.service'

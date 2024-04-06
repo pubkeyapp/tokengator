@@ -1,4 +1,4 @@
-import { useUserFindManyUser } from '@tokengator-mint/web-user-data-access'
+import { useUserFindManyUser } from '@tokengator/web-user-data-access'
 import { UserUiAutocomplete, type UserUiAutocompleteProps } from './user-ui-autocomplete'
 
 export type UserUiSearchProps = Omit<UserUiAutocompleteProps, 'items' | 'isLoading' | 'setSearch'>

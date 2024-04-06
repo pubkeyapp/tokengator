@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { ApiIdentityDataAccessModule } from '@tokengator-mint/api-identity-data-access'
+import { ApiIdentityDataAccessModule } from '@tokengator/api-identity-data-access'
 import { ApiIdentityAdminResolver } from './api-identity-admin.resolver'
 import { ApiIdentityAnonResolver } from './api-identity-anon.resolver'
 import { ApiIdentityUserResolver } from './api-identity-user.resolver'

@@ -1,4 +1,4 @@
-import { uiToastLink } from '@tokengator-mint/web-solana-data-access'
+import { uiToastLink } from '@tokengator/web-solana-data-access'
 import { toastError } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 import { useCounterProgramAccount } from './counter-program-account-provider'

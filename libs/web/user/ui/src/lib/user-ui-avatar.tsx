@@ -1,4 +1,4 @@
-import { User } from '@tokengator-mint/sdk'
+import { User } from '@tokengator/sdk'
 import { UiAvatar, UiAvatarProps } from '@pubkey-ui/core'
 
 export type UserUiAvatarProps = UiAvatarProps & {

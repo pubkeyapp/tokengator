@@ -1,4 +1,4 @@
-import { AdminCreateMintInput, AdminFindManyMintInput, AdminUpdateMintInput, Mint } from '@tokengator-mint/sdk'
+import { AdminCreateMintInput, AdminFindManyMintInput, AdminUpdateMintInput, Mint } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-mint-feature', () => {

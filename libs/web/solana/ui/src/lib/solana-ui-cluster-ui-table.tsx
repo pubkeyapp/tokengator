@@ -1,5 +1,5 @@
 import { Anchor, Button, Table, Text } from '@mantine/core'
-import { useCluster } from '@tokengator-mint/web-solana-data-access'
+import { useCluster } from '@tokengator/web-solana-data-access'
 import { IconTrash } from '@tabler/icons-react'
 
 export function SolanaUiClusterUiTable() {

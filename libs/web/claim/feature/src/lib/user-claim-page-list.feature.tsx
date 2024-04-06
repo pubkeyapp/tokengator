@@ -1,8 +1,8 @@
 import { Group, Stack, Text } from '@mantine/core'
 import { UiDebug, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { ellipsify } from '@tokengator-mint/sdk'
-import { useUserGetClaims } from '@tokengator-mint/web-claim-data-access'
-import { IdentityUiAvatar, IdentityUiIcon } from '@tokengator-mint/web-identity-ui'
+import { ellipsify } from '@tokengator/sdk'
+import { useUserGetClaims } from '@tokengator/web-claim-data-access'
+import { IdentityUiAvatar, IdentityUiIcon } from '@tokengator/web-identity-ui'
 
 export default function UserClaimListFeature() {
   const { items, query } = useUserGetClaims()

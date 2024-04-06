@@ -1,8 +1,8 @@
 import { Button, ButtonProps } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { Identity, IdentityProvider, solanaGradient } from '@tokengator-mint/sdk'
-import { IdentityProviderSolanaLink } from '@tokengator-mint/web-identity-data-access'
-import { SolanaClusterProvider } from '@tokengator-mint/web-solana-data-access'
+import { Identity, IdentityProvider, solanaGradient } from '@tokengator/sdk'
+import { IdentityProviderSolanaLink } from '@tokengator/web-identity-data-access'
+import { SolanaClusterProvider } from '@tokengator/web-solana-data-access'
 import { IdentityUiIcon } from './identity-ui-icon'
 import { IdentityUiSolanaLinkWizard } from './identity-ui-solana-link-wizard'
 

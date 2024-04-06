@@ -1,6 +1,6 @@
 import { Resolver } from '@nestjs/graphql'
-import { ApiClaimService } from '@tokengator-mint/api-claim-data-access'
-import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
+import { ApiClaimService } from '@tokengator/api-claim-data-access'
+import { ApiAuthGraphQLAdminGuard } from '@tokengator/api-auth-data-access'
 import { Mutation, Query, Args } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 import {
@@ -9,7 +9,7 @@ import {
   Claim,
   ClaimPaging,
   ClaimAdminUpdateInput,
-} from '@tokengator-mint/api-claim-data-access'
+} from '@tokengator/api-claim-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)

@@ -1,5 +1,5 @@
-import { useAdminFindOnePreset } from '@tokengator-mint/web-preset-data-access'
-import { PresetUiInfo } from '@tokengator-mint/web-preset-ui'
+import { useAdminFindOnePreset } from '@tokengator/web-preset-data-access'
+import { PresetUiInfo } from '@tokengator/web-preset-ui'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
 
 export function AdminPresetDetailInfoTab({ presetId }: { presetId: string }) {

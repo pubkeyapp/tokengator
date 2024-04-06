@@ -1,5 +1,5 @@
 import { Group, Text } from '@mantine/core'
-import { Identity, IdentityProvider } from '@tokengator-mint/sdk'
+import { Identity, IdentityProvider } from '@tokengator/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { IdentityUiIcon } from './identity-ui-icon'
 

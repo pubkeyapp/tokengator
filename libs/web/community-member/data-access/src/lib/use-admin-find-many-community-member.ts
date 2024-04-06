@@ -4,8 +4,8 @@ import {
   AdminCreateCommunityMemberInput,
   AdminFindManyCommunityMemberInput,
   CommunityMemberRole,
-} from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+} from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useState } from 'react'
 
 export function useAdminFindManyCommunityMember(

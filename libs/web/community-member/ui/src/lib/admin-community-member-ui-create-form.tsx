@@ -1,8 +1,8 @@
 import { Button, Group } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
-import { AdminCreateCommunityMemberInput, CommunityMemberRole, User } from '@tokengator-mint/sdk'
+import { AdminCreateCommunityMemberInput, CommunityMemberRole, User } from '@tokengator/sdk'
 import { CommunityMemberUiRoleSelect } from './community-member-ui-role-select'
-import { UserUiSearch } from '@tokengator-mint/web-user-ui'
+import { UserUiSearch } from '@tokengator/web-user-ui'
 import { useState } from 'react'
 
 export function AdminCommunityMemberUiCreateForm({

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { Community } from '@tokengator-mint/sdk'
-import { useSdk } from '@tokengator-mint/web-core-data-access'
+import { Community } from '@tokengator/sdk'
+import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useAnonFindOneCommunity({ slug }: { slug: string }) {
   const sdk = useSdk()

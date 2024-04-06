@@ -1,4 +1,4 @@
-import { WebCoreFeature } from '@tokengator-mint/web-core-feature'
+import { WebCoreFeature } from '@tokengator/web-core-feature'
 import { StrictMode } from 'react'
 import * as ReactDOM from 'react-dom/client'
 

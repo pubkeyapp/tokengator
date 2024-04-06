@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { Prisma, UserStatus } from '@prisma/client'
-import { ApiCoreService, CORE_APP_STARTED, hashPassword, slugifyId } from '@tokengator-mint/api-core-data-access'
+import { ApiCoreService, CORE_APP_STARTED, hashPassword, slugifyId } from '@tokengator/api-core-data-access'
 import { provisionUsers } from './api-user-provision-data'
 import { USER_PROVISIONED } from './api-user.events'
 

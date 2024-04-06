@@ -1,6 +1,6 @@
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
-import { useUserFindOneCommunity } from '@tokengator-mint/web-community-data-access'
-import { UserCommunityUiUpdateForm } from '@tokengator-mint/web-community-ui'
+import { useUserFindOneCommunity } from '@tokengator/web-community-data-access'
+import { UserCommunityUiUpdateForm } from '@tokengator/web-community-ui'
 
 export function UserCommunityDetailSettingsTab({ slug }: { slug: string }) {
   const { item, query, updateCommunity } = useUserFindOneCommunity({ slug })

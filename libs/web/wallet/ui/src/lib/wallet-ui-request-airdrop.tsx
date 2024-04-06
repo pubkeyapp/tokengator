@@ -1,6 +1,6 @@
 import { ActionIcon, Tooltip } from '@mantine/core'
 import { IconMoneybag } from '@tabler/icons-react'
-import { Wallet } from '@tokengator-mint/sdk'
+import { Wallet } from '@tokengator/sdk'
 
 export function WalletUiRequestAirdrop({
   requestAirdrop,

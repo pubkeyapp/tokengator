@@ -1,4 +1,4 @@
-import { PresetAdminCreateInput, PresetAdminFindManyInput, PresetAdminUpdateInput, Preset } from '@tokengator-mint/sdk'
+import { PresetAdminCreateInput, PresetAdminFindManyInput, PresetAdminUpdateInput, Preset } from '@tokengator/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-preset-feature', () => {

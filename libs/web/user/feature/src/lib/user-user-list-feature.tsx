@@ -1,7 +1,7 @@
 import { Group } from '@mantine/core'
-import { UiSearchField } from '@tokengator-mint/web-core-ui'
-import { useUserFindManyUser } from '@tokengator-mint/web-user-data-access'
-import { UserUiGrid } from '@tokengator-mint/web-user-ui'
+import { UiSearchField } from '@tokengator/web-core-ui'
+import { useUserFindManyUser } from '@tokengator/web-user-data-access'
+import { UserUiGrid } from '@tokengator/web-user-ui'
 import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconUserSearch } from '@tabler/icons-react'
 

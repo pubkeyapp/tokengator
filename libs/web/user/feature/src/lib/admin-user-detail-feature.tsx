@@ -1,6 +1,6 @@
 import { Group } from '@mantine/core'
-import { useAdminFindOneUser } from '@tokengator-mint/web-user-data-access'
-import { UserUiAvatar } from '@tokengator-mint/web-user-ui'
+import { useAdminFindOneUser } from '@tokengator/web-user-data-access'
+import { UserUiAvatar } from '@tokengator/web-user-ui'
 import { UiBack, UiDebugModal, UiError, UiLoader, UiPage, UiStack, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { AdminUserDetailFeatureIdentities } from './admin-user-detail-feature-identities'

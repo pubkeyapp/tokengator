@@ -1,7 +1,7 @@
 import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core'
-import { ClaimAdminCreateInput } from '@tokengator-mint/sdk'
-import { useAdminFindManyClaim } from '@tokengator-mint/web-claim-data-access'
-import { AdminClaimUiCreateForm } from '@tokengator-mint/web-claim-ui'
+import { ClaimAdminCreateInput } from '@tokengator/sdk'
+import { useAdminFindManyClaim } from '@tokengator/web-claim-data-access'
+import { AdminClaimUiCreateForm } from '@tokengator/web-claim-ui'
 import { useNavigate } from 'react-router-dom'
 
 export default function AdminClaimCreateFeature({ communityId }: { communityId: string }) {

@@ -1,5 +1,5 @@
 import { Alert, Badge, Button, rem, Stepper, StepperProps, Switch } from '@mantine/core'
-import { ellipsify } from '@tokengator-mint/sdk'
+import { ellipsify } from '@tokengator/sdk'
 import { UiGroup, useUiBreakpoints } from '@pubkey-ui/core'
 import { WalletDisconnectButton, WalletMultiButton } from '@pubkeyapp/wallet-adapter-mantine-ui'
 import { useWallet } from '@solana/wallet-adapter-react'

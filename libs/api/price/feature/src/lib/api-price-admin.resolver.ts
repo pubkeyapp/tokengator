@@ -1,13 +1,13 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLAdminGuard } from '@tokengator-mint/api-auth-data-access'
+import { ApiAuthGraphQLAdminGuard } from '@tokengator/api-auth-data-access'
 import {
   ApiPriceService,
   Price,
   PriceAdminCreateInput,
   PriceAdminFindManyInput,
   PriceAdminUpdateInput,
-} from '@tokengator-mint/api-price-data-access'
+} from '@tokengator/api-price-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)

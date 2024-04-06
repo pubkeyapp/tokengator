@@ -6,8 +6,8 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: tokengator-mint
-      POSTGRES_USER: tokengator-mint
-      POSTGRES_PASSWORD: tokengator-mint
+      POSTGRES_DB: tokengator
+      POSTGRES_USER: tokengator
+      POSTGRES_PASSWORD: tokengator
     volumes:
       - ./tmp/postgres:/var/lib/postgresql/data

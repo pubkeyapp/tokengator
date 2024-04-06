@@ -1,5 +1,5 @@
 import { Button, Menu } from '@mantine/core'
-import { User, UserRole } from '@tokengator-mint/sdk'
+import { User, UserRole } from '@tokengator/sdk'
 import { UiAvatar, useUiColorScheme } from '@pubkey-ui/core'
 import { IconBug, IconLogout, IconMoonStars, IconSettings, IconShield, IconSun, IconUser } from '@tabler/icons-react'
 import { useState } from 'react'
