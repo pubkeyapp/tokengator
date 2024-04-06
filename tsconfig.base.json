@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tokengator/anchor": ["libs/anchor/src/index.ts"],
       "@tokengator/api-auth-data-access": ["libs/api/auth/data-access/src/index.ts"],
       "@tokengator/api-auth-feature": ["libs/api/auth/feature/src/index.ts"],
       "@tokengator/api-claim-data-access": ["libs/api/claim/data-access/src/index.ts"],
