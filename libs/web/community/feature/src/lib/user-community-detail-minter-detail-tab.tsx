@@ -23,7 +23,19 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
     {
       path: 'assets',
       label: 'Assets',
-      element: items?.length ? <MinterUiAssets items={items} /> : <UiInfo message="No assets found" />,
+      element: (
+        <UiStack>
+          <Group justify="flex-end">
+            <Button
+              loading={mutation.isPending}
+              onClick={() => mutation.mutateAsync().then(() => queryAssets.refetch())}
+            >
+              Mint
+            </Button>
+          </Group>
+          {items?.length ? <MinterUiAssets items={items} /> : <UiInfo message="No assets found" />}
+        </UiStack>
+      ),
     },
     {
       path: 'claims',
@@ -38,18 +50,7 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
         <UiLoader />
       ) : query.data ? (
         <UiStack>
-          <MinterUiCard item={query.data}>
-            <Group justify="flex-end">
-              <Button
-                loading={mutation.isPending}
-                onClick={() => mutation.mutateAsync().then(() => queryAssets.refetch())}
-              >
-                Mint
-              </Button>
-            </Group>
-
-            <MinterUiAssets items={items} />
-          </MinterUiCard>
+          <MinterUiCard item={query.data} />
           <UiTabRoutes tabs={tabs} />
         </UiStack>
       ) : (

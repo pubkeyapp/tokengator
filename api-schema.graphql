@@ -81,6 +81,37 @@ type AppConfig {
   authTwitterEnabled: Boolean!
 }
 
+type Asset {
+  account: String!
+  description: String!
+  image: String!
+  lists: [AssetActivityType!]!
+  name: String!
+}
+
+type AssetActivity {
+  account: String!
+  endDate: DateTime!
+  entries: [AssetActivityEntry!]
+  label: String!
+  pointsLabel: String!
+  pointsTotal: Float!
+  startDate: DateTime!
+  type: AssetActivityType!
+}
+
+type AssetActivityEntry {
+  message: String!
+  points: Float
+  timestamp: DateTime!
+  url: String
+}
+
+enum AssetActivityType {
+  Payouts
+  Points
+}
+
 type Claim {
   account: String!
   amount: String!
@@ -414,6 +445,8 @@ type Query {
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
   currencies: [Currency!]!
+  getAsset(account: String!): Asset!
+  getAssetActivity(account: String!, type: AssetActivityType!): AssetActivity!
   me: User
   metadataAll(account: String!): JSON
   solanaGetBalance(account: String!): String

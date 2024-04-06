@@ -104,6 +104,40 @@ export type AppConfig = {
   authTwitterEnabled: Scalars['Boolean']['output']
 }
 
+export type Asset = {
+  __typename?: 'Asset'
+  account: Scalars['String']['output']
+  description: Scalars['String']['output']
+  image: Scalars['String']['output']
+  lists: Array<AssetActivityType>
+  name: Scalars['String']['output']
+}
+
+export type AssetActivity = {
+  __typename?: 'AssetActivity'
+  account: Scalars['String']['output']
+  endDate: Scalars['DateTime']['output']
+  entries?: Maybe<Array<AssetActivityEntry>>
+  label: Scalars['String']['output']
+  pointsLabel: Scalars['String']['output']
+  pointsTotal: Scalars['Float']['output']
+  startDate: Scalars['DateTime']['output']
+  type: AssetActivityType
+}
+
+export type AssetActivityEntry = {
+  __typename?: 'AssetActivityEntry'
+  message: Scalars['String']['output']
+  points?: Maybe<Scalars['Float']['output']>
+  timestamp: Scalars['DateTime']['output']
+  url?: Maybe<Scalars['String']['output']>
+}
+
+export enum AssetActivityType {
+  Payouts = 'Payouts',
+  Points = 'Points',
+}
+
 export type Claim = {
   __typename?: 'Claim'
   account: Scalars['String']['output']
@@ -639,6 +673,8 @@ export type Query = {
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
   currencies: Array<Currency>
+  getAsset: Asset
+  getAssetActivity: AssetActivity
   me?: Maybe<User>
   metadataAll?: Maybe<Scalars['JSON']['output']>
   solanaGetBalance?: Maybe<Scalars['String']['output']>
@@ -738,6 +774,15 @@ export type QueryAnonFindOneCommunityArgs = {
 
 export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
+}
+
+export type QueryGetAssetArgs = {
+  account: Scalars['String']['input']
+}
+
+export type QueryGetAssetActivityArgs = {
+  account: Scalars['String']['input']
+  type: AssetActivityType
 }
 
 export type QueryMetadataAllArgs = {
@@ -1025,6 +1070,81 @@ export type WalletUserFindManyInput = {
 
 export type WalletUserUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>
+}
+
+export type AssetDetailsFragment = {
+  __typename?: 'Asset'
+  account: string
+  name: string
+  description: string
+  image: string
+  lists: Array<AssetActivityType>
+}
+
+export type AssetActivityEntryDetailsFragment = {
+  __typename?: 'AssetActivityEntry'
+  timestamp: Date
+  message: string
+  points?: number | null
+  url?: string | null
+}
+
+export type AssetActivityDetailsFragment = {
+  __typename?: 'AssetActivity'
+  type: AssetActivityType
+  label: string
+  startDate: Date
+  endDate: Date
+  pointsLabel: string
+  pointsTotal: number
+  entries?: Array<{
+    __typename?: 'AssetActivityEntry'
+    timestamp: Date
+    message: string
+    points?: number | null
+    url?: string | null
+  }> | null
+}
+
+export type GetAssetQueryVariables = Exact<{
+  account: Scalars['String']['input']
+}>
+
+export type GetAssetQuery = {
+  __typename?: 'Query'
+  item: {
+    __typename?: 'Asset'
+    account: string
+    name: string
+    description: string
+    image: string
+    lists: Array<AssetActivityType>
+  }
+}
+
+export type GetAssetActivityQueryVariables = Exact<{
+  account: Scalars['String']['input']
+  type: AssetActivityType
+}>
+
+export type GetAssetActivityQuery = {
+  __typename?: 'Query'
+  item: {
+    __typename?: 'AssetActivity'
+    type: AssetActivityType
+    label: string
+    startDate: Date
+    endDate: Date
+    pointsLabel: string
+    pointsTotal: number
+    entries?: Array<{
+      __typename?: 'AssetActivityEntry'
+      timestamp: Date
+      message: string
+      points?: number | null
+      url?: string | null
+    }> | null
+  }
 }
 
 export type LoginMutationVariables = Exact<{
@@ -3989,6 +4109,37 @@ export type UserSetWalletFeepayerMutation = {
   } | null
 }
 
+export const AssetDetailsFragmentDoc = gql`
+  fragment AssetDetails on Asset {
+    account
+    name
+    description
+    image
+    lists
+  }
+`
+export const AssetActivityEntryDetailsFragmentDoc = gql`
+  fragment AssetActivityEntryDetails on AssetActivityEntry {
+    timestamp
+    message
+    points
+    url
+  }
+`
+export const AssetActivityDetailsFragmentDoc = gql`
+  fragment AssetActivityDetails on AssetActivity {
+    type
+    label
+    startDate
+    endDate
+    pointsLabel
+    pointsTotal
+    entries {
+      ...AssetActivityEntryDetails
+    }
+  }
+  ${AssetActivityEntryDetailsFragmentDoc}
+`
 export const IdentityDetailsFragmentDoc = gql`
   fragment IdentityDetails on Identity {
     createdAt
@@ -4213,6 +4364,22 @@ export const WalletDetailsFragmentDoc = gql`
     updatedAt
     communityId
   }
+`
+export const GetAssetDocument = gql`
+  query getAsset($account: String!) {
+    item: getAsset(account: $account) {
+      ...AssetDetails
+    }
+  }
+  ${AssetDetailsFragmentDoc}
+`
+export const GetAssetActivityDocument = gql`
+  query getAssetActivity($account: String!, $type: AssetActivityType!) {
+    item: getAssetActivity(account: $account, type: $type) {
+      ...AssetActivityDetails
+    }
+  }
+  ${AssetActivityDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {
@@ -4997,6 +5164,8 @@ export type SdkFunctionWrapper = <T>(
 ) => Promise<T>
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType, variables) => action()
+const GetAssetDocumentString = print(GetAssetDocument)
+const GetAssetActivityDocumentString = print(GetAssetActivityDocument)
 const LoginDocumentString = print(LoginDocument)
 const LogoutDocumentString = print(LogoutDocument)
 const RegisterDocumentString = print(RegisterDocument)
@@ -5092,6 +5261,42 @@ const UserDeleteWalletDocumentString = print(UserDeleteWalletDocument)
 const UserSetWalletFeepayerDocumentString = print(UserSetWalletFeepayerDocument)
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    getAsset(
+      variables: GetAssetQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{ data: GetAssetQuery; errors?: GraphQLError[]; extensions?: any; headers: Headers; status: number }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<GetAssetQuery>(GetAssetDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getAsset',
+        'query',
+        variables,
+      )
+    },
+    getAssetActivity(
+      variables: GetAssetActivityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: GetAssetActivityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<GetAssetActivityQuery>(GetAssetActivityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getAssetActivity',
+        'query',
+        variables,
+      )
+    },
     login(
       variables: LoginMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -7019,6 +7224,8 @@ type definedNonNullAny = {}
 export const isDefinedNonNullAny = (v: any): v is definedNonNullAny => v !== undefined && v !== null
 
 export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny(v))
+
+export const AssetActivityTypeSchema = z.nativeEnum(AssetActivityType)
 
 export const ClaimStatusSchema = z.nativeEnum(ClaimStatus)
 
