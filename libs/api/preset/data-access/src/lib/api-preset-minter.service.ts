@@ -4,7 +4,16 @@ import { Injectable, Logger } from '@nestjs/common'
 import { Preset } from '@prisma/client'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
-import { Keypair, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from '@solana/web3.js'
+import {
+  AddressLookupTableProgram,
+  ComputeBudgetProgram,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+  TransactionMessage,
+  VersionedTransaction,
+} from '@solana/web3.js'
 import { ApiCoreService } from '@tokengator/api-core-data-access'
 import { ApiSolanaService } from '@tokengator/api-solana-data-access'
 import {
@@ -87,7 +96,47 @@ export class ApiPresetMinterService {
 
     const identities = getIdentityProviders([IdentityProvider.Discord])
 
-    const signature = await programTokenMinter.methods
+    const slot = await this.solana.connection.getSlot('confirmed')
+    const { blockhash, lastValidBlockHeight } = await this.solana.connection.getLatestBlockhash()
+    const [createLookupTableIx, lookupTableAccount] = AddressLookupTableProgram.createLookupTable({
+      authority: remoteFeePayer.publicKey,
+      payer: remoteFeePayer.publicKey,
+      recentSlot: slot - 1,
+    })
+
+    const extendLookupTableIx = AddressLookupTableProgram.extendLookupTable({
+      addresses: [
+        minter,
+        group,
+        manager,
+        minterTokenAccount,
+        authority.publicKey,
+        remoteFeePayer.publicKey,
+        mintKeypair.publicKey,
+        SYSVAR_RENT_PUBKEY,
+        WEN_NEW_STANDARD_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_2022_PROGRAM_ID,
+        SystemProgram.programId,
+      ],
+      authority: remoteFeePayer.publicKey,
+      lookupTable: lookupTableAccount,
+      payer: remoteFeePayer.publicKey,
+    })
+
+    const txMessage = new TransactionMessage({
+      instructions: [createLookupTableIx, extendLookupTableIx],
+      payerKey: remoteFeePayer.publicKey,
+      recentBlockhash: blockhash,
+    }).compileToV0Message()
+
+    const tx = new VersionedTransaction(txMessage)
+    tx.sign([remoteFeePayer])
+
+    const sig = await this.solana.connection.sendTransaction(tx)
+    await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature: sig })
+
+    const createMinterWnsIx = await programTokenMinter.methods
       .createMinterWns({
         community: communitySlug,
         name,
@@ -129,10 +178,25 @@ export class ApiPresetMinterService {
         systemProgram: SystemProgram.programId,
       })
       .signers([authority, mintKeypair, remoteFeePayer])
-      .rpc({ commitment: 'confirmed' })
+      .instruction()
 
-    this.logger.debug(`Signature: ${signature}`)
-    return signature
+    const { value } = await this.solana.connection.getAddressLookupTable(lookupTableAccount)
+
+    if (value) {
+      const { blockhash } = await this.solana.connection.getLatestBlockhash()
+      const transactionMessage = new TransactionMessage({
+        instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 250_000 }), createMinterWnsIx],
+        payerKey: remoteFeePayer.publicKey,
+        recentBlockhash: blockhash,
+      }).compileToV0Message([value])
+
+      const transaction = new VersionedTransaction(transactionMessage)
+      transaction.sign([remoteFeePayer, authority, mintKeypair])
+      const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
+      this.logger.debug(`Signature: ${signature}`)
+      return signature
+    }
+    throw new Error('Lookup table not found')
   }
 
   async mintFromMinter(minterAccount: string, communitySlug: string) {
@@ -171,7 +235,7 @@ export class ApiPresetMinterService {
     )
 
     const signature = await programTokenMinter.methods
-      .mintMinterWns({ name, symbol, uri })
+      .mintMinterWns({ name, symbol, uri, metadata: [] })
       .accounts({
         minter,
         group,

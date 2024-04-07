@@ -8,6 +8,7 @@ import {
 
 export const PREFIX = encodeToBuffer('tokengator_minter')
 export const MINTER = encodeToBuffer('minter')
+export const ACTIVITY = encodeToBuffer('activity')
 
 export enum IdentityProvider {
   Discord = 'discord',
@@ -65,6 +66,10 @@ export function getWNSManagerPda(programId: PublicKey) {
 
 function encodeToBuffer(input: string) {
   return new TextEncoder().encode(input)
+}
+
+export function getActivityPda({ programId, mint, label }: { label: string; mint: PublicKey; programId: PublicKey }) {
+  return PublicKey.findProgramAddressSync([PREFIX, ACTIVITY, mint.toBuffer(), encodeToBuffer(label)], programId)
 }
 
 export function getMetadataProgram(provider: Provider, programId: PublicKey = WEN_NEW_STANDARD_PROGRAM_ID) {

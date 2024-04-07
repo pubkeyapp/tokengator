@@ -7,7 +7,7 @@ import { IDL as TokengatorMinterIDL } from './types/tokengator_minter'
 export { TokengatorMinter, TokengatorMinterIDL }
 
 // After updating your program ID (e.g. after running `anchor keys sync`) update the value below.
-export const TOKENGATOR_MINTER_PROGRAM_ID = new PublicKey('gatorxhhdfsTpfkgB2QM4qwkwgSem2UgzPXLaD2ZGoY')
+export const TOKENGATOR_MINTER_PROGRAM_ID = new PublicKey('GAToRDEEZmbXSe7ECcChQ1TsZCQXDBCtVhSd1Ypas9h6')
 
 // This is a helper function to get the program ID for the TokengatorMinter program depending on the cluster.
 export function getTokengatorMinterProgramId(cluster: Cluster) {

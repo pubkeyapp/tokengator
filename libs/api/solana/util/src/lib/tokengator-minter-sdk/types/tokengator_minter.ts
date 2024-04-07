@@ -140,6 +140,67 @@ export type TokengatorMinter = {
       ]
     },
     {
+      "name": "addMinterAuthority",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AddMinterAuthorityArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeMinterAuthority",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "RemoveMinterAuthorityArgs"
+          }
+        }
+      ]
+    },
+    {
       "name": "mintMinterWns",
       "accounts": [
         {
@@ -222,9 +283,245 @@ export type TokengatorMinter = {
           }
         }
       ]
+    },
+    {
+      "name": "updateMemberMetdata",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateMemberMetadataArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateMemberMetadataWns",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateMemberMetadataWNSArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeMinter",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createActivity",
+      "accounts": [
+        {
+          "name": "activity",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "minter",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "CreateActivityArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "appendActivityEntry",
+      "accounts": [
+        {
+          "name": "activity",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AppendActivityEntryArgs"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
+    {
+      "name": "activity",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "type": "i64"
+          },
+          {
+            "name": "endDate",
+            "type": "i64"
+          },
+          {
+            "name": "feePayer",
+            "type": "publicKey"
+          },
+          {
+            "name": "minter",
+            "type": "publicKey"
+          },
+          {
+            "name": "member",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "entries",
+            "type": {
+              "vec": {
+                "defined": "Entry"
+              }
+            }
+          }
+        ]
+      }
+    },
     {
       "name": "group",
       "type": {
@@ -260,6 +557,10 @@ export type TokengatorMinter = {
           },
           {
             "name": "communityId",
+            "type": "publicKey"
+          },
+          {
+            "name": "group",
             "type": "publicKey"
           },
           {
@@ -302,7 +603,61 @@ export type TokengatorMinter = {
   ],
   "types": [
     {
-      "name": "AddPresetAuthorityArgs",
+      "name": "AppendActivityEntryArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "timestamp",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "message",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "points",
+            "type": {
+              "option": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateActivityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "endDate",
+            "type": {
+              "option": "i64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AddMinterAuthorityArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -314,7 +669,19 @@ export type TokengatorMinter = {
       }
     },
     {
-      "name": "CreateMinterWNSArgs",
+      "name": "RemoveMinterAuthorityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authorityToRemove",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMinterArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -372,7 +739,31 @@ export type TokengatorMinter = {
       }
     },
     {
-      "name": "CreateMinterArgs",
+      "name": "UpdateMemberMetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "endDate",
+            "type": {
+              "option": "i64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMinterWNSArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -445,18 +836,61 @@ export type TokengatorMinter = {
           {
             "name": "uri",
             "type": "string"
+          },
+          {
+            "name": "metadata",
+            "type": {
+              "option": {
+                "vec": {
+                  "array": [
+                    "string",
+                    2
+                  ]
+                }
+              }
+            }
           }
         ]
       }
     },
     {
-      "name": "RemovePresetAuthorityArgs",
+      "name": "UpdateMemberMetadataWNSArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "authorityToRemove",
-            "type": "publicKey"
+            "name": "field",
+            "type": "string"
+          },
+          {
+            "name": "newValue",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Entry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "message",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "points",
+            "type": "u8"
           }
         ]
       }
@@ -869,6 +1303,67 @@ export const IDL: TokengatorMinter = {
       ]
     },
     {
+      "name": "addMinterAuthority",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AddMinterAuthorityArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeMinterAuthority",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "RemoveMinterAuthorityArgs"
+          }
+        }
+      ]
+    },
+    {
       "name": "mintMinterWns",
       "accounts": [
         {
@@ -951,9 +1446,245 @@ export const IDL: TokengatorMinter = {
           }
         }
       ]
+    },
+    {
+      "name": "updateMemberMetdata",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateMemberMetadataArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateMemberMetadataWns",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "wnsProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateMemberMetadataWNSArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeMinter",
+      "accounts": [
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createActivity",
+      "accounts": [
+        {
+          "name": "activity",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "minter",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "CreateActivityArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "appendActivityEntry",
+      "accounts": [
+        {
+          "name": "activity",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AppendActivityEntryArgs"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
+    {
+      "name": "activity",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "type": "i64"
+          },
+          {
+            "name": "endDate",
+            "type": "i64"
+          },
+          {
+            "name": "feePayer",
+            "type": "publicKey"
+          },
+          {
+            "name": "minter",
+            "type": "publicKey"
+          },
+          {
+            "name": "member",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "entries",
+            "type": {
+              "vec": {
+                "defined": "Entry"
+              }
+            }
+          }
+        ]
+      }
+    },
     {
       "name": "group",
       "type": {
@@ -989,6 +1720,10 @@ export const IDL: TokengatorMinter = {
           },
           {
             "name": "communityId",
+            "type": "publicKey"
+          },
+          {
+            "name": "group",
             "type": "publicKey"
           },
           {
@@ -1031,7 +1766,61 @@ export const IDL: TokengatorMinter = {
   ],
   "types": [
     {
-      "name": "AddPresetAuthorityArgs",
+      "name": "AppendActivityEntryArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "timestamp",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "message",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "points",
+            "type": {
+              "option": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateActivityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "endDate",
+            "type": {
+              "option": "i64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AddMinterAuthorityArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1043,7 +1832,19 @@ export const IDL: TokengatorMinter = {
       }
     },
     {
-      "name": "CreateMinterWNSArgs",
+      "name": "RemoveMinterAuthorityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authorityToRemove",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMinterArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1101,7 +1902,31 @@ export const IDL: TokengatorMinter = {
       }
     },
     {
-      "name": "CreateMinterArgs",
+      "name": "UpdateMemberMetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "endDate",
+            "type": {
+              "option": "i64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMinterWNSArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1174,18 +1999,61 @@ export const IDL: TokengatorMinter = {
           {
             "name": "uri",
             "type": "string"
+          },
+          {
+            "name": "metadata",
+            "type": {
+              "option": {
+                "vec": {
+                  "array": [
+                    "string",
+                    2
+                  ]
+                }
+              }
+            }
           }
         ]
       }
     },
     {
-      "name": "RemovePresetAuthorityArgs",
+      "name": "UpdateMemberMetadataWNSArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "authorityToRemove",
-            "type": "publicKey"
+            "name": "field",
+            "type": "string"
+          },
+          {
+            "name": "newValue",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Entry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "message",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "points",
+            "type": "u8"
           }
         ]
       }
