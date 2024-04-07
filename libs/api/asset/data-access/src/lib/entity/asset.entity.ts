@@ -13,4 +13,6 @@ export class Asset {
   image!: string
   @Field(() => [AssetActivityType])
   lists!: AssetActivityType[]
+  @Field(() => [[String]])
+  attributes!: [string, string][]
 }

@@ -83,6 +83,7 @@ type AppConfig {
 
 type Asset {
   account: String!
+  attributes: [[String!]!]!
   description: String!
   image: String!
   lists: [AssetActivityType!]!

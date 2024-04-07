@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { PublicKey } from '@solana/web3.js'
-import { ApiCoreService } from '@tokengator/api-core-data-access'
+import { ApiCoreService, TEN_MINUTES } from '@tokengator/api-core-data-access'
 import { ApiSolanaService, SolanaAccountInfo } from '@tokengator/api-solana-data-access'
 import { LRUCache } from 'lru-cache'
 import { ApiMetadataImageService } from './api-metadata-image.service'
 
-export interface CantFindTheRightTypeScrewItHackathonMode {
+export interface ExtensionTokenMetadata {
   extension: 'tokenMetadata'
   state: {
     additionalMetadata: [string, string][]
@@ -20,7 +20,7 @@ export interface CantFindTheRightTypeScrewItHackathonMode {
 export interface ExternalMetadata {
   image: string
   description: string
-  [key: string]: string
+  attributes: { trait_type: string; value: string }[]
 }
 
 export interface LocalMetadata {
@@ -29,17 +29,15 @@ export interface LocalMetadata {
   description: string
   external_url: string
   image: string
+  attributes: { trait_type: string; value: string }[]
 }
-
-const ONE_HOUR = 1000 * 60 * 60
-const TEN_MINUTES = 1000 * 60 * 10
 
 @Injectable()
 export class ApiMetadataService {
   private readonly logger = new Logger(ApiMetadataService.name)
   private readonly externalMetadataCache = new LRUCache<string, ExternalMetadata>({
     max: 1000,
-    ttl: ONE_HOUR,
+    ttl: TEN_MINUTES,
     fetchMethod: async (url) => {
       const fetched = await fetch(url).then((r) => r.json())
       if (fetched.image) {
@@ -52,7 +50,7 @@ export class ApiMetadataService {
 
   private readonly accountCache = new LRUCache<string, SolanaAccountInfo>({
     max: 1000,
-    ttl: ONE_HOUR,
+    ttl: TEN_MINUTES,
     fetchMethod: async (account: string) => {
       const found = await this.solana.getAccount(account)
       if (found) {
@@ -63,24 +61,40 @@ export class ApiMetadataService {
     },
   })
 
-  private readonly accountMetadataCache = new LRUCache<string, CantFindTheRightTypeScrewItHackathonMode>({
+  private readonly accountMetadataCache = new LRUCache<string, ExtensionTokenMetadata>({
     max: 1000,
     ttl: TEN_MINUTES,
     fetchMethod: async (account: string) => {
       const found = await this.accountCache.fetch(account)
-      const extensions = found?.data?.parsed?.info?.extensions as CantFindTheRightTypeScrewItHackathonMode[]
+      const extensions = found?.data?.parsed?.info?.extensions as ExtensionTokenMetadata[]
       const metadata = extensions.find((e) => e.extension === 'tokenMetadata')
 
       if (!metadata) {
         throw new Error(`Failed to fetch metadata for ${account}`)
       }
-      return metadata
+
+      const additionalMetadata = metadata.state.additionalMetadata?.length
+        ? metadata.state.additionalMetadata
+        : ([
+            // TODO: These fields should come from the on-chain metadata
+            ['community', 'deans-list'],
+            ['username', 'beeman'],
+            ['preset', 'business-visa'],
+          ] as [string, string][])
+
+      return {
+        ...metadata,
+        state: {
+          ...metadata.state,
+          additionalMetadata,
+        },
+      }
     },
   })
 
   private readonly jsonCache = new LRUCache<string, LocalMetadata>({
     max: 1000,
-    ttl: ONE_HOUR,
+    ttl: TEN_MINUTES,
     fetchMethod: async (account: string) => {
       const image = `${this.core.config.apiUrl}/metadata/image/${account}`
       const metadata = await this.accountMetadataCache.fetch(account)
@@ -102,10 +116,16 @@ export class ApiMetadataService {
               symbol: metadata.state.symbol,
               image: externalMetadata.image,
               description: externalMetadata.description,
+              attributes: externalMetadata.attributes,
               external_url,
             }
           }
         }
+
+        const attributes = metadata.state.additionalMetadata?.map(([trait_type, value]) => ({
+          trait_type,
+          value,
+        }))
 
         // The metadata is on the account, return it
         return {
@@ -114,10 +134,7 @@ export class ApiMetadataService {
           description: metadata.state.name,
           image,
           external_url,
-          attributes: metadata.state.additionalMetadata?.map(([trait_type, value]) => ({
-            trait_type,
-            value,
-          })),
+          attributes,
         }
       }
       throw new Error(`Failed to fetch metadata for ${account}`)
@@ -146,7 +163,7 @@ export class ApiMetadataService {
       return externalMetadata.image
     }
 
-    return this.image.generate(accountMetadata)
+    return this.image.generate(account, accountMetadata)
   }
 
   async getJson(account: string) {

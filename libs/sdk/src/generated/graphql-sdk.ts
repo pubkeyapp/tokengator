@@ -107,6 +107,7 @@ export type AppConfig = {
 export type Asset = {
   __typename?: 'Asset'
   account: Scalars['String']['output']
+  attributes: Array<Array<Scalars['String']['output']>>
   description: Scalars['String']['output']
   image: Scalars['String']['output']
   lists: Array<AssetActivityType>
@@ -1079,6 +1080,7 @@ export type AssetDetailsFragment = {
   description: string
   image: string
   lists: Array<AssetActivityType>
+  attributes: Array<Array<string>>
 }
 
 export type AssetActivityEntryDetailsFragment = {
@@ -1119,6 +1121,7 @@ export type GetAssetQuery = {
     description: string
     image: string
     lists: Array<AssetActivityType>
+    attributes: Array<Array<string>>
   }
 }
 
@@ -4116,6 +4119,7 @@ export const AssetDetailsFragmentDoc = gql`
     description
     image
     lists
+    attributes
   }
 `
 export const AssetActivityEntryDetailsFragmentDoc = gql`

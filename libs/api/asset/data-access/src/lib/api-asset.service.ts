@@ -20,6 +20,7 @@ export class ApiAssetService {
       description: json.description,
       image: json.image,
       lists: this.getLists('business-visa'),
+      attributes: json.attributes.map((attr) => [attr.trait_type, attr.value]),
     }
   }
 

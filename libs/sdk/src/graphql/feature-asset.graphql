@@ -4,6 +4,7 @@ fragment AssetDetails on Asset {
   description
   image
   lists
+  attributes
 }
 
 fragment AssetActivityEntryDetails on AssetActivityEntry {
