@@ -33,6 +33,14 @@ export class ApiCoreService {
     return found
   }
 
+  async ensureUserByUsername({ username }: { username: string }) {
+    const found = await this.data.user.findUnique({ where: { username } })
+    if (!found) {
+      throw new Error(`User ${username} not found`)
+    }
+    return found
+  }
+
   async getUserIdentityMap({ userId }: { userId: string }): Promise<Map<IdentityProvider, Identity[]>> {
     const identities = await this.data.identity.findMany({
       where: { ownerId: userId },

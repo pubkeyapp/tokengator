@@ -31,6 +31,8 @@ import {
   WenNewStandardIDL,
 } from '@tokengator/api-solana-util'
 import { ApiPresetDataService } from './api-preset-data.service'
+import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
+import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
 import { TokenGatorMinter } from './entity/token-gator-minter.entity'
 import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'
 
@@ -57,7 +59,7 @@ export class ApiPresetMinterService {
     return new Program(WenNewStandardIDL, WEN_NEW_STANDARD_PROGRAM_ID, provider)
   }
 
-  async mintFromPreset(presetId: string, communitySlug: string) {
+  async mintFromPreset({ communitySlug, presetId }: PresetUserMintFromPreset) {
     const preset = await this.data.findOne(presetId)
 
     const authority = await this.getKeypairFromCommunity(communitySlug)
@@ -199,7 +201,8 @@ export class ApiPresetMinterService {
     throw new Error('Lookup table not found')
   }
 
-  async mintFromMinter(minterAccount: string, communitySlug: string) {
+  async mintFromMinter({ account: minterAccount, communitySlug, username }: PresetUserMintFromMinter) {
+    const user = await this.core.ensureUserByUsername({ username })
     const minter = new PublicKey(minterAccount)
     const authority = await this.getKeypairFromCommunity(communitySlug)
     const programTokenMinter = this.getProgramTokenMinter(this.solana.getAnchorProvider(authority))
@@ -209,22 +212,34 @@ export class ApiPresetMinterService {
       throw new Error(`Minter not found: ${minterAccount}`)
     }
 
+    if (!found?.minterConfig?.metadataConfig) {
+      throw new Error(`Minter has no metadata config: ${minterAccount}`)
+    }
+
+    const metadataConfig = found.minterConfig.metadataConfig
+    const collectionMetadata = (metadataConfig?.metadata ?? []) as [string, string][]
+    const metadataMint: [string, string][] = [['username', user.username]]
+    const metadata: [string, string][] = [...collectionMetadata, ...metadataMint] as [string, string][]
     const feePayer = this.feePayer
 
     const groupMintPublicKey = found.minterConfig.mint
     const memberMintKeypair = Keypair.generate()
+    const { name, symbol, uri } = {
+      uri: this.getMetadataUrl(memberMintKeypair.publicKey.toString()),
+      name: metadataConfig.name,
+      symbol: metadataConfig.symbol,
+    }
 
+    this.logger.debug(
+      `Minting ${
+        metadataConfig.name
+      } for ${username} in community: ${communitySlug}, fee payer: ${feePayer.publicKey.toString()}`,
+    )
     // ---- THIS WILL BE MOVED TO THE SDK AT SOME POINT ----
 
     const [group] = getWNSGroupPda(groupMintPublicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [member] = getWNSMemberPda(memberMintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
-
-    const { name, symbol, uri } = {
-      uri: this.getMetadataUrl(memberMintKeypair.publicKey.toString()),
-      name: 'test',
-      symbol: 'HI',
-    }
 
     const authorityTokenAccount = getAssociatedTokenAddressSync(
       memberMintKeypair.publicKey,
@@ -234,8 +249,8 @@ export class ApiPresetMinterService {
       ASSOCIATED_TOKEN_PROGRAM_ID,
     )
 
-    const signature = await programTokenMinter.methods
-      .mintMinterWns({ name, symbol, uri, metadata: [] })
+    const createMintIx = await programTokenMinter.methods
+      .mintMinterWns({ name, symbol, uri, metadata })
       .accounts({
         minter,
         group,
@@ -252,10 +267,22 @@ export class ApiPresetMinterService {
         systemProgram: SystemProgram.programId,
       })
       .signers([feePayer, authority, memberMintKeypair])
-      .rpc({ commitment: 'confirmed', skipPreflight: true })
+      .instruction()
+
+    const { blockhash, lastValidBlockHeight } = await this.solana.connection.getLatestBlockhash()
+    const transactionMessage = new TransactionMessage({
+      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 350_000 }), createMintIx],
+      payerKey: feePayer.publicKey,
+      recentBlockhash: blockhash,
+    }).compileToV0Message()
+
+    const transaction = new VersionedTransaction(transactionMessage)
+    transaction.sign([feePayer, authority, memberMintKeypair])
+    const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
 
     this.logger.debug(`Signature: ${signature}`)
-
+    await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')
+    this.logger.debug(`Confirmed: ${signature}`)
     return signature
   }
 

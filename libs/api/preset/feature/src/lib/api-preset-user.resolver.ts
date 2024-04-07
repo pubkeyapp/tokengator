@@ -6,6 +6,8 @@ import {
   Preset,
   PresetPaging,
   PresetUserFindManyInput,
+  PresetUserMintFromMinter,
+  PresetUserMintFromPreset,
   TokenGatorMinter,
 } from '@tokengator/api-preset-data-access'
 import { GraphQLJSON } from 'graphql-scalars'
@@ -16,21 +18,13 @@ export class ApiPresetUserResolver {
   constructor(private readonly service: ApiPresetService) {}
 
   @Mutation(() => String, { nullable: true })
-  userCreateMintFromPreset(
-    @CtxUserId() userId: string,
-    @Args('presetId') presetId: string,
-    @Args('communitySlug') communitySlug: string,
-  ) {
-    return this.service.user.createMinterFromPreset(userId, presetId, communitySlug)
+  userCreateMintFromPreset(@CtxUserId() userId: string, @Args('input') input: PresetUserMintFromPreset) {
+    return this.service.user.createMinterFromPreset(userId, input)
   }
 
   @Mutation(() => String, { nullable: true })
-  userCreateMintFromMinter(
-    @CtxUserId() userId: string,
-    @Args('account') account: string,
-    @Args('communitySlug') communitySlug: string,
-  ) {
-    return this.service.user.createMintFromMinter(userId, account, communitySlug)
+  userCreateMintFromMinter(@CtxUserId() userId: string, @Args('input') input: PresetUserMintFromMinter) {
+    return this.service.user.createMintFromMinter(userId, input)
   }
 
   @Mutation(() => Boolean, { nullable: true })

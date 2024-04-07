@@ -1,6 +1,6 @@
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { Community, UserUpdateCommunityInput } from '@tokengator/sdk'
+import { Community, PresetUserMintFromPreset, UserUpdateCommunityInput } from '@tokengator/sdk'
 import { useSdk } from '@tokengator/web-core-data-access'
 import { uiToastLink, useCluster } from '@tokengator/web-solana-data-access'
 
@@ -17,9 +17,9 @@ export function useUserFindOneCommunity({ slug }: { slug: string }) {
   return {
     item,
     query,
-    createMinter: ({ presetId }: { presetId: string }) =>
+    createMinter: ({ presetId }: Omit<PresetUserMintFromPreset, 'communitySlug'>) =>
       sdk
-        .userCreateMintFromPreset({ presetId, communitySlug: item?.slug ?? '' })
+        .userCreateMintFromPreset({ input: { presetId, communitySlug: item?.slug ?? '' } })
         .then((res) => {
           if (res.data.minted) {
             toastSuccess('Minter created')

@@ -1,7 +1,7 @@
 import { Button, Group } from '@mantine/core'
-import { UiInfo, UiLoader, UiStack, UiTabRoute, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
+import { UiCard, UiInfo, UiLoader, UiStack, UiTabRoute, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
-import { Community } from '@tokengator/sdk'
+import { Community, User } from '@tokengator/sdk'
 import { UserClaimFeature } from '@tokengator/web-claim-feature'
 import {
   useUserCreateMintFromMinter,
@@ -9,7 +9,8 @@ import {
   useUserGetMinterAssets,
 } from '@tokengator/web-community-data-access'
 import { MinterUiAssets, MinterUiCard } from '@tokengator/web-community-ui'
-import { useMemo } from 'react'
+import { UserUiItem, UserUiSearch } from '@tokengator/web-user-ui'
+import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 export function UserCommunityDetailMinterDetailTab({ community }: { community: Community }) {
@@ -25,14 +26,12 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
       label: 'Assets',
       element: (
         <UiStack>
-          <Group justify="flex-end">
-            <Button
-              loading={mutation.isPending}
-              onClick={() => mutation.mutateAsync().then(() => queryAssets.refetch())}
-            >
-              Mint
-            </Button>
-          </Group>
+          <MintModal
+            loading={mutation.isPending}
+            mint={async ({ username }) => {
+              mutation.mutateAsync({ username }).then(() => queryAssets.refetch())
+            }}
+          />
           {items?.length ? <MinterUiAssets items={items} /> : <UiInfo message="No assets found" />}
         </UiStack>
       ),
@@ -57,5 +56,31 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
         <UiWarning message={`Minter not found: ${account}`} />
       )}
     </UiStack>
+  )
+}
+
+function MintModal({ loading, mint }: { loading: boolean; mint: (data: { username: string }) => Promise<void> }) {
+  const [user, setUser] = useState<User | null>(null)
+  return (
+    <UiCard>
+      <UserUiSearch
+        label={'Mint to'}
+        description={'Search for a user to mint to'}
+        select={(user) => setUser(user ?? null)}
+      />
+      {user ? <UserUiItem user={user} to={user.profileUrl} /> : null}
+      <Group justify="flex-end">
+        <Button
+          disabled={!user?.username}
+          loading={loading}
+          onClick={() => {
+            if (!user?.username) return
+            return mint({ username: user.username }).then(() => setUser(null))
+          }}
+        >
+          Mint
+        </Button>
+      </Group>
+    </UiCard>
   )
 }

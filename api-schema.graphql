@@ -321,8 +321,8 @@ type Mutation {
   userCreateClaim(input: ClaimUserCreateInput!): Claim
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
-  userCreateMintFromMinter(account: String!, communitySlug: String!): String
-  userCreateMintFromPreset(communitySlug: String!, presetId: String!): String
+  userCreateMintFromMinter(input: PresetUserMintFromMinter!): String
+  userCreateMintFromPreset(input: PresetUserMintFromPreset!): String
   userCreateWallet(input: WalletUserCreateInput!): Wallet
   userDeleteClaim(claimId: String!): Boolean
   userDeleteCommunity(communityId: String!): Boolean
@@ -386,6 +386,17 @@ input PresetUserFindManyInput {
   limit: Int = 10
   page: Int = 1
   search: String
+}
+
+input PresetUserMintFromMinter {
+  account: String!
+  communitySlug: String!
+  username: String!
+}
+
+input PresetUserMintFromPreset {
+  communitySlug: String!
+  presetId: String!
 }
 
 type Price {

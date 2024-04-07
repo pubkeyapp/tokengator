@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAuthGraphQLUserGuard } from '@tokengator/api-auth-data-access'
+import { ApiAuthGraphQLUserGuard, CtxUser } from '@tokengator/api-auth-data-access'
 import { ApiSolanaService } from '@tokengator/api-solana-data-access'
+import { UserRole } from '@tokengator/sdk'
 import { GraphQLJSON } from 'graphql-scalars'
 
 @Resolver()
@@ -25,7 +26,7 @@ export class ApiSolanaResolver {
   }
 
   @Mutation(() => GraphQLJSON, { nullable: true })
-  solanaRequestAirdrop(@Args('account') account: string) {
-    return this.service.solanaRequestAirdrop(account)
+  solanaRequestAirdrop(@CtxUser() { role }: { role: UserRole }, @Args('account') account: string) {
+    return this.service.solanaRequestAirdrop(account, role)
   }
 }

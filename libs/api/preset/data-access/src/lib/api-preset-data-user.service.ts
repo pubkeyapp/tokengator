@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common'
+import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
+import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { ApiPresetMinterService } from './api-preset-minter.service'
 import { PresetUserFindManyInput } from './dto/preset-user-find-many.input'
@@ -22,14 +24,14 @@ export class ApiPresetDataUserService {
     return this.data.findOne(presetId)
   }
 
-  async createMinterFromPreset(userId: string, presetId: string, communitySlug: string) {
-    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
-    return this.minter.mintFromPreset(presetId, communitySlug)
+  async createMinterFromPreset(userId: string, input: PresetUserMintFromPreset) {
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug: input.communitySlug, userId })
+    return this.minter.mintFromPreset(input)
   }
 
-  async createMintFromMinter(userId: string, account: string, communitySlug: string) {
-    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
-    return this.minter.mintFromMinter(account, communitySlug)
+  async createMintFromMinter(userId: string, input: PresetUserMintFromMinter) {
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug: input.communitySlug, userId })
+    return this.minter.mintFromMinter(input)
   }
 
   async getMinters() {

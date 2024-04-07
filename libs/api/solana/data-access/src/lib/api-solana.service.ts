@@ -8,6 +8,7 @@ import { TokenMetadata } from '@solana/spl-token-metadata'
 import { AccountInfo, Connection, Keypair, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ApiCoreService, CORE_APP_STARTED } from '@tokengator/api-core-data-access'
 import { MINT_EURC, MINT_USDC, requestCircleAirdrop } from '@tokengator/api-solana-util'
+import { UserRole } from '@tokengator/sdk'
 
 export type SolanaAccountInfo = AccountInfo<ParsedAccountData>
 
@@ -78,24 +79,25 @@ export class ApiSolanaService {
   }
 
   async getTransactions(account: string) {
-    return this.connection.getConfirmedSignaturesForAddress2(new PublicKey(account), { limit: 50 })
+    return this.connection.getConfirmedSignaturesForAddress2(new PublicKey(account), { limit: 50 }, 'confirmed')
   }
 
   getAnchorProvider(keypair = Keypair.generate()) {
     return new AnchorProvider(this.connection, new AnchorKeypairWallet(keypair), AnchorProvider.defaultOptions())
   }
 
-  async solanaRequestAirdrop(account: string) {
+  async solanaRequestAirdrop(account: string, role: UserRole = UserRole.User) {
     const [sol, eurc, usdc] = await Promise.all([
       this.getBalance(account).then((res) => res / LAMPORTS_PER_SOL),
       this.getTokenBalanceEurc(account),
       this.getTokenBalanceUsdc(account),
     ])
+    const isAdmin = role === UserRole.Admin
 
     if (sol < 1) {
       await this.connection.requestAirdrop(new PublicKey(account), LAMPORTS_PER_SOL)
     }
-    if (eurc < 1) {
+    if (eurc < 1 || isAdmin) {
       this.logger.verbose(`Requesting airdrop for EURC: ${account}`)
       const res = await requestCircleAirdrop({ destination: account, token: 'EURC' })
       if (res.statusText === 'OK') {
@@ -104,7 +106,7 @@ export class ApiSolanaService {
         this.logger.error(`Failed to request airdrop for EURC: ${account}: ${res.statusText}`)
       }
     }
-    if (usdc < 1) {
+    if (usdc < 1 || isAdmin) {
       this.logger.verbose(`Requesting airdrop for USDC: ${account}`)
       const res = await requestCircleAirdrop({ destination: account, token: 'USDC' })
       if (res.statusText === 'OK') {

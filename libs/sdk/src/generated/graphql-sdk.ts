@@ -490,13 +490,11 @@ export type MutationUserCreateCommunityMemberArgs = {
 }
 
 export type MutationUserCreateMintFromMinterArgs = {
-  account: Scalars['String']['input']
-  communitySlug: Scalars['String']['input']
+  input: PresetUserMintFromMinter
 }
 
 export type MutationUserCreateMintFromPresetArgs = {
-  communitySlug: Scalars['String']['input']
-  presetId: Scalars['String']['input']
+  input: PresetUserMintFromPreset
 }
 
 export type MutationUserCreateWalletArgs = {
@@ -612,6 +610,17 @@ export type PresetUserFindManyInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type PresetUserMintFromMinter = {
+  account: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
+  username: Scalars['String']['input']
+}
+
+export type PresetUserMintFromPreset = {
+  communitySlug: Scalars['String']['input']
+  presetId: Scalars['String']['input']
 }
 
 export type Price = {
@@ -3415,15 +3424,13 @@ export type UserGetMinterAssetsQueryVariables = Exact<{
 export type UserGetMinterAssetsQuery = { __typename?: 'Query'; items: any }
 
 export type UserCreateMintFromPresetMutationVariables = Exact<{
-  presetId: Scalars['String']['input']
-  communitySlug: Scalars['String']['input']
+  input: PresetUserMintFromPreset
 }>
 
 export type UserCreateMintFromPresetMutation = { __typename?: 'Mutation'; minted?: string | null }
 
 export type UserCreateMintFromMinterMutationVariables = Exact<{
-  account: Scalars['String']['input']
-  communitySlug: Scalars['String']['input']
+  input: PresetUserMintFromMinter
 }>
 
 export type UserCreateMintFromMinterMutation = { __typename?: 'Mutation'; minted?: string | null }
@@ -4940,13 +4947,13 @@ export const UserGetMinterAssetsDocument = gql`
   }
 `
 export const UserCreateMintFromPresetDocument = gql`
-  mutation userCreateMintFromPreset($presetId: String!, $communitySlug: String!) {
-    minted: userCreateMintFromPreset(presetId: $presetId, communitySlug: $communitySlug)
+  mutation userCreateMintFromPreset($input: PresetUserMintFromPreset!) {
+    minted: userCreateMintFromPreset(input: $input)
   }
 `
 export const UserCreateMintFromMinterDocument = gql`
-  mutation userCreateMintFromMinter($account: String!, $communitySlug: String!) {
-    minted: userCreateMintFromMinter(account: $account, communitySlug: $communitySlug)
+  mutation userCreateMintFromMinter($input: PresetUserMintFromMinter!) {
+    minted: userCreateMintFromMinter(input: $input)
   }
 `
 export const AdminFindManyPriceDocument = gql`
@@ -7458,6 +7465,21 @@ export function PresetUserFindManyInputSchema(): z.ZodObject<Properties<PresetUs
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
+  })
+}
+
+export function PresetUserMintFromMinterSchema(): z.ZodObject<Properties<PresetUserMintFromMinter>> {
+  return z.object({
+    account: z.string(),
+    communitySlug: z.string(),
+    username: z.string(),
+  })
+}
+
+export function PresetUserMintFromPresetSchema(): z.ZodObject<Properties<PresetUserMintFromPreset>> {
+  return z.object({
+    communitySlug: z.string(),
+    presetId: z.string(),
   })
 }
 

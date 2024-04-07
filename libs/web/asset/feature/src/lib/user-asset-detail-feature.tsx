@@ -1,5 +1,5 @@
 import { Accordion, SimpleGrid, Text } from '@mantine/core'
-import { UiCard, UiDebug, UiGroup, UiInfo, UiLoader, UiPage, UiWarning } from '@pubkey-ui/core'
+import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiWarning } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { Asset, AssetActivityType } from '@tokengator/sdk'
 import { useGetAsset, useGetAssetActivity } from '@tokengator/web-asset-data-access'
@@ -28,7 +28,7 @@ export function UserAssetDetailFeature() {
   return loading ? (
     <UiLoader />
   ) : asset ? (
-    <UiPage>
+    <UiPage rightAction={<UiDebugModal data={{ asset, metadata }} />}>
       <SimpleGrid cols={{ base: 1, md: 2 }}>
         <UiCard title="Asset">
           <AssetUiItem asset={asset} />
@@ -37,7 +37,6 @@ export function UserAssetDetailFeature() {
           <UserAssetActivities asset={asset} />
         </UiCard>
       </SimpleGrid>
-      <UiDebug data={{ asset, metadata }} />
     </UiPage>
   ) : (
     <UiWarning message={`Asset not found: ${account}`} />

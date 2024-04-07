@@ -1,6 +1,5 @@
 export * from './lib/request-circle-airdrop'
 export * from './lib/get-keypair-from-secret-key'
-export * from './lib/mint-non-fungible-token'
 export * from './lib/solana-mints'
 export * from './lib/tokengator-minter'
 export * from './lib/tokengator-minter-sdk'

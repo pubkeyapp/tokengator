@@ -80,10 +80,10 @@ query userGetMinterAssets($account: String!) {
   items: userGetMinterAssets(account: $account)
 }
 
-mutation userCreateMintFromPreset($presetId: String!, $communitySlug: String!) {
-  minted: userCreateMintFromPreset(presetId: $presetId, communitySlug: $communitySlug)
+mutation userCreateMintFromPreset($input: PresetUserMintFromPreset!) {
+  minted: userCreateMintFromPreset(input: $input)
 }
 
-mutation userCreateMintFromMinter($account: String!, $communitySlug: String!) {
-  minted: userCreateMintFromMinter(account: $account, communitySlug: $communitySlug)
+mutation userCreateMintFromMinter($input: PresetUserMintFromMinter!) {
+  minted: userCreateMintFromMinter(input: $input)
 }
