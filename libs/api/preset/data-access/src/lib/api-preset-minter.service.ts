@@ -5,12 +5,16 @@ import { Preset } from '@prisma/client'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
 import {
+  AddressLookupTableAccount,
   AddressLookupTableProgram,
+  BlockhashWithExpiryBlockHeight,
+  Commitment,
   ComputeBudgetProgram,
   Keypair,
   PublicKey,
   SystemProgram,
   SYSVAR_RENT_PUBKEY,
+  TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
@@ -30,6 +34,7 @@ import {
   WEN_NEW_STANDARD_PROGRAM_ID,
   WenNewStandardIDL,
 } from '@tokengator/api-solana-util'
+import { LRUCache } from 'lru-cache'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
 import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
@@ -39,12 +44,45 @@ import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'
 @Injectable()
 export class ApiPresetMinterService {
   private readonly logger = new Logger(ApiPresetMinterService.name)
+  private readonly cacheLatestBlockhash = new LRUCache<string, BlockhashWithExpiryBlockHeight>({
+    max: 1000,
+    ttl: 30_000,
+    fetchMethod: async (commitment = 'confirmed') => {
+      this.logger.verbose(`Caching latest blockhash`)
+      return this.solana.connection.getLatestBlockhash(commitment as Commitment)
+    },
+  })
+  private readonly cacheSlot = new LRUCache<string, number>({
+    max: 1000,
+    ttl: 30_000,
+    fetchMethod: async (commitment = 'confirmed') => {
+      this.logger.verbose(`Caching slot`)
+      return this.solana.connection.getSlot(commitment as Commitment)
+    },
+  })
+
   private readonly feePayer: Keypair
   private readonly programId = getTokengatorMinterProgramId('devnet')
 
   constructor(readonly data: ApiPresetDataService, readonly core: ApiCoreService, readonly solana: ApiSolanaService) {
     this.feePayer = this.core.config.solanaFeePayer
     this.logger.debug(`Program ID: ${this.programId.toString()}`)
+  }
+
+  async getCachedSlot() {
+    const slot = await this.cacheSlot.fetch('confirmed')
+    if (!slot) {
+      throw new Error('Slot not found')
+    }
+    return slot
+  }
+
+  async getCachedBlockhash(): Promise<BlockhashWithExpiryBlockHeight> {
+    const blockhash = await this.cacheLatestBlockhash.fetch('confirmed')
+    if (!blockhash) {
+      throw new Error('Blockhash not found')
+    }
+    return blockhash
   }
 
   getMetadataUrl(account: string) {
@@ -98,8 +136,11 @@ export class ApiPresetMinterService {
 
     const identities = getIdentityProviders([IdentityProvider.Discord])
 
-    const slot = await this.solana.connection.getSlot('confirmed')
-    const { blockhash, lastValidBlockHeight } = await this.solana.connection.getLatestBlockhash()
+    const [slot, { blockhash, lastValidBlockHeight }] = await Promise.all([
+      this.getCachedSlot(),
+      this.getCachedBlockhash(),
+    ])
+
     const [createLookupTableIx, lookupTableAccount] = AddressLookupTableProgram.createLookupTable({
       authority: remoteFeePayer.publicKey,
       payer: remoteFeePayer.publicKey,
@@ -135,8 +176,7 @@ export class ApiPresetMinterService {
     const tx = new VersionedTransaction(txMessage)
     tx.sign([remoteFeePayer])
 
-    const sig = await this.solana.connection.sendTransaction(tx)
-    await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature: sig })
+    await this.sendAndConfirmTransaction({ transaction: tx, blockhash, lastValidBlockHeight })
 
     const createMinterWnsIx = await programTokenMinter.methods
       .createMinterWns({
@@ -184,21 +224,17 @@ export class ApiPresetMinterService {
 
     const { value } = await this.solana.connection.getAddressLookupTable(lookupTableAccount)
 
-    if (value) {
-      const { blockhash } = await this.solana.connection.getLatestBlockhash()
-      const transactionMessage = new TransactionMessage({
-        instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 250_000 }), createMinterWnsIx],
-        payerKey: remoteFeePayer.publicKey,
-        recentBlockhash: blockhash,
-      }).compileToV0Message([value])
-
-      const transaction = new VersionedTransaction(transactionMessage)
-      transaction.sign([remoteFeePayer, authority, mintKeypair])
-      const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
-      this.logger.debug(`Signature: ${signature}`)
-      return signature
+    if (!value) {
+      throw new Error('Lookup table not found')
     }
-    throw new Error('Lookup table not found')
+
+    return this.createSendAndConfirmTransaction({
+      addressLookupTableAccounts: [value],
+      authority,
+      feePayer: remoteFeePayer,
+      mintKeypair,
+      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 250_000 }), createMinterWnsIx],
+    })
   }
 
   async mintFromMinter({ account: minterAccount, communitySlug, username }: PresetUserMintFromMinter) {
@@ -269,21 +305,12 @@ export class ApiPresetMinterService {
       .signers([feePayer, authority, memberMintKeypair])
       .instruction()
 
-    const { blockhash, lastValidBlockHeight } = await this.solana.connection.getLatestBlockhash()
-    const transactionMessage = new TransactionMessage({
+    return this.createSendAndConfirmTransaction({
+      authority,
+      feePayer,
+      mintKeypair: memberMintKeypair,
       instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 350_000 }), createMintIx],
-      payerKey: feePayer.publicKey,
-      recentBlockhash: blockhash,
-    }).compileToV0Message()
-
-    const transaction = new VersionedTransaction(transactionMessage)
-    transaction.sign([feePayer, authority, memberMintKeypair])
-    const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
-
-    this.logger.debug(`Signature: ${signature}`)
-    await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')
-    this.logger.debug(`Confirmed: ${signature}`)
-    return signature
+    })
   }
 
   async getMinters(): Promise<TokenGatorMinter[]> {
@@ -343,6 +370,48 @@ export class ApiPresetMinterService {
           minterConfig,
         }),
       )
+  }
+
+  private async createSendAndConfirmTransaction({
+    addressLookupTableAccounts,
+    instructions,
+    feePayer,
+    authority,
+    mintKeypair,
+  }: {
+    addressLookupTableAccounts?: AddressLookupTableAccount[]
+    authority: Keypair
+    feePayer: Keypair
+    mintKeypair: Keypair
+    instructions: TransactionInstruction[]
+  }): Promise<string> {
+    const { blockhash, lastValidBlockHeight } = await this.getCachedBlockhash()
+    const transactionMessage = new TransactionMessage({
+      instructions,
+      payerKey: feePayer.publicKey,
+      recentBlockhash: blockhash,
+    }).compileToV0Message(addressLookupTableAccounts)
+
+    const transaction = new VersionedTransaction(transactionMessage)
+    transaction.sign([feePayer, authority, mintKeypair])
+
+    return this.sendAndConfirmTransaction({ transaction, blockhash, lastValidBlockHeight })
+  }
+
+  private async sendAndConfirmTransaction({
+    transaction,
+    blockhash,
+    lastValidBlockHeight,
+  }: {
+    transaction: VersionedTransaction
+    blockhash: string
+    lastValidBlockHeight: number
+  }): Promise<string> {
+    const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
+    this.logger.debug(`Signature: ${signature}`)
+    await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')
+    this.logger.debug(`Confirmed: ${signature}`)
+    return signature
   }
 
   private async getKeypairFromCommunity(communitySlug: string): Promise<Keypair> {
