@@ -18,15 +18,10 @@ export class ApiMetadataController {
       return res.redirect(result)
     }
 
-    // set headers
     res.setHeader('Content-Type', 'image/png')
     res.setHeader('Cache-Control', 'no-store no-cache must-revalidate private max-age=0 s-maxage=0 proxy-revalidate')
 
-    // send pubkey-profile
     res.send(result)
-    //
-    // res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': result.length })
-    // res.end(result)
   }
 
   @Get('json/:account')

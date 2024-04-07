@@ -1,6 +1,7 @@
-import { AspectRatio, Image, SimpleGrid, useMantineTheme } from '@mantine/core'
+import { AspectRatio, Group, Image, SimpleGrid, useMantineTheme } from '@mantine/core'
 import { UiAnchor, UiCard, UiCardTitle, UiDebugModal, UiGroup } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
+import { SolanaExplorerIcon } from '@tokengator/web-solana-ui'
 
 export function MinterUiAssets({ items }: { items: AccountInfo<ParsedAccountData>[] }) {
   const { colors } = useMantineTheme()
@@ -18,7 +19,10 @@ export function MinterUiAssets({ items }: { items: AccountInfo<ParsedAccountData
                 <UiAnchor to={`/assets/${mint}`}>
                   <UiCardTitle>Asset {index}</UiCardTitle>
                 </UiAnchor>
-                <UiDebugModal data={item} />
+                <Group gap="xs">
+                  <SolanaExplorerIcon path={`account/${mint}`} />
+                  <UiDebugModal data={item} />
+                </Group>
               </UiGroup>
             }
             key={index}

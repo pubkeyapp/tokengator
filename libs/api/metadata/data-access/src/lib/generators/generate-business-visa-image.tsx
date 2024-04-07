@@ -3,6 +3,20 @@
 import { Builder, JSX } from 'canvacord'
 import { CSSProperties } from 'react'
 
+export interface BusinessVisaBrands {
+  discord: Buffer
+  github: Buffer
+  google: Buffer
+  x: Buffer
+}
+
+export interface BusinessVisaSocials {
+  discord?: string
+  github?: string
+  google?: string
+  x?: string
+}
+
 interface Props {
   status: string
   earnings: string
@@ -13,6 +27,8 @@ interface Props {
   poweredBy: Buffer
   icon: Buffer
   logo: Buffer
+  brands: BusinessVisaBrands
+  socials: BusinessVisaSocials
 }
 
 export interface GenerateDynamicImageOptions {
@@ -27,6 +43,8 @@ export interface GenerateDynamicImageOptions {
   poweredBy: Buffer
   icon: Buffer
   logo: Buffer
+  brands: BusinessVisaBrands
+  socials: BusinessVisaSocials
 }
 export class GenerateBusinessVisaImage extends Builder<Props> {
   constructor(props: GenerateDynamicImageOptions) {
@@ -44,6 +62,8 @@ export class GenerateBusinessVisaImage extends Builder<Props> {
       poweredBy: props.poweredBy,
       icon: props.icon,
       logo: props.logo,
+      brands: props.brands,
+      socials: props.socials,
     })
   }
 
@@ -59,12 +79,16 @@ export class GenerateBusinessVisaImage extends Builder<Props> {
         icon={this.options.get('icon')}
         logo={this.options.get('logo')}
         avatar={this.options.get('avatar')}
+        brands={this.options.get('brands')}
+        socials={this.options.get('socials')}
       />
     )
   }
 }
 
 function TemplateRender({
+  socials,
+  brands,
   icon,
   logo,
   poweredBy,
@@ -75,6 +99,8 @@ function TemplateRender({
   avatar,
   community,
 }: {
+  socials: BusinessVisaSocials
+  brands: BusinessVisaBrands
   icon: Buffer
   logo: Buffer
   poweredBy: Buffer
@@ -89,6 +115,11 @@ function TemplateRender({
   const base64PoweredBy = Buffer.from(poweredBy).toString('base64')
   const base64Icon = Buffer.from(icon).toString('base64')
   const base64Logo = Buffer.from(logo).toString('base64')
+  const base64Discord = Buffer.from(brands.discord).toString('base64')
+  const base64Github = Buffer.from(brands.github).toString('base64')
+  const base64Google = Buffer.from(brands.google).toString('base64')
+  const base64X = Buffer.from(brands.x).toString('base64')
+
   const gray = '#383838'
   const brand = '#8743FF'
   const brandLight = '#D6C6FF'
@@ -108,6 +139,14 @@ function TemplateRender({
     width: '401px',
     left: '541px',
   }
+
+  const socialMap = Object.keys(socials)
+    .filter((key) => (socials[key as keyof BusinessVisaSocials] ?? '').length > 0)
+    .map((key) => ({
+      username: socials[key as keyof BusinessVisaSocials],
+      icon: brands[key as keyof BusinessVisaBrands],
+    }))
+
   return (
     <div
       style={{
@@ -151,13 +190,16 @@ function TemplateRender({
       </div>
       <div style={{ ...lineItem, top: '530px', fontFamily: 'BalooBhai2-SemiBold', fontSize: '48px' }}>{name}</div>
       <div style={{ ...lineItem, height: '50px', top: '580px', fontSize: '36px' }}>{community}</div>
-      <div style={{ ...lineItem, height: '50px', top: '680px', fontSize: '24px' }}>
-        <div>x.com/beeman_nl</div>
-      </div>
-      <div style={{ ...lineItem, height: '50px', top: '730px', fontSize: '24px' }}>
-        <div>github.com/beeman</div>
-      </div>
-      {/* RIGHT CARD */}
+      {socialMap
+        .filter((social) => (social.username ?? '')?.length > 0)
+        .map((social, index) => {
+          const top = 640 + index * 40
+          return (
+            <div key={index} style={{ ...lineItem, height: '50px', top: `${top}px`, fontSize: '24px' }}>
+              <SocialIcon icon={social.icon.toString('base64')} username={social.username as string} />
+            </div>
+          )
+        })}
       <div style={{ ...leftItem, top: '230px', fontFamily: 'BalooBhai2-SemiBold', fontSize: '48px', color: brand }}>
         {status}
       </div>
@@ -207,6 +249,15 @@ function TemplateRender({
       >
         <img height={100} src={`data:image/png;base64,${base64PoweredBy}`} alt="Powered by" />
       </div>
+    </div>
+  )
+}
+
+function SocialIcon({ username, icon }: { username: string; icon: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+      <img height={24} src={`data:image/png;base64,${icon}`} alt="" />
+      <span>{username}</span>
     </div>
   )
 }

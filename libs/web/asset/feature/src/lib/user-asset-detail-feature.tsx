@@ -1,10 +1,11 @@
-import { Accordion, SimpleGrid, Text } from '@mantine/core'
+import { Accordion, Group, SimpleGrid, Text } from '@mantine/core'
 import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiWarning } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { Asset, AssetActivityType } from '@tokengator/sdk'
 import { useGetAsset, useGetAssetActivity } from '@tokengator/web-asset-data-access'
 import { AssetActivityUiEntryList, AssetActivityUiPoints, AssetUiItem } from '@tokengator/web-asset-ui'
 import { useSdk } from '@tokengator/web-core-data-access'
+import { SolanaExplorerIcon } from '@tokengator/web-solana-ui'
 import { useParams } from 'react-router-dom'
 
 export function useMetadataAll(account: string) {
@@ -28,7 +29,14 @@ export function UserAssetDetailFeature() {
   return loading ? (
     <UiLoader />
   ) : asset ? (
-    <UiPage rightAction={<UiDebugModal data={{ asset, metadata }} />}>
+    <UiPage
+      rightAction={
+        <Group>
+          <SolanaExplorerIcon path={`account/${account}`} />
+          <UiDebugModal data={{ asset, metadata }} />
+        </Group>
+      }
+    >
       <SimpleGrid cols={{ base: 1, md: 2 }}>
         <UiCard title="Asset">
           <AssetUiItem asset={asset} />

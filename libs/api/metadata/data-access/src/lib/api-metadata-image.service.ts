@@ -8,7 +8,7 @@ import { LRUCache } from 'lru-cache'
 import * as fs from 'node:fs/promises'
 import { join } from 'node:path'
 import { ExtensionTokenMetadata } from './api-metadata.service'
-import { GenerateBusinessVisaImage } from './generators/generate-business-visa-image'
+import { BusinessVisaSocials, GenerateBusinessVisaImage } from './generators/generate-business-visa-image'
 
 type IdentityWithProfile = Omit<Identity, 'profile'> & { profile: { username: string } }
 type UserWithIdentities = User & { identities: IdentityWithProfile[] }
@@ -199,13 +199,22 @@ export class ApiMetadataImageService implements OnModuleInit {
     const poweredBy = await this.renderPoweredBy()
     const icon = await this.renderIcon(community)
     const logo = await this.renderLogo(community)
-
-    if (!icon || !logo) {
-      throw new Error('Missing icon or logo. Expected in brand folder')
+    const brands = await this.getBrands()
+    if (!icon || !logo || !brands) {
+      throw new Error('Missing brands, icon or logo. Expected in brand folder')
     }
 
+    const discordIdentity = user.identities.find((i) => i.provider === IdentityProvider.Discord)
     const githubIdentity = user.identities.find((i) => i.provider === IdentityProvider.GitHub)
+    const googleIdentity = user.identities.find((i) => i.provider === IdentityProvider.Google)
     const twitterIdentity = user.identities.find((i) => i.provider === IdentityProvider.Twitter)
+
+    const socials: BusinessVisaSocials = {
+      discord: discordIdentity ? discordIdentity?.profile?.username : '',
+      github: githubIdentity ? githubIdentity?.profile?.username : '',
+      google: googleIdentity ? googleIdentity?.profile?.username : '',
+      x: twitterIdentity ? twitterIdentity?.profile?.username : '',
+    }
 
     const templateData = {
       left: {
@@ -234,10 +243,21 @@ export class ApiMetadataImageService implements OnModuleInit {
       poweredBy,
       icon,
       logo,
+      brands,
+      socials,
     })
 
     const image: Buffer = (await imageBuilder.build({ format: 'png' })) as Buffer
 
     return image
+  }
+
+  private async getBrands() {
+    return {
+      discord: this.brandMap.get('brand-discord.png') as Buffer,
+      github: this.brandMap.get('brand-github.png') as Buffer,
+      google: this.brandMap.get('brand-google.png') as Buffer,
+      x: this.brandMap.get('brand-x.png') as Buffer,
+    }
   }
 }

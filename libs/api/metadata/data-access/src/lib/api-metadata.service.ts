@@ -35,6 +35,13 @@ export interface LocalMetadata {
 @Injectable()
 export class ApiMetadataService {
   private readonly logger = new Logger(ApiMetadataService.name)
+
+  constructor(
+    private readonly core: ApiCoreService,
+    private readonly image: ApiMetadataImageService,
+    private readonly solana: ApiSolanaService,
+  ) {}
+
   private readonly externalMetadataCache = new LRUCache<string, ExternalMetadata>({
     max: 1000,
     ttl: TEN_MINUTES,
@@ -102,7 +109,7 @@ export class ApiMetadataService {
 
       if (metadata) {
         // The metadata is external, fetch it and return
-        if (!metadata.state.uri.startsWith(this.core.config.apiUrl)) {
+        if (!metadata.state.uri.includes('/api/metadata/')) {
           // We have external metadata
           const externalMetadata = await this.externalMetadataCache.fetch(metadata.state.uri)
 
@@ -141,29 +148,31 @@ export class ApiMetadataService {
     },
   })
 
-  constructor(
-    private readonly core: ApiCoreService,
-    private readonly image: ApiMetadataImageService,
-    private readonly solana: ApiSolanaService,
-  ) {}
-
-  async getImage(account: string): Promise<Buffer | string> {
-    this.logger.verbose(`Fetching metadata image for ${account}`)
-    const accountMetadata = await this.accountMetadataCache.fetch(account)
-    if (!accountMetadata) {
-      throw new Error(`Failed to fetch metadata for ${account}`)
-    }
-
-    if (!accountMetadata.state.uri?.startsWith(this.core.config.apiUrl)) {
-      const externalMetadata = await this.externalMetadataCache.fetch(accountMetadata.state.uri)
-      if (!externalMetadata) {
-        throw new Error(`Failed to fetch external metadata for ${accountMetadata.state.uri}`)
+  private readonly imageCache = new LRUCache<string, Buffer | string>({
+    max: 1000,
+    ttl: TEN_MINUTES,
+    fetchMethod: async (account: string) => {
+      const accountMetadata = await this.accountMetadataCache.fetch(account)
+      if (!accountMetadata) {
+        throw new Error(`Failed to fetch metadata for ${account}`)
       }
 
-      return externalMetadata.image
-    }
+      if (!accountMetadata.state.uri?.includes('/api/metadata/')) {
+        const externalMetadata = await this.externalMetadataCache.fetch(accountMetadata.state.uri)
+        if (!externalMetadata) {
+          throw new Error(`Failed to fetch external metadata for ${accountMetadata.state.uri}`)
+        }
 
-    return this.image.generate(account, accountMetadata)
+        return externalMetadata.image
+      }
+
+      return this.image.generate(account, accountMetadata)
+    },
+  })
+
+  async getImage(account: string): Promise<Buffer | string | undefined> {
+    this.logger.verbose(`Fetching metadata image for ${account}`)
+    return this.imageCache.fetch(account)
   }
 
   async getJson(account: string) {
