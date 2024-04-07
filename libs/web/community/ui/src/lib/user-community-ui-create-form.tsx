@@ -6,13 +6,13 @@ export function UserCommunityUiCreateForm({ submit }: { submit: (res: UserCreate
   const model: UserCreateCommunityInput = {
     name: '',
     description: '',
-    imageUrl: '',
+    iconUrl: '',
+    logoUrl: '',
   }
 
   const fields: UiFormField<UserCreateCommunityInput>[] = [
     formFieldText('name', { label: 'Name', required: true }),
     formFieldText('description', { label: 'Description', required: true }),
-    formFieldText('imageUrl', { label: 'Image URL', required: false }),
   ]
   return (
     <UiForm model={model} fields={fields} submit={(res) => submit(res as UserCreateCommunityInput)}>

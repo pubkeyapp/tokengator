@@ -48,7 +48,8 @@ input AdminFindManyUserInput {
 
 input AdminUpdateCommunityInput {
   description: String
-  imageUrl: String
+  iconUrl: String
+  logoUrl: String
   name: String
 }
 
@@ -189,8 +190,9 @@ input ClaimUserUpdateInput {
 type Community {
   createdAt: DateTime
   description: String!
+  iconUrl: String
   id: String!
-  imageUrl: String
+  logoUrl: String
   name: String!
   publicUrl: String
   slug: String!
@@ -542,7 +544,8 @@ type User {
 
 input UserCreateCommunityInput {
   description: String!
-  imageUrl: String
+  iconUrl: String
+  logoUrl: String
   name: String!
 }
 
@@ -594,7 +597,8 @@ enum UserStatus {
 
 input UserUpdateCommunityInput {
   description: String
-  imageUrl: String
+  iconUrl: String
+  logoUrl: String
   name: String
 }
 

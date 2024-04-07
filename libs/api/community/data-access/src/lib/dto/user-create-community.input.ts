@@ -4,10 +4,10 @@ import { Field, InputType } from '@nestjs/graphql'
 export class UserCreateCommunityInput {
   @Field()
   name!: string
-
   @Field()
   description!: string
-
   @Field({ nullable: true })
-  imageUrl?: string
+  iconUrl?: string
+  @Field({ nullable: true })
+  logoUrl?: string
 }

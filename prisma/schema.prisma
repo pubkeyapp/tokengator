@@ -28,7 +28,8 @@ model Community {
   name        String
   slug        String            @unique
   description String
-  imageUrl    String?
+  iconUrl     String?
+  logoUrl     String?
   claims      Claim[]
   members     CommunityMember[]
   wallets     Wallet[]

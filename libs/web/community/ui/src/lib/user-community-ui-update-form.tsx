@@ -1,6 +1,6 @@
 import { Button, Group } from '@mantine/core'
-import { UserUpdateCommunityInput, Community } from '@tokengator/sdk'
 import { formFieldText, UiForm, UiFormField } from '@pubkey-ui/core'
+import { Community, UserUpdateCommunityInput } from '@tokengator/sdk'
 
 export function UserCommunityUiUpdateForm({
   submit,
@@ -11,18 +11,16 @@ export function UserCommunityUiUpdateForm({
 }) {
   const model: UserUpdateCommunityInput = {
     name: community.name ?? '',
-
     description: community.description ?? '',
-
-    imageUrl: community.imageUrl ?? '',
+    iconUrl: community.iconUrl ?? '',
+    logoUrl: community.logoUrl ?? '',
   }
 
   const fields: UiFormField<UserUpdateCommunityInput>[] = [
     formFieldText('name', { label: 'name' }),
-
     formFieldText('description', { label: 'description' }),
-
-    formFieldText('imageUrl', { label: 'imageUrl' }),
+    formFieldText('iconUrl', { label: 'Icon URL (square)', required: false }),
+    formFieldText('logoUrl', { label: 'Logo URL (rectangle)', required: false }),
   ]
   return (
     <UiForm model={model} fields={fields} submit={(res) => submit(res as UserUpdateCommunityInput)}>

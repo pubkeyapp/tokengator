@@ -11,7 +11,10 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
   {
     name: "Dean's List",
     description: 'A DAO turned Network State',
-    imageUrl: 'https://avatars.githubusercontent.com/u/137821488?v=4',
+    iconUrl:
+      'https://raw.githubusercontent.com/pubkeyapp/tokengator/main/apps/api/src/assets/images/brand/deans-list-icon.png',
+    logoUrl:
+      'https://raw.githubusercontent.com/pubkeyapp/tokengator/main/apps/api/src/assets/images/brand/deans-list-logo.png',
     members: {
       create: [
         { userId: 'beeman', role: CommunityMemberRole.Admin },
@@ -34,7 +37,10 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
   {
     name: 'PubKey',
     description: 'The PubKey 🅿️ Community',
-    imageUrl: 'https://avatars.githubusercontent.com/u/125477168?v=4',
+    iconUrl:
+      'https://raw.githubusercontent.com/pubkeyapp/tokengator/main/apps/api/src/assets/images/brand/pubkey-icon.png',
+    logoUrl:
+      'https://raw.githubusercontent.com/pubkeyapp/tokengator/main/apps/api/src/assets/images/brand/pubkey-logo.png',
     members: {
       create: [
         { userId: 'beeman', role: CommunityMemberRole.Admin },
@@ -67,7 +73,7 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
   {
     name: 'COLOSSEUM',
     description: `Powering online Solana hackathons. 🏟️`,
-    imageUrl: 'https://pbs.twimg.com/profile_images/1684566200662233092/BZzDPr5q_400x400.jpg',
+    iconUrl: 'https://pbs.twimg.com/profile_images/1684566200662233092/BZzDPr5q_400x400.jpg',
     members: {
       create: [
         { userId: 'beeman', role: CommunityMemberRole.Admin },

@@ -9,5 +9,8 @@ export class AdminUpdateCommunityInput {
   description?: string
 
   @Field({ nullable: true })
-  imageUrl?: string
+  iconUrl?: string
+
+  @Field({ nullable: true })
+  logoUrl?: string
 }

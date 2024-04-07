@@ -16,7 +16,9 @@ export class Community {
   @Field()
   description!: string
   @Field({ nullable: true })
-  imageUrl?: string | null
+  iconUrl?: string | null
+  @Field({ nullable: true })
+  logoUrl?: string | null
 }
 
 @ObjectType()

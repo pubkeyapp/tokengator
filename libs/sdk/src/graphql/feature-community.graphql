@@ -4,7 +4,8 @@ fragment CommunityDetails on Community {
   name
   slug
   description
-  imageUrl
+  iconUrl
+  logoUrl
   publicUrl
   updatedAt
 }

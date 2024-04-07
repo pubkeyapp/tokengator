@@ -70,7 +70,8 @@ export type AdminFindManyUserInput = {
 
 export type AdminUpdateCommunityInput = {
   description?: InputMaybe<Scalars['String']['input']>
-  imageUrl?: InputMaybe<Scalars['String']['input']>
+  iconUrl?: InputMaybe<Scalars['String']['input']>
+  logoUrl?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -218,8 +219,9 @@ export type Community = {
   __typename?: 'Community'
   createdAt?: Maybe<Scalars['DateTime']['output']>
   description: Scalars['String']['output']
+  iconUrl?: Maybe<Scalars['String']['output']>
   id: Scalars['String']['output']
-  imageUrl?: Maybe<Scalars['String']['output']>
+  logoUrl?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
   publicUrl?: Maybe<Scalars['String']['output']>
   slug: Scalars['String']['output']
@@ -949,7 +951,8 @@ export type User = {
 
 export type UserCreateCommunityInput = {
   description: Scalars['String']['input']
-  imageUrl?: InputMaybe<Scalars['String']['input']>
+  iconUrl?: InputMaybe<Scalars['String']['input']>
+  logoUrl?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']
 }
 
@@ -1002,7 +1005,8 @@ export enum UserStatus {
 
 export type UserUpdateCommunityInput = {
   description?: InputMaybe<Scalars['String']['input']>
-  imageUrl?: InputMaybe<Scalars['String']['input']>
+  iconUrl?: InputMaybe<Scalars['String']['input']>
+  logoUrl?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -1261,7 +1265,8 @@ export type ClaimDetailsFragment = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -1350,7 +1355,8 @@ export type AdminFindManyClaimQuery = {
         name: string
         slug: string
         description: string
-        imageUrl?: string | null
+        iconUrl?: string | null
+        logoUrl?: string | null
         publicUrl?: string | null
         updatedAt?: Date | null
       } | null
@@ -1449,7 +1455,8 @@ export type AdminFindOneClaimQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -1537,7 +1544,8 @@ export type AdminCreateClaimMutation = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -1626,7 +1634,8 @@ export type AdminUpdateClaimMutation = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -1722,7 +1731,8 @@ export type UserFindManyClaimQuery = {
         name: string
         slug: string
         description: string
-        imageUrl?: string | null
+        iconUrl?: string | null
+        logoUrl?: string | null
         publicUrl?: string | null
         updatedAt?: Date | null
       } | null
@@ -1821,7 +1831,8 @@ export type UserGetClaimQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -1907,7 +1918,8 @@ export type UserGetClaimsQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -1995,7 +2007,8 @@ export type UserFindOneClaimQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -2083,7 +2096,8 @@ export type UserCreateClaimMutation = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -2172,7 +2186,8 @@ export type UserUpdateClaimMutation = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     } | null
@@ -2537,7 +2552,8 @@ export type CommunityDetailsFragment = {
   name: string
   slug: string
   description: string
-  imageUrl?: string | null
+  iconUrl?: string | null
+  logoUrl?: string | null
   publicUrl?: string | null
   updatedAt?: Date | null
 }
@@ -2558,7 +2574,8 @@ export type UserFindManyCommunityQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     }>
@@ -2589,7 +2606,8 @@ export type UserFindOneCommunityQuery = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -2609,7 +2627,8 @@ export type UserCreateCommunityMutation = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -2629,7 +2648,8 @@ export type UserUpdateCommunityMutation = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -2657,7 +2677,8 @@ export type AdminFindManyCommunityQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     }>
@@ -2688,7 +2709,8 @@ export type AdminFindOneCommunityQuery = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -2708,7 +2730,8 @@ export type AdminUpdateCommunityMutation = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -2735,7 +2758,8 @@ export type AnonFindManyCommunityQuery = {
       name: string
       slug: string
       description: string
-      imageUrl?: string | null
+      iconUrl?: string | null
+      logoUrl?: string | null
       publicUrl?: string | null
       updatedAt?: Date | null
     }>
@@ -2765,7 +2789,8 @@ export type AnonFindOneCommunityQuery = {
     name: string
     slug: string
     description: string
-    imageUrl?: string | null
+    iconUrl?: string | null
+    logoUrl?: string | null
     publicUrl?: string | null
     updatedAt?: Date | null
   } | null
@@ -4165,7 +4190,8 @@ export const CommunityDetailsFragmentDoc = gql`
     name
     slug
     description
-    imageUrl
+    iconUrl
+    logoUrl
     publicUrl
     updatedAt
   }
@@ -7302,7 +7328,8 @@ export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFind
 export function AdminUpdateCommunityInputSchema(): z.ZodObject<Properties<AdminUpdateCommunityInput>> {
   return z.object({
     description: z.string().nullish(),
-    imageUrl: z.string().nullish(),
+    iconUrl: z.string().nullish(),
+    logoUrl: z.string().nullish(),
     name: z.string().nullish(),
   })
 }
@@ -7483,7 +7510,8 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
 export function UserCreateCommunityInputSchema(): z.ZodObject<Properties<UserCreateCommunityInput>> {
   return z.object({
     description: z.string(),
-    imageUrl: z.string().nullish(),
+    iconUrl: z.string().nullish(),
+    logoUrl: z.string().nullish(),
     name: z.string(),
   })
 }
@@ -7531,7 +7559,8 @@ export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindMa
 export function UserUpdateCommunityInputSchema(): z.ZodObject<Properties<UserUpdateCommunityInput>> {
   return z.object({
     description: z.string().nullish(),
-    imageUrl: z.string().nullish(),
+    iconUrl: z.string().nullish(),
+    logoUrl: z.string().nullish(),
     name: z.string().nullish(),
   })
 }
