@@ -11,6 +11,7 @@ patchBigintToJSON()
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const core = app.get(ApiCoreService)
+  app.enableCors(core.config.cors)
   app.setGlobalPrefix(core.config.prefix)
   app.use(cookieParser())
   app.use(
@@ -28,6 +29,17 @@ async function bootstrap() {
   Logger.log(`🔋 API_URL: ${core.config.apiUrl}`)
   Logger.log(`🔋 WEB_URL: ${core.config.webUrl}`)
   Logger.log(`🔋 COOKIE_DOMAINS: ${core.config.cookieDomains.join(', ')}`)
+  Logger.log(
+    `🔋 CORS: ${
+      core.config.corsBypass
+        ? 'Bypassed'
+        : core.config?.corsOrigins
+        ? `enabled for: ${
+            Array.isArray(core.config?.corsOrigins) ? core.config?.corsOrigins?.join(', ') : core.config?.corsOrigins
+          }`
+        : 'disabled'
+    }`,
+  )
   if (core.config.isDevelopment) {
     Logger.warn(`🐞 Application is running in development mode.`)
     exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })

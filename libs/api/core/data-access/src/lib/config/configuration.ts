@@ -52,6 +52,8 @@ export interface ApiCoreConfig {
   cookieDomains: string[]
   cookieName: string
   cookieSecure: boolean
+  // CORS
+  corsBypass: boolean
   corsOrigins: string[]
   databaseProvision: boolean
   environment: Env
@@ -91,6 +93,7 @@ export function configuration(): ApiCoreConfig {
     cookieDomains,
     cookieName: '__session',
     cookieSecure: process.env['COOKIE_SECURE'] === 'true',
+    corsBypass: process.env['CORS_BYPASS'] === 'true',
     corsOrigins,
     databaseProvision: process.env['DATABASE_PROVISION'] === 'true',
     environment: (process.env['NODE_ENV'] as Env) || 'development',

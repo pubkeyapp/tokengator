@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface'
 import { ConfigService } from '@nestjs/config'
 import { IdentityProvider } from '@prisma/client'
 import { Keypair } from '@solana/web3.js'
@@ -197,6 +198,21 @@ export class ApiCoreConfigService {
 
   get cookieSecure(): boolean {
     return this.service.get('cookieSecure') as boolean
+  }
+
+  get cors(): CorsOptions {
+    return {
+      credentials: true,
+      origin: (origin, callback) => callback(null, this.corsBypass ? origin : this.corsOrigins),
+    }
+  }
+
+  get corsBypass(): boolean {
+    return this.service.get('corsBypass') as boolean
+  }
+
+  get corsOrigins(): string[] {
+    return this.service.get('corsOrigins') as string[]
   }
 
   get databaseProvision() {
