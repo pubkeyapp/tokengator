@@ -15,6 +15,7 @@ model Claim {
   communityId String
   amount      String           @default("1")
   account     String
+  avatarUrl   String?
   signature   String?
   provider    IdentityProvider
   providerId  String

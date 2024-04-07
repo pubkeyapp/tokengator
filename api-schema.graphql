@@ -117,6 +117,7 @@ enum AssetActivityType {
 type Claim {
   account: String!
   amount: String!
+  avatarUrl: String
   community: Community
   communityId: String!
   createdAt: DateTime
@@ -165,6 +166,7 @@ enum ClaimStatus {
 input ClaimUserCreateInput {
   account: String!
   amount: String
+  avatarUrl: String
   communityId: String!
   provider: IdentityProvider!
   providerId: String!

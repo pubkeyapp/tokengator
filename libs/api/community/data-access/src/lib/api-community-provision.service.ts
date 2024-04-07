@@ -60,14 +60,37 @@ export const provisionCommunities: ProvisionCommunityInput[] = [
     },
     claims: {
       create: [
-        { provider: IdentityProvider.Discord, providerId: '185307556032413697' },
-        { provider: IdentityProvider.Discord, providerId: '386584531353862154' },
-        { provider: IdentityProvider.GitHub, providerId: '32637757' },
-        { provider: IdentityProvider.GitHub, providerId: '36491' },
+        twitterUser('fordudesake', 'https://pbs.twimg.com/profile_images/1745476026610970624/VnruqazA_400x400.jpg'),
+        twitterUser('HeyAndyS', 'https://pbs.twimg.com/profile_images/1691941118903021568/RoMA6RdT_400x400.jpg'),
+        twitterUser('voshy', 'https://pbs.twimg.com/profile_images/1654231381248032771/DKN6Tdtl_400x400.jpg'),
+        twitterUser('therealchaseeb', 'https://pbs.twimg.com/profile_images/1776995441345011712/xj05U0zO_400x400.jpg'),
+        twitterUser('aeyakovenko', 'https://pbs.twimg.com/profile_images/1776610025252986882/5Qatptcx_400x400.jpg'),
+        twitterUser('a_milz', 'https://pbs.twimg.com/profile_images/1775603724863565824/h8napIbl_400x400.jpg'),
+        twitterUser('tamarincrypto', 'https://pbs.twimg.com/profile_images/1601771870952587265/9hsvSiC-_400x400.jpg'),
+        twitterUser('_Dean_Machine', 'https://pbs.twimg.com/profile_images/1776690984824213504/3WsNQfMC_400x400.png'),
+        twitterUser('Milimalism', 'https://pbs.twimg.com/profile_images/1649448251739852801/x-vNsMJf_400x400.jpg'),
+        twitterUser('derlys_paola', 'https://pbs.twimg.com/profile_images/1705589278686707712/FCAVjkWZ_400x400.jpg'),
+        twitterUser('SundeepCharan', 'https://pbs.twimg.com/profile_images/1765429691023032320/xs1tR2-7_400x400.jpg'),
+        twitterUser('beeman_nl', 'https://avatars.githubusercontent.com/u/36491'),
+        {
+          provider: IdentityProvider.Discord,
+          providerId: 'sundeepcharan',
+          avatarUrl: 'https://pbs.twimg.com/profile_images/1765429691023032320/xs1tR2-7_400x400.jpg',
+        },
+        {
+          provider: IdentityProvider.Discord,
+          providerId: 'beeman.dev',
+          avatarUrl: 'https://avatars.githubusercontent.com/u/36491',
+        },
+        { provider: IdentityProvider.GitHub, providerId: 'sunguru98' },
+        {
+          provider: IdentityProvider.GitHub,
+          providerId: 'beeman',
+          avatarUrl: 'https://avatars.githubusercontent.com/u/36491',
+        },
         { provider: IdentityProvider.Solana, providerId: '81sWMLg1EgYps3nMwyeSW1JfjKgFqkGYPP85vTnkFzRn' },
         { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
-        { provider: IdentityProvider.Twitter, providerId: 'beeman_nl' },
-      ].map((i) => ({ ...i, account: '9u6HpBdFd1yZzQ8JszBoSRtcgbvJF5uk5pv7zcvrL3Se' })),
+      ].map((i) => ({ ...i, account: '3zhnymzhgJVckkCgzowEWDQhDWrNbALzDWvVKuH72Gow' })),
     },
   },
   {
@@ -120,5 +143,13 @@ export class ApiCommunityProvisionService {
       this.logger.verbose(`Provisioned community ${input.name} with slug ${slug}`)
       return
     }
+  }
+}
+
+function twitterUser(providerId: string, avatarUrl?: string) {
+  return {
+    provider: IdentityProvider.Twitter,
+    providerId,
+    avatarUrl,
   }
 }

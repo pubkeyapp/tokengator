@@ -1,9 +1,10 @@
-import { ActionIcon, Anchor, Group, ScrollArea } from '@mantine/core'
+import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { UiDebugModal } from '@pubkey-ui/core'
 import { IconPencil, IconTrash } from '@tabler/icons-react'
-import { Claim, ellipsify } from '@tokengator/sdk'
+import { Claim } from '@tokengator/sdk'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
+import { ClaimUiItem } from './claim-ui-item'
 
 export function UserClaimUiTable({
   deleteClaim,
@@ -33,13 +34,8 @@ export function UserClaimUiTable({
         columns={[
           {
             accessor: 'name',
-            render: (item) => (
-              <Anchor component={Link} to={`./${item.id}`} size="sm" fw={500}>
-                {ellipsify(item.providerId, 10)}
-              </Anchor>
-            ),
+            render: (item) => <ClaimUiItem claim={item} to={`./${item.id}`} />,
           },
-          { accessor: 'provider' },
           { accessor: 'amount' },
           {
             accessor: 'actions',

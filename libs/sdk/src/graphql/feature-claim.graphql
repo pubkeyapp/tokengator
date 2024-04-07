@@ -4,6 +4,7 @@ fragment ClaimDetails on Claim {
   communityId
   account
   amount
+  avatarUrl
   signature
   provider
   providerId

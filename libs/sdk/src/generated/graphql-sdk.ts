@@ -144,6 +144,7 @@ export type Claim = {
   __typename?: 'Claim'
   account: Scalars['String']['output']
   amount: Scalars['String']['output']
+  avatarUrl?: Maybe<Scalars['String']['output']>
   community?: Maybe<Community>
   communityId: Scalars['String']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
@@ -193,6 +194,7 @@ export enum ClaimStatus {
 export type ClaimUserCreateInput = {
   account: Scalars['String']['input']
   amount?: InputMaybe<Scalars['String']['input']>
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
   communityId: Scalars['String']['input']
   provider: IdentityProvider
   providerId: Scalars['String']['input']
@@ -1263,6 +1265,7 @@ export type ClaimDetailsFragment = {
   communityId: string
   account: string
   amount: string
+  avatarUrl?: string | null
   signature?: string | null
   provider: IdentityProvider
   providerId: string
@@ -1353,6 +1356,7 @@ export type AdminFindManyClaimQuery = {
       communityId: string
       account: string
       amount: string
+      avatarUrl?: string | null
       signature?: string | null
       provider: IdentityProvider
       providerId: string
@@ -1453,6 +1457,7 @@ export type AdminFindOneClaimQuery = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -1542,6 +1547,7 @@ export type AdminCreateClaimMutation = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -1632,6 +1638,7 @@ export type AdminUpdateClaimMutation = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -1729,6 +1736,7 @@ export type UserFindManyClaimQuery = {
       communityId: string
       account: string
       amount: string
+      avatarUrl?: string | null
       signature?: string | null
       provider: IdentityProvider
       providerId: string
@@ -1829,6 +1837,7 @@ export type UserGetClaimQuery = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -1916,6 +1925,7 @@ export type UserGetClaimsQuery = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -2005,6 +2015,7 @@ export type UserFindOneClaimQuery = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -2094,6 +2105,7 @@ export type UserCreateClaimMutation = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -2184,6 +2196,7 @@ export type UserUpdateClaimMutation = {
     communityId: string
     account: string
     amount: string
+    avatarUrl?: string | null
     signature?: string | null
     provider: IdentityProvider
     providerId: string
@@ -4300,6 +4313,7 @@ export const ClaimDetailsFragmentDoc = gql`
     communityId
     account
     amount
+    avatarUrl
     signature
     provider
     providerId
@@ -7482,6 +7496,7 @@ export function ClaimUserCreateInputSchema(): z.ZodObject<Properties<ClaimUserCr
   return z.object({
     account: z.string(),
     amount: z.string().nullish(),
+    avatarUrl: z.string().nullish(),
     communityId: z.string(),
     provider: IdentityProviderSchema,
     providerId: z.string(),

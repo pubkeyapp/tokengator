@@ -7,6 +7,8 @@ export class ClaimUserCreateInput {
   communityId!: string
   @Field({ nullable: true })
   amount?: string
+  @Field({ nullable: true })
+  avatarUrl?: string
   @Field()
   account!: string
   @Field(() => IdentityProvider)

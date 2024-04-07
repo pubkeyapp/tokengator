@@ -21,10 +21,13 @@ export function ClaimUiItem({
   return (
     <UiAnchor to={to ?? undefined} underline="never" {...anchorProps}>
       <Group gap="sm" {...groupProps}>
-        <ClaimUiAvatar claim={claim} {...avatarProps} />
+        <ClaimUiAvatar size="lg" claim={claim} {...avatarProps} />
         <Stack gap={1}>
-          <Text size="lg" fw={500}>
+          <Text size="xl" fw={700}>
             {claim?.name}
+          </Text>
+          <Text size="xs" c="dimmed">
+            {claim?.provider}
           </Text>
         </Stack>
       </Group>

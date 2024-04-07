@@ -1,4 +1,5 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
+import { IdentityProvider } from '@prisma/client'
 import { ApiClaimService, Claim } from '@tokengator/api-claim-data-access'
 import { ellipsify } from '@tokengator/api-core-data-access'
 
@@ -13,6 +14,8 @@ export class ApiClaimResolver {
     if (communityName && minterName) {
       return `${communityName} - ${minterName}`
     }
-    return `${claim.provider}: ${ellipsify(claim.providerId)} `
+    return claim.provider === IdentityProvider.Solana
+      ? `${claim.provider}: ${ellipsify(claim.providerId)} `
+      : claim.providerId
   }
 }

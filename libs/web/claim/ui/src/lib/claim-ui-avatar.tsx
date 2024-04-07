@@ -6,5 +6,5 @@ export type ClaimUiAvatarProps = UiAvatarProps & {
 }
 
 export function ClaimUiAvatar({ claim, ...props }: ClaimUiAvatarProps) {
-  return <UiAvatar url={undefined} name={claim?.name} {...props} />
+  return <UiAvatar url={claim?.avatarUrl} name={claim?.name} {...props} />
 }

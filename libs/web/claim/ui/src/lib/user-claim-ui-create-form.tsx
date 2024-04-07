@@ -8,6 +8,7 @@ export function UserClaimUiCreateForm({ submit }: { submit: (res: ClaimUserCreat
     initialValues: {
       communityId: '',
       account: '',
+      avatarUrl: '',
       amount: '1',
       provider: IdentityProvider.Solana,
       providerId: '',
@@ -35,6 +36,12 @@ export function UserClaimUiCreateForm({ submit }: { submit: (res: ClaimUserCreat
           label="Amount"
           description="The amount of items a user can mint."
           {...form.getInputProps('amount')}
+        />
+        <TextInput
+          name="avatarUrl"
+          label="Avatar Url"
+          description="The avatar url of the user."
+          {...form.getInputProps('avatarUrl')}
         />
         <Group justify="right">
           <Button type="submit">Save</Button>

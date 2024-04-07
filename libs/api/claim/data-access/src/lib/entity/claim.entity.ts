@@ -20,6 +20,8 @@ export class Claim {
   @Field()
   account!: string
   @Field({ nullable: true })
+  avatarUrl?: string | null
+  @Field({ nullable: true })
   signature?: string | null
   @Field(() => IdentityProvider)
   provider!: IdentityProvider
