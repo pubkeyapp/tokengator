@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
-import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { ApiPresetMinterService } from './api-preset-minter.service'
 import { PresetUserFindManyInput } from './dto/preset-user-find-many.input'
+import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
+import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
 import { PresetPaging } from './entity/preset.entity'
 import { getPresetWhereUserInput } from './helpers/get-preset-where-user.input'
 
@@ -51,10 +51,41 @@ export class ApiPresetDataUserService {
     return this.minter.getMinterAssets(account)
   }
 
-  async deleteMinter(userId: string, account: string) {
-    const find = await this.minter.getMinter(account)
-    await this.data.core.ensureCommunityAdminBySlug({ communitySlug: find.communityId, userId })
+  async deleteMinter(userId: string, account: string, communitySlug: string) {
+    const minter = await this.minter.getMinter(account)
+    const communityPda = this.minter.getCommunityPda(communitySlug)
+    if (communityPda.toString() !== minter.communityId) {
+      throw new Error('Minter does not belong to this community')
+    }
+
     // TODO: delete minter
     return false
+  }
+
+  async addMinterAuthority(userId: string, account: string, authority: string, communitySlug: string): Promise<string> {
+    const minter = await this.minter.getMinter(account)
+    const communityPda = this.minter.getCommunityPda(communitySlug)
+    if (communityPda.toString() !== minter.communityId) {
+      throw new Error('Minter does not belong to this community')
+    }
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
+
+    return this.minter.addAuthority({ authority, communitySlug, minter })
+  }
+
+  async removeMinterAuthority(
+    userId: string,
+    account: string,
+    authority: string,
+    communitySlug: string,
+  ): Promise<string> {
+    const minter = await this.minter.getMinter(account)
+    const communityPda = this.minter.getCommunityPda(communitySlug)
+    if (communityPda.toString() !== minter.communityId) {
+      throw new Error('Minter does not belong to this community')
+    }
+    await this.data.core.ensureCommunityAdminBySlug({ communitySlug, userId })
+
+    return this.minter.removeAuthority({ authority, communitySlug, minter })
   }
 }

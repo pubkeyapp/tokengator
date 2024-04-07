@@ -87,3 +87,11 @@ mutation userCreateMintFromPreset($input: PresetUserMintFromPreset!) {
 mutation userCreateMintFromMinter($input: PresetUserMintFromMinter!) {
   minted: userCreateMintFromMinter(input: $input)
 }
+
+mutation userAddMinterAuthority($account: String!, $authority: String!, $communitySlug: String!) {
+  added: userAddMinterAuthority(account: $account, authority: $authority, communitySlug: $communitySlug)
+}
+
+mutation userRemoveMinterAuthority($account: String!, $authority: String!, $communitySlug: String!) {
+  removed: userRemoveMinterAuthority(account: $account, authority: $authority, communitySlug: $communitySlug)
+}

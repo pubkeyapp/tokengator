@@ -318,6 +318,7 @@ type Mutation {
   logout: Boolean
   register(input: RegisterInput!): User
   solanaRequestAirdrop(account: String!): JSON
+  userAddMinterAuthority(account: String!, authority: String!, communitySlug: String!): String
   userCreateClaim(input: ClaimUserCreateInput!): Claim
   userCreateCommunity(input: UserCreateCommunityInput!): Community
   userCreateCommunityMember(input: UserCreateCommunityMemberInput!): CommunityMember
@@ -328,9 +329,10 @@ type Mutation {
   userDeleteCommunity(communityId: String!): Boolean
   userDeleteCommunityMember(communityMemberId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
-  userDeleteMinter(account: String!): Boolean
+  userDeleteMinter(account: String!, communitySlug: String!): Boolean
   userDeleteWallet(publicKey: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userRemoveMinterAuthority(account: String!, authority: String!, communitySlug: String!): String
   userSetWalletFeepayer(publicKey: String!): Wallet
   userUpdateClaim(claimId: String!, input: ClaimUserUpdateInput!): Claim
   userUpdateCommunity(communityId: String!, input: UserUpdateCommunityInput!): Community

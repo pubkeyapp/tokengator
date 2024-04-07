@@ -344,6 +344,7 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
   solanaRequestAirdrop?: Maybe<Scalars['JSON']['output']>
+  userAddMinterAuthority?: Maybe<Scalars['String']['output']>
   userCreateClaim?: Maybe<Claim>
   userCreateCommunity?: Maybe<Community>
   userCreateCommunityMember?: Maybe<CommunityMember>
@@ -357,6 +358,7 @@ export type Mutation = {
   userDeleteMinter?: Maybe<Scalars['Boolean']['output']>
   userDeleteWallet?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
+  userRemoveMinterAuthority?: Maybe<Scalars['String']['output']>
   userSetWalletFeepayer?: Maybe<Wallet>
   userUpdateClaim?: Maybe<Claim>
   userUpdateCommunity?: Maybe<Community>
@@ -477,6 +479,12 @@ export type MutationSolanaRequestAirdropArgs = {
   account: Scalars['String']['input']
 }
 
+export type MutationUserAddMinterAuthorityArgs = {
+  account: Scalars['String']['input']
+  authority: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
+}
+
 export type MutationUserCreateClaimArgs = {
   input: ClaimUserCreateInput
 }
@@ -519,6 +527,7 @@ export type MutationUserDeleteIdentityArgs = {
 
 export type MutationUserDeleteMinterArgs = {
   account: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
 }
 
 export type MutationUserDeleteWalletArgs = {
@@ -527,6 +536,12 @@ export type MutationUserDeleteWalletArgs = {
 
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
+}
+
+export type MutationUserRemoveMinterAuthorityArgs = {
+  account: Scalars['String']['input']
+  authority: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
 }
 
 export type MutationUserSetWalletFeepayerArgs = {
@@ -3435,6 +3450,22 @@ export type UserCreateMintFromMinterMutationVariables = Exact<{
 
 export type UserCreateMintFromMinterMutation = { __typename?: 'Mutation'; minted?: string | null }
 
+export type UserAddMinterAuthorityMutationVariables = Exact<{
+  account: Scalars['String']['input']
+  authority: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
+}>
+
+export type UserAddMinterAuthorityMutation = { __typename?: 'Mutation'; added?: string | null }
+
+export type UserRemoveMinterAuthorityMutationVariables = Exact<{
+  account: Scalars['String']['input']
+  authority: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
+}>
+
+export type UserRemoveMinterAuthorityMutation = { __typename?: 'Mutation'; removed?: string | null }
+
 export type PriceDetailsFragment = {
   __typename?: 'Price'
   createdAt?: Date | null
@@ -4956,6 +4987,16 @@ export const UserCreateMintFromMinterDocument = gql`
     minted: userCreateMintFromMinter(input: $input)
   }
 `
+export const UserAddMinterAuthorityDocument = gql`
+  mutation userAddMinterAuthority($account: String!, $authority: String!, $communitySlug: String!) {
+    added: userAddMinterAuthority(account: $account, authority: $authority, communitySlug: $communitySlug)
+  }
+`
+export const UserRemoveMinterAuthorityDocument = gql`
+  mutation userRemoveMinterAuthority($account: String!, $authority: String!, $communitySlug: String!) {
+    removed: userRemoveMinterAuthority(account: $account, authority: $authority, communitySlug: $communitySlug)
+  }
+`
 export const AdminFindManyPriceDocument = gql`
   query adminFindManyPrice($input: PriceAdminFindManyInput!) {
     items: adminFindManyPrice(input: $input) {
@@ -5267,6 +5308,8 @@ const UserGetMinterDocumentString = print(UserGetMinterDocument)
 const UserGetMinterAssetsDocumentString = print(UserGetMinterAssetsDocument)
 const UserCreateMintFromPresetDocumentString = print(UserCreateMintFromPresetDocument)
 const UserCreateMintFromMinterDocumentString = print(UserCreateMintFromMinterDocument)
+const UserAddMinterAuthorityDocumentString = print(UserAddMinterAuthorityDocument)
+const UserRemoveMinterAuthorityDocumentString = print(UserRemoveMinterAuthorityDocument)
 const AdminFindManyPriceDocumentString = print(AdminFindManyPriceDocument)
 const AdminFindOnePriceDocumentString = print(AdminFindOnePriceDocument)
 const AdminCreatePriceDocumentString = print(AdminCreatePriceDocument)
@@ -6635,6 +6678,48 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userCreateMintFromMinter',
+        'mutation',
+        variables,
+      )
+    },
+    userAddMinterAuthority(
+      variables: UserAddMinterAuthorityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserAddMinterAuthorityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserAddMinterAuthorityMutation>(UserAddMinterAuthorityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userAddMinterAuthority',
+        'mutation',
+        variables,
+      )
+    },
+    userRemoveMinterAuthority(
+      variables: UserRemoveMinterAuthorityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserRemoveMinterAuthorityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserRemoveMinterAuthorityMutation>(UserRemoveMinterAuthorityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userRemoveMinterAuthority',
         'mutation',
         variables,
       )

@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { UserRole } from '@prisma/client'
 import { ApiAuthGraphQLUserGuard, CtxUser } from '@tokengator/api-auth-data-access'
 import { ApiSolanaService } from '@tokengator/api-solana-data-access'
-import { UserRole } from '@tokengator/sdk'
 import { GraphQLJSON } from 'graphql-scalars'
 
 @Resolver()

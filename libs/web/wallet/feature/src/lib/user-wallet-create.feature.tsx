@@ -12,7 +12,7 @@ export default function UserWalletCreateFeature({ communityId }: { communityId: 
     return createWallet(input)
       .then((res) => {
         if (res) {
-          navigate(`../${res?.id}`)
+          navigate(`../${res?.publicKey}`)
         }
       })
       .then(() => true)

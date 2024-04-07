@@ -2,13 +2,13 @@ import { AnchorProvider } from '@coral-xyz/anchor'
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { Cron, CronExpression } from '@nestjs/schedule'
+import { UserRole } from '@prisma/client'
 import { AnchorKeypairWallet } from '@pubkey-program-library/sdk'
 import { getMint, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { TokenMetadata } from '@solana/spl-token-metadata'
 import { AccountInfo, Connection, Keypair, LAMPORTS_PER_SOL, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ApiCoreService, CORE_APP_STARTED } from '@tokengator/api-core-data-access'
 import { MINT_EURC, MINT_USDC, requestCircleAirdrop } from '@tokengator/api-solana-util'
-import { UserRole } from '@tokengator/sdk'
 
 export type SolanaAccountInfo = AccountInfo<ParsedAccountData>
 

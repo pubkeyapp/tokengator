@@ -7,8 +7,8 @@ export function UserClaimUiCreateForm({ submit }: { submit: (res: ClaimUserCreat
   const form = useForm<ClaimUserCreateInput>({
     initialValues: {
       communityId: '',
-      amount: '',
       account: '',
+      amount: '1',
       provider: IdentityProvider.Solana,
       providerId: '',
     },
@@ -23,12 +23,32 @@ export function UserClaimUiCreateForm({ submit }: { submit: (res: ClaimUserCreat
           label="Provider"
           {...form.getInputProps('provider')}
         />
-        <TextInput required name="providerId" label="providerId" {...form.getInputProps('providerId')} />
-        <TextInput name="amount" label="amount" {...form.getInputProps('amount')} />
+        <TextInput
+          required
+          name="providerId"
+          label="Provider Id"
+          description={getProviderDescription(form.values.provider)}
+          {...form.getInputProps('providerId')}
+        />
+        <TextInput
+          name="amount"
+          label="Amount"
+          description="The amount of items a user can mint."
+          {...form.getInputProps('amount')}
+        />
         <Group justify="right">
           <Button type="submit">Save</Button>
         </Group>
       </UiStack>
     </form>
   )
+}
+
+function getProviderDescription(provider: IdentityProvider) {
+  switch (provider) {
+    case IdentityProvider.Solana:
+      return 'Solana wallet address'
+    default:
+      return `The ${provider} username or id.`
+  }
 }

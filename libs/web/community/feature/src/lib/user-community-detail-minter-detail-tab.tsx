@@ -1,5 +1,5 @@
-import { Button, Group } from '@mantine/core'
-import { UiCard, UiInfo, UiLoader, UiStack, UiTabRoute, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
+import { Button, Group, Text } from '@mantine/core'
+import { UiAnchor, UiCard, UiInfo, UiLoader, UiStack, UiTabRoute, UiTabRoutes, UiWarning } from '@pubkey-ui/core'
 import { AccountInfo, ParsedAccountData } from '@solana/web3.js'
 import { Community, User } from '@tokengator/sdk'
 import { UserClaimFeature } from '@tokengator/web-claim-feature'
@@ -12,6 +12,7 @@ import { MinterUiAssets, MinterUiCard } from '@tokengator/web-community-ui'
 import { UserUiItem, UserUiSearch } from '@tokengator/web-user-ui'
 import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { MinterAuthoritiesFeature } from './minter-authorities-feature'
 
 export function UserCommunityDetailMinterDetailTab({ community }: { community: Community }) {
   const { account } = useParams<{ account: string }>() as { account: string }
@@ -26,6 +27,11 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
       label: 'Assets',
       element: (
         <UiStack>
+          <UiInfo
+            title="Collection Assets"
+            variant="outline"
+            message={<Text>These are the assets that the community has minted in this collection.</Text>}
+          />
           <MintModal
             loading={mutation.isPending}
             mint={async ({ username }) => {
@@ -39,7 +45,46 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
     {
       path: 'claims',
       label: 'Claims',
-      element: <UserClaimFeature communityId={community.id} account={account} />,
+      element: (
+        <UiStack>
+          <UiInfo
+            title="Collection Claims"
+            variant="outline"
+            message={<Text>Claims give the user the ability to mint assets in this collection.</Text>}
+          />
+          <UserClaimFeature communityId={community.id} account={account} />
+        </UiStack>
+      ),
+    },
+    {
+      path: 'authorities',
+      label: 'Authorities',
+      element: (
+        <UiStack>
+          <UiInfo
+            title="Collection Authorities"
+            variant="outline"
+            message={
+              <UiStack>
+                <Text>The Authorities are Solana accounts that can manage this Collection Minter.</Text>
+                <Text>
+                  You can add any of your <UiAnchor to={`/c/${community.slug}/wallets`}>Wallets</UiAnchor> as
+                  authorities.
+                </Text>
+              </UiStack>
+            }
+          />
+          {query.data ? (
+            <MinterAuthoritiesFeature
+              community={community}
+              minter={query.data}
+              refresh={async () => {
+                await query.refetch()
+              }}
+            />
+          ) : null}
+        </UiStack>
+      ),
     },
   ]
 

@@ -27,9 +27,33 @@ export class ApiPresetUserResolver {
     return this.service.user.createMintFromMinter(userId, input)
   }
 
+  @Mutation(() => String, { nullable: true })
+  userAddMinterAuthority(
+    @CtxUserId() userId: string,
+    @Args('account') account: string,
+    @Args('authority') authority: string,
+    @Args('communitySlug') communitySlug: string,
+  ) {
+    return this.service.user.addMinterAuthority(userId, account, authority, communitySlug)
+  }
+
+  @Mutation(() => String, { nullable: true })
+  userRemoveMinterAuthority(
+    @CtxUserId() userId: string,
+    @Args('account') account: string,
+    @Args('authority') authority: string,
+    @Args('communitySlug') communitySlug: string,
+  ) {
+    return this.service.user.removeMinterAuthority(userId, account, authority, communitySlug)
+  }
+
   @Mutation(() => Boolean, { nullable: true })
-  userDeleteMinter(@CtxUserId() userId: string, @Args('account') account: string) {
-    return this.service.user.deleteMinter(userId, account)
+  userDeleteMinter(
+    @CtxUserId() userId: string,
+    @Args('account') account: string,
+    @Args('communitySlug') communitySlug: string,
+  ) {
+    return this.service.user.deleteMinter(userId, account, communitySlug)
   }
 
   @Query(() => TokenGatorMinter)

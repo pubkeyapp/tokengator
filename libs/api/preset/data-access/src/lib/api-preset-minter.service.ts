@@ -313,6 +313,75 @@ export class ApiPresetMinterService {
     })
   }
 
+  async addAuthority({
+    authority,
+    communitySlug,
+    minter,
+  }: {
+    authority: string
+    communitySlug: string
+    minter: TokenGatorMinter
+  }) {
+    if (minter.authorities.includes(authority)) {
+      throw new Error('Authority already exists.')
+    }
+    this.logger.verbose(`Adding authority: ${authority} to minter: ${minter.publicKey} in community: ${communitySlug}`)
+    const newAuthority = new PublicKey(authority)
+    const communityAuthority = await this.getKeypairFromCommunity(communitySlug)
+    const feePayer = this.feePayer
+    const minterProgram = this.getProgramTokenMinter(this.solana.getAnchorProvider(feePayer))
+
+    const signature = await minterProgram.methods
+      .addMinterAuthority({ newAuthority })
+      .accounts({
+        authority: communityAuthority.publicKey,
+        feePayer: feePayer.publicKey,
+        minter: new PublicKey(minter.publicKey),
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([feePayer, communityAuthority])
+      .rpc({ commitment: 'confirmed', skipPreflight: true })
+
+    this.logger.verbose(`Signature: ${signature}`)
+
+    return signature
+  }
+
+  async removeAuthority({
+    authority,
+    communitySlug,
+    minter,
+  }: {
+    authority: string
+    communitySlug: string
+    minter: TokenGatorMinter
+  }) {
+    if (!minter.authorities.includes(authority)) {
+      throw new Error('Authority does not exist.')
+    }
+    this.logger.verbose(
+      `Removing authority: ${authority} to minter: ${minter.publicKey} in community: ${communitySlug}`,
+    )
+    const authorityToRemove = new PublicKey(authority)
+    const communityAuthority = await this.getKeypairFromCommunity(communitySlug)
+    const feePayer = this.feePayer
+    const minterProgram = this.getProgramTokenMinter(this.solana.getAnchorProvider(feePayer))
+
+    const signature = await minterProgram.methods
+      .removeMinterAuthority({ authorityToRemove })
+      .accounts({
+        authority: communityAuthority.publicKey,
+        feePayer: feePayer.publicKey,
+        minter: new PublicKey(minter.publicKey),
+      })
+      .signers([feePayer, communityAuthority])
+      .rpc({ commitment: 'confirmed', skipPreflight: true })
+
+    this.logger.verbose(`Signature: ${signature}`)
+
+    return signature
+  }
+
   async getMinters(): Promise<TokenGatorMinter[]> {
     return this.getProgramTokenMinter()
       .account.minter.all()
@@ -330,8 +399,13 @@ export class ApiPresetMinterService {
       )
   }
 
-  async getMintersByCommunity(communitySlug: string): Promise<TokenGatorMinter[]> {
+  getCommunityPda(communitySlug: string): PublicKey {
     const [account] = getCommunityPda(communitySlug, this.programId)
+    return account
+  }
+
+  async getMintersByCommunity(communitySlug: string): Promise<TokenGatorMinter[]> {
+    const account = this.getCommunityPda(communitySlug)
 
     return this.getProgramTokenMinter()
       .account.minter.all([{ memcmp: { offset: 8 + 1, bytes: account.toBase58() } }])
