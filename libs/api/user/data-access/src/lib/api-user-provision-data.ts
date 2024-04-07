@@ -50,6 +50,15 @@ export const provisionUsers: Prisma.UserCreateInput[] = [
     },
   },
   {
+    username: 'derlys',
+    role: UserRole.Admin,
+    developer: true,
+    avatarUrl: 'https://pbs.twimg.com/profile_images/1705589278686707712/FCAVjkWZ_400x400.jpg',
+    identities: {
+      create: [{ provider: IdentityProvider.Discord, providerId: '872581397099986964' }],
+    },
+  },
+  {
     username: 'bob',
     password: 'password',
     role: UserRole.User,
