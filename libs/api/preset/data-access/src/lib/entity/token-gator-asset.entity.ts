@@ -1,8 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { PresetActivity } from '@tokengator/api-preset-data-access'
+import { PresetActivity } from './preset-activity.enum'
 
 @ObjectType()
-export class Asset {
+export class TokenGatorAsset {
   @Field()
   account!: string
   @Field()

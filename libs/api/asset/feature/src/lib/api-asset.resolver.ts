@@ -1,20 +1,20 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { ApiAssetService, Asset, AssetActivity } from '@tokengator/api-asset-data-access'
+import { ApiAssetService } from '@tokengator/api-asset-data-access'
 import { ApiAuthGraphQLUserGuard } from '@tokengator/api-auth-data-access'
-import { PresetActivity } from '@tokengator/api-preset-data-access'
+import { PresetActivity, TokenGatorActivity, TokenGatorAsset } from '@tokengator/api-preset-data-access'
 
-@Resolver(() => Asset)
+@Resolver(() => TokenGatorAsset)
 @UseGuards(ApiAuthGraphQLUserGuard)
 export class ApiAssetResolver {
   constructor(private readonly service: ApiAssetService) {}
 
-  @Query(() => Asset)
+  @Query(() => TokenGatorAsset)
   getAsset(@Args('account') account: string) {
     return this.service.getAsset(account)
   }
 
-  @Query(() => AssetActivity, { nullable: true })
+  @Query(() => TokenGatorActivity, { nullable: true })
   getAssetActivity(
     @Args('account') account: string,
     @Args({ name: 'type', type: () => PresetActivity }) type: PresetActivity,
@@ -22,7 +22,7 @@ export class ApiAssetResolver {
     return this.service.getAssetActivity(account, type)
   }
 
-  @Mutation(() => AssetActivity, { nullable: true })
+  @Mutation(() => TokenGatorActivity, { nullable: true })
   createAssetActivity(
     @Args('account') account: string,
     @Args({ name: 'type', type: () => PresetActivity }) type: PresetActivity,

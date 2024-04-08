@@ -1,15 +1,15 @@
 import { Text, Timeline } from '@mantine/core'
 import { UiTime } from '@pubkey-ui/core'
 import { IconCheck } from '@tabler/icons-react'
-import { AssetActivity, AssetActivityEntry } from '@tokengator/sdk'
+import { TokenGatorActivity, TokenGatorActivityEntry } from '@tokengator/sdk'
 import { AssetActivityUiPoints } from './asset-activity-ui-points'
 
 export function AssetActivityUiEntryList({
   activity,
   entries,
 }: {
-  activity: AssetActivity
-  entries: AssetActivityEntry[]
+  activity: TokenGatorActivity
+  entries: TokenGatorActivityEntry[]
 }) {
   return (
     <Timeline active={entries.length} bulletSize={24} lineWidth={2}>

@@ -1,7 +1,7 @@
 import { Accordion, Button, Group, SimpleGrid, Text } from '@mantine/core'
 import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { Asset, PresetActivity } from '@tokengator/sdk'
+import { PresetActivity, TokenGatorAsset } from '@tokengator/sdk'
 import { useCreateAssetActivity, useGetAsset, useGetAssetActivity } from '@tokengator/web-asset-data-access'
 import { AssetActivityUiEntryList, AssetActivityUiPoints, AssetUiItem } from '@tokengator/web-asset-ui'
 import { useSdk } from '@tokengator/web-core-data-access'
@@ -51,7 +51,7 @@ export function UserAssetDetailFeature() {
   )
 }
 
-function UserAssetActivities({ asset }: { asset: Asset }) {
+function UserAssetActivities({ asset }: { asset: TokenGatorAsset }) {
   return (
     <Accordion multiple variant="separated">
       {asset.activities?.map((type) => (

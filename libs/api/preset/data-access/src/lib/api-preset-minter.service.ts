@@ -66,12 +66,12 @@ export class ApiPresetMinterService {
   private readonly cacheActivity = new LRUCache<string, TokenGatorActivity | boolean>({
     max: 1000,
     ttl: 30_000,
-    fetchMethod: async (activityPda: string) => {
+    fetchMethod: async (account: string) => {
       this.logger.verbose(`Caching slot`)
       return this.getProgramTokenMinter()
-        .account.activity.fetch(activityPda)
+        .account.activity.fetch(account)
         .then((res) => {
-          console.log(`Activity: ${activityPda}`, res)
+          console.log(`Activity: ${account}`, res)
           return res ? (res as unknown as TokenGatorActivity) : false
         })
         .catch(() => false)
@@ -522,17 +522,20 @@ export class ApiPresetMinterService {
       )
   }
 
-  getActivityPda({ mint, label }: { mint: PublicKey; label: string }) {
+  getActivityPda({ asset, label }: { asset: PublicKey; label: string }) {
     const [account] = getActivityPda({
-      mint,
+      mint: asset,
       label: label.toLowerCase(),
       programId: this.programId,
     })
     return account
   }
 
-  async getActivity({ account }: { account: PublicKey }) {
-    return this.cacheActivity.fetch(account.toString())
+  async getActivity({ asset, label }: { asset: PublicKey; label: string }) {
+    const pda = this.getActivityPda({ asset, label })
+    const activity = await this.cacheActivity.fetch(pda.toBase58())
+
+    return { pda, activity }
   }
 
   getCommunityPda(communitySlug: string): PublicKey {

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Asset } from '@tokengator/sdk'
+import { TokenGatorAsset } from '@tokengator/sdk'
 import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useGetAsset({ account }: { account: string }) {
@@ -7,6 +7,6 @@ export function useGetAsset({ account }: { account: string }) {
 
   return useQuery({
     queryKey: ['getAsset', account],
-    queryFn: async () => sdk.getAsset({ account }).then((res) => res.data?.item as Asset | undefined),
+    queryFn: async () => sdk.getAsset({ account }).then((res) => res.data?.item as TokenGatorAsset | undefined),
   })
 }

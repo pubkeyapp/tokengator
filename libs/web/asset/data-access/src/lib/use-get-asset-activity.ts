@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AssetActivity, PresetActivity } from '@tokengator/sdk'
+import { PresetActivity, TokenGatorActivity } from '@tokengator/sdk'
 import { useSdk } from '@tokengator/web-core-data-access'
 
 export function useGetAssetActivity({ account, type }: { account: string; type: PresetActivity }) {
@@ -8,7 +8,7 @@ export function useGetAssetActivity({ account, type }: { account: string; type: 
   return useQuery({
     queryKey: ['getAssetActivity', { account, type }],
     queryFn: async () =>
-      sdk.getAssetActivity({ account, type }).then((res) => res.data?.item as AssetActivity | undefined),
+      sdk.getAssetActivity({ account, type }).then((res) => res.data?.item as TokenGatorActivity | undefined),
   })
 }
 
@@ -17,6 +17,6 @@ export function useCreateAssetActivity({ account, type }: { account: string; typ
 
   return useMutation({
     mutationFn: async () =>
-      sdk.createAssetActivity({ account, type }).then((res) => res.data?.item as AssetActivity | undefined),
+      sdk.createAssetActivity({ account, type }).then((res) => res.data?.item as TokenGatorActivity | undefined),
   })
 }

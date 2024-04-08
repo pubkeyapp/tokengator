@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common'
 import { PublicKey } from '@solana/web3.js'
 import { ApiMetadataService } from '@tokengator/api-metadata-data-access'
-import { ApiPresetService, PresetActivity } from '@tokengator/api-preset-data-access'
-import { AssetActivity } from './entity/asset-activity.entity'
-import { Asset } from './entity/asset.entity'
+import {
+  ApiPresetService,
+  PresetActivity,
+  TokenGatorActivity,
+  TokenGatorAsset,
+} from '@tokengator/api-preset-data-access'
 
 @Injectable()
 export class ApiAssetService {
   constructor(private readonly metadata: ApiMetadataService, private readonly preset: ApiPresetService) {}
 
-  async getAsset(account: string): Promise<Asset & { mint: PublicKey }> {
+  async getAsset(account: string): Promise<TokenGatorAsset> {
     const { json, accountMetadata } = await this.metadata.getAll(account)
 
     if (!json) {
@@ -35,11 +38,10 @@ export class ApiAssetService {
       image: json.image,
       activities: preset.activities ?? [],
       attributes: json.attributes.map((attr) => [attr.trait_type, attr.value]),
-      mint,
     }
   }
 
-  async getAssetActivity(account: string, type: PresetActivity): Promise<AssetActivity | null> {
+  async getAssetActivity(account: string, type: PresetActivity): Promise<TokenGatorActivity | null> {
     const { accountMetadata } = await this.metadata.getAll(account)
 
     const mint = accountMetadata?.state.updateAuthority
@@ -47,24 +49,21 @@ export class ApiAssetService {
       throw new Error('Asset minter not found')
     }
 
-    const activityPda = this.preset.minter.getActivityPda({
-      mint: new PublicKey(mint),
+    const { pda, activity } = await this.preset.minter.getActivity({
+      asset: new PublicKey(account),
       label: type.toLowerCase(),
     })
 
-    const activity = await this.preset.minter.getActivity({ account: activityPda })
-
     if (typeof activity === 'boolean') {
-      //
-      // console.log('Creating activity...')
-      // await this.createAssetActivity(account, type)
-      // throw new Error('Activity not found')
       return null
     }
+    if (!activity) {
+      throw new Error('Activity not found')
+    }
+
     // this.preset.minter.getCommunityPda()
     console.log(`Account, type: ${account}, ${type}`, activity)
 
-    const listAccount = `pda-${account}-${type}`
     const found = {
       label: `${type}`,
       startDate: new Date(),
@@ -92,26 +91,27 @@ export class ApiAssetService {
     const pointsLabel = type === PresetActivity.Payouts ? 'USD' : 'Points'
 
     return {
-      account: listAccount,
+      account: pda.toString(),
       type,
-      label: found.label,
-      startDate: new Date(found.startDate),
-      endDate: new Date(found.endDate),
+      label: activity.label,
+      endDate: null,
+      startDate: null,
+      // startDate: activity.startDate ? new Date(activity.startDate) : null,
+      // endDate: activity.endDate ? new Date(activity.endDate) : null,
       pointsLabel,
       pointsTotal,
-      entries: found.entries ?? [],
+      entries: activity.entries ?? [],
     }
   }
 
   async createAssetActivity(account: string, activity: PresetActivity) {
-    const asset = await this.getAsset(account)
-    const minter = await this.preset.minter.getMinter(asset.mint.toString())
-    console.log('minter', minter)
-    // const activity = await this.getAssetActivity(account, type)
-    //
-    // if (activity) {
-    //   return activity
-    // }
+    const { accountMetadata } = await this.metadata.getAll(account)
+
+    const mint = accountMetadata?.state.updateAuthority
+    if (!mint) {
+      throw new Error('Asset minter not found')
+    }
+    const minter = await this.preset.minter.getMinter(mint.toString())
 
     return this.preset.minter.createActivity({ minter, asset: account, activity })
   }

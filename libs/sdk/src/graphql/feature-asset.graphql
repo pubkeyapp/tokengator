@@ -1,45 +1,17 @@
-fragment AssetDetails on Asset {
-  account
-  name
-  description
-  image
-  activities
-  attributes
-}
-
-fragment AssetActivityEntryDetails on AssetActivityEntry {
-  timestamp
-  message
-  points
-  url
-}
-
-fragment AssetActivityDetails on AssetActivity {
-  type
-  label
-  startDate
-  endDate
-  pointsLabel
-  pointsTotal
-  entries {
-    ...AssetActivityEntryDetails
-  }
-}
-
 query getAsset($account: String!) {
   item: getAsset(account: $account) {
-    ...AssetDetails
+    ...TokenGatorAssetDetails
   }
 }
 
 query getAssetActivity($account: String!, $type: PresetActivity!) {
   item: getAssetActivity(account: $account, type: $type) {
-    ...AssetActivityDetails
+    ...TokenGatorActivityDetails
   }
 }
 
 mutation createAssetActivity($account: String!, $type: PresetActivity!) {
   item: createAssetActivity(account: $account, type: $type) {
-    ...AssetActivityDetails
+    ...TokenGatorActivityDetails
   }
 }

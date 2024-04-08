@@ -15,6 +15,34 @@ fragment TokenGatorMinterDetails on TokenGatorMinter {
   }
 }
 
+fragment TokenGatorAssetDetails on TokenGatorAsset {
+  account
+  name
+  description
+  image
+  activities
+  attributes
+}
+
+fragment TokenGatorActivityEntryDetails on TokenGatorActivityEntry {
+  timestamp
+  message
+  points
+  url
+}
+
+fragment TokenGatorActivityDetails on TokenGatorActivity {
+  type
+  label
+  startDate
+  endDate
+  pointsLabel
+  pointsTotal
+  entries {
+    ...TokenGatorActivityEntryDetails
+  }
+}
+
 fragment TokenGatorApplicationConfigDetails on TokenGatorMinterApplicationConfig {
   identities
   paymentConfig {

@@ -105,36 +105,6 @@ export type AppConfig = {
   authTwitterEnabled: Scalars['Boolean']['output']
 }
 
-export type Asset = {
-  __typename?: 'Asset'
-  account: Scalars['String']['output']
-  activities: Array<PresetActivity>
-  attributes: Array<Array<Scalars['String']['output']>>
-  description: Scalars['String']['output']
-  image: Scalars['String']['output']
-  name: Scalars['String']['output']
-}
-
-export type AssetActivity = {
-  __typename?: 'AssetActivity'
-  account: Scalars['String']['output']
-  endDate: Scalars['DateTime']['output']
-  entries?: Maybe<Array<AssetActivityEntry>>
-  label: Scalars['String']['output']
-  pointsLabel: Scalars['String']['output']
-  pointsTotal: Scalars['Float']['output']
-  startDate: Scalars['DateTime']['output']
-  type: PresetActivity
-}
-
-export type AssetActivityEntry = {
-  __typename?: 'AssetActivityEntry'
-  message: Scalars['String']['output']
-  points?: Maybe<Scalars['Float']['output']>
-  timestamp: Scalars['DateTime']['output']
-  url?: Maybe<Scalars['String']['output']>
-}
-
 export type Claim = {
   __typename?: 'Claim'
   account: Scalars['String']['output']
@@ -337,7 +307,7 @@ export type Mutation = {
   adminUpdateUser?: Maybe<User>
   adminUpdateWallet?: Maybe<Wallet>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
-  createAssetActivity?: Maybe<AssetActivity>
+  createAssetActivity?: Maybe<TokenGatorActivity>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
@@ -709,8 +679,8 @@ export type Query = {
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
   currencies: Array<Currency>
-  getAsset: Asset
-  getAssetActivity?: Maybe<AssetActivity>
+  getAsset: TokenGatorAsset
+  getAssetActivity?: Maybe<TokenGatorActivity>
   me?: Maybe<User>
   metadataAll?: Maybe<Scalars['JSON']['output']>
   solanaGetBalance?: Maybe<Scalars['String']['output']>
@@ -923,6 +893,36 @@ export type RequestIdentityChallengeInput = {
   providerId: Scalars['String']['input']
 }
 
+export type TokenGatorActivity = {
+  __typename?: 'TokenGatorActivity'
+  account: Scalars['String']['output']
+  endDate?: Maybe<Scalars['String']['output']>
+  entries?: Maybe<Array<TokenGatorActivityEntry>>
+  label: Scalars['String']['output']
+  pointsLabel: Scalars['String']['output']
+  pointsTotal: Scalars['Float']['output']
+  startDate?: Maybe<Scalars['String']['output']>
+  type: PresetActivity
+}
+
+export type TokenGatorActivityEntry = {
+  __typename?: 'TokenGatorActivityEntry'
+  message: Scalars['String']['output']
+  points?: Maybe<Scalars['Float']['output']>
+  timestamp: Scalars['DateTime']['output']
+  url?: Maybe<Scalars['String']['output']>
+}
+
+export type TokenGatorAsset = {
+  __typename?: 'TokenGatorAsset'
+  account: Scalars['String']['output']
+  activities: Array<PresetActivity>
+  attributes: Array<Array<Scalars['String']['output']>>
+  description: Scalars['String']['output']
+  image: Scalars['String']['output']
+  name: Scalars['String']['output']
+}
+
 export type TokenGatorMinter = {
   __typename?: 'TokenGatorMinter'
   authorities: Array<Scalars['String']['output']>
@@ -1110,41 +1110,6 @@ export type WalletUserUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>
 }
 
-export type AssetDetailsFragment = {
-  __typename?: 'Asset'
-  account: string
-  name: string
-  description: string
-  image: string
-  activities: Array<PresetActivity>
-  attributes: Array<Array<string>>
-}
-
-export type AssetActivityEntryDetailsFragment = {
-  __typename?: 'AssetActivityEntry'
-  timestamp: Date
-  message: string
-  points?: number | null
-  url?: string | null
-}
-
-export type AssetActivityDetailsFragment = {
-  __typename?: 'AssetActivity'
-  type: PresetActivity
-  label: string
-  startDate: Date
-  endDate: Date
-  pointsLabel: string
-  pointsTotal: number
-  entries?: Array<{
-    __typename?: 'AssetActivityEntry'
-    timestamp: Date
-    message: string
-    points?: number | null
-    url?: string | null
-  }> | null
-}
-
 export type GetAssetQueryVariables = Exact<{
   account: Scalars['String']['input']
 }>
@@ -1152,7 +1117,7 @@ export type GetAssetQueryVariables = Exact<{
 export type GetAssetQuery = {
   __typename?: 'Query'
   item: {
-    __typename?: 'Asset'
+    __typename?: 'TokenGatorAsset'
     account: string
     name: string
     description: string
@@ -1170,15 +1135,15 @@ export type GetAssetActivityQueryVariables = Exact<{
 export type GetAssetActivityQuery = {
   __typename?: 'Query'
   item?: {
-    __typename?: 'AssetActivity'
+    __typename?: 'TokenGatorActivity'
     type: PresetActivity
     label: string
-    startDate: Date
-    endDate: Date
+    startDate?: string | null
+    endDate?: string | null
     pointsLabel: string
     pointsTotal: number
     entries?: Array<{
-      __typename?: 'AssetActivityEntry'
+      __typename?: 'TokenGatorActivityEntry'
       timestamp: Date
       message: string
       points?: number | null
@@ -1195,15 +1160,15 @@ export type CreateAssetActivityMutationVariables = Exact<{
 export type CreateAssetActivityMutation = {
   __typename?: 'Mutation'
   item?: {
-    __typename?: 'AssetActivity'
+    __typename?: 'TokenGatorActivity'
     type: PresetActivity
     label: string
-    startDate: Date
-    endDate: Date
+    startDate?: string | null
+    endDate?: string | null
     pointsLabel: string
     pointsTotal: number
     entries?: Array<{
-      __typename?: 'AssetActivityEntry'
+      __typename?: 'TokenGatorActivityEntry'
       timestamp: Date
       message: string
       points?: number | null
@@ -3753,6 +3718,41 @@ export type TokenGatorMinterDetailsFragment = {
   }
 }
 
+export type TokenGatorAssetDetailsFragment = {
+  __typename?: 'TokenGatorAsset'
+  account: string
+  name: string
+  description: string
+  image: string
+  activities: Array<PresetActivity>
+  attributes: Array<Array<string>>
+}
+
+export type TokenGatorActivityEntryDetailsFragment = {
+  __typename?: 'TokenGatorActivityEntry'
+  timestamp: Date
+  message: string
+  points?: number | null
+  url?: string | null
+}
+
+export type TokenGatorActivityDetailsFragment = {
+  __typename?: 'TokenGatorActivity'
+  type: PresetActivity
+  label: string
+  startDate?: string | null
+  endDate?: string | null
+  pointsLabel: string
+  pointsTotal: number
+  entries?: Array<{
+    __typename?: 'TokenGatorActivityEntry'
+    timestamp: Date
+    message: string
+    points?: number | null
+    url?: string | null
+  }> | null
+}
+
 export type TokenGatorApplicationConfigDetailsFragment = {
   __typename?: 'TokenGatorMinterApplicationConfig'
   identities: Array<IdentityProvider>
@@ -4227,38 +4227,6 @@ export type UserSetWalletFeepayerMutation = {
   } | null
 }
 
-export const AssetDetailsFragmentDoc = gql`
-  fragment AssetDetails on Asset {
-    account
-    name
-    description
-    image
-    activities
-    attributes
-  }
-`
-export const AssetActivityEntryDetailsFragmentDoc = gql`
-  fragment AssetActivityEntryDetails on AssetActivityEntry {
-    timestamp
-    message
-    points
-    url
-  }
-`
-export const AssetActivityDetailsFragmentDoc = gql`
-  fragment AssetActivityDetails on AssetActivity {
-    type
-    label
-    startDate
-    endDate
-    pointsLabel
-    pointsTotal
-    entries {
-      ...AssetActivityEntryDetails
-    }
-  }
-  ${AssetActivityEntryDetailsFragmentDoc}
-`
 export const IdentityDetailsFragmentDoc = gql`
   fragment IdentityDetails on Identity {
     createdAt
@@ -4476,6 +4444,38 @@ export const PriceDetailsFragmentDoc = gql`
   }
   ${CurrencyDetailsFragmentDoc}
 `
+export const TokenGatorAssetDetailsFragmentDoc = gql`
+  fragment TokenGatorAssetDetails on TokenGatorAsset {
+    account
+    name
+    description
+    image
+    activities
+    attributes
+  }
+`
+export const TokenGatorActivityEntryDetailsFragmentDoc = gql`
+  fragment TokenGatorActivityEntryDetails on TokenGatorActivityEntry {
+    timestamp
+    message
+    points
+    url
+  }
+`
+export const TokenGatorActivityDetailsFragmentDoc = gql`
+  fragment TokenGatorActivityDetails on TokenGatorActivity {
+    type
+    label
+    startDate
+    endDate
+    pointsLabel
+    pointsTotal
+    entries {
+      ...TokenGatorActivityEntryDetails
+    }
+  }
+  ${TokenGatorActivityEntryDetailsFragmentDoc}
+`
 export const WalletDetailsFragmentDoc = gql`
   fragment WalletDetails on Wallet {
     createdAt
@@ -4490,26 +4490,26 @@ export const WalletDetailsFragmentDoc = gql`
 export const GetAssetDocument = gql`
   query getAsset($account: String!) {
     item: getAsset(account: $account) {
-      ...AssetDetails
+      ...TokenGatorAssetDetails
     }
   }
-  ${AssetDetailsFragmentDoc}
+  ${TokenGatorAssetDetailsFragmentDoc}
 `
 export const GetAssetActivityDocument = gql`
   query getAssetActivity($account: String!, $type: PresetActivity!) {
     item: getAssetActivity(account: $account, type: $type) {
-      ...AssetActivityDetails
+      ...TokenGatorActivityDetails
     }
   }
-  ${AssetActivityDetailsFragmentDoc}
+  ${TokenGatorActivityDetailsFragmentDoc}
 `
 export const CreateAssetActivityDocument = gql`
   mutation createAssetActivity($account: String!, $type: PresetActivity!) {
     item: createAssetActivity(account: $account, type: $type) {
-      ...AssetActivityDetails
+      ...TokenGatorActivityDetails
     }
   }
-  ${AssetActivityDetailsFragmentDoc}
+  ${TokenGatorActivityDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {

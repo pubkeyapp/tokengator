@@ -1,9 +1,9 @@
 import { AspectRatio, Image, useMantineTheme } from '@mantine/core'
 import { UiCardTitle, UiDebugModal, UiInfoTable, UiStack } from '@pubkey-ui/core'
-import { Asset } from '@tokengator/sdk'
+import { TokenGatorAsset } from '@tokengator/sdk'
 import { ReactNode } from 'react'
 
-export function AssetUiItem({ asset }: { asset: Asset }) {
+export function AssetUiItem({ asset }: { asset: TokenGatorAsset }) {
   const { colors } = useMantineTheme()
   return (
     <UiStack>

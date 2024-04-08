@@ -82,33 +82,6 @@ type AppConfig {
   authTwitterEnabled: Boolean!
 }
 
-type Asset {
-  account: String!
-  activities: [PresetActivity!]!
-  attributes: [[String!]!]!
-  description: String!
-  image: String!
-  name: String!
-}
-
-type AssetActivity {
-  account: String!
-  endDate: DateTime!
-  entries: [AssetActivityEntry!]
-  label: String!
-  pointsLabel: String!
-  pointsTotal: Float!
-  startDate: DateTime!
-  type: PresetActivity!
-}
-
-type AssetActivityEntry {
-  message: String!
-  points: Float
-  timestamp: DateTime!
-  url: String
-}
-
 type Claim {
   account: String!
   amount: String!
@@ -311,7 +284,7 @@ type Mutation {
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   adminUpdateWallet(input: WalletAdminUpdateInput!, walletId: String!): Wallet
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
-  createAssetActivity(account: String!, type: PresetActivity!): AssetActivity
+  createAssetActivity(account: String!, type: PresetActivity!): TokenGatorActivity
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
@@ -465,8 +438,8 @@ type Query {
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
   currencies: [Currency!]!
-  getAsset(account: String!): Asset!
-  getAssetActivity(account: String!, type: PresetActivity!): AssetActivity
+  getAsset(account: String!): TokenGatorAsset!
+  getAssetActivity(account: String!, type: PresetActivity!): TokenGatorActivity
   me: User
   metadataAll(account: String!): JSON
   solanaGetBalance(account: String!): String
@@ -504,6 +477,33 @@ input RegisterInput {
 input RequestIdentityChallengeInput {
   provider: IdentityProvider!
   providerId: String!
+}
+
+type TokenGatorActivity {
+  account: String!
+  endDate: String
+  entries: [TokenGatorActivityEntry!]
+  label: String!
+  pointsLabel: String!
+  pointsTotal: Float!
+  startDate: String
+  type: PresetActivity!
+}
+
+type TokenGatorActivityEntry {
+  message: String!
+  points: Float
+  timestamp: DateTime!
+  url: String
+}
+
+type TokenGatorAsset {
+  account: String!
+  activities: [PresetActivity!]!
+  attributes: [[String!]!]!
+  description: String!
+  image: String!
+  name: String!
 }
 
 type TokenGatorMinter {
