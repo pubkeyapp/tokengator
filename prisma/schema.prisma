@@ -90,14 +90,15 @@ model IdentityChallenge {
 }
 
 model Preset {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   name        String
   color       String
   description String?
   imageUrl    String?
   config      Json
+  activities  PresetActivity[]
   prices      Price[]
 }
 
@@ -159,6 +160,11 @@ enum IdentityProvider {
   Google
   Solana
   Twitter
+}
+
+enum PresetActivity {
+  Payouts
+  Points
 }
 
 enum UserRole {

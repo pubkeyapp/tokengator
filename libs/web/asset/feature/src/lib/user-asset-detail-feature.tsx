@@ -1,8 +1,8 @@
-import { Accordion, Group, SimpleGrid, Text } from '@mantine/core'
-import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiWarning } from '@pubkey-ui/core'
+import { Accordion, Button, Group, SimpleGrid, Text } from '@mantine/core'
+import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { Asset, AssetActivityType } from '@tokengator/sdk'
-import { useGetAsset, useGetAssetActivity } from '@tokengator/web-asset-data-access'
+import { Asset, PresetActivity } from '@tokengator/sdk'
+import { useCreateAssetActivity, useGetAsset, useGetAssetActivity } from '@tokengator/web-asset-data-access'
 import { AssetActivityUiEntryList, AssetActivityUiPoints, AssetUiItem } from '@tokengator/web-asset-ui'
 import { useSdk } from '@tokengator/web-core-data-access'
 import { SolanaExplorerIcon } from '@tokengator/web-solana-ui'
@@ -12,7 +12,7 @@ export function useMetadataAll(account: string) {
   const sdk = useSdk()
 
   return useQuery({
-    queryKey: [],
+    queryKey: ['metadataAll', account],
     queryFn: async () => sdk.metadataAll({ account }).then((res) => res.data?.item),
   })
 }
@@ -54,7 +54,7 @@ export function UserAssetDetailFeature() {
 function UserAssetActivities({ asset }: { asset: Asset }) {
   return (
     <Accordion multiple variant="separated">
-      {asset.lists?.map((type) => (
+      {asset.activities?.map((type) => (
         <Accordion.Item key={type} value={type}>
           <Accordion.Control>
             <UserAssetActivityLabel account={asset.account} type={type} />
@@ -68,7 +68,7 @@ function UserAssetActivities({ asset }: { asset: Asset }) {
   )
 }
 
-function UserAssetActivityLabel({ account, type }: { account: string; type: AssetActivityType }) {
+function UserAssetActivityLabel({ account, type }: { account: string; type: PresetActivity }) {
   const query = useGetAssetActivity({ account, type })
   const activity = query.data
 
@@ -84,8 +84,9 @@ function UserAssetActivityLabel({ account, type }: { account: string; type: Asse
   )
 }
 
-function UserAssetActivityDetails({ account, type }: { account: string; type: AssetActivityType }) {
+function UserAssetActivityDetails({ account, type }: { account: string; type: PresetActivity }) {
   const query = useGetAssetActivity({ account, type })
+  const mutation = useCreateAssetActivity({ account, type })
   const activity = query.data
   const entries = activity?.entries || []
   return query.isLoading ? (
@@ -93,6 +94,24 @@ function UserAssetActivityDetails({ account, type }: { account: string; type: As
   ) : activity ? (
     <AssetActivityUiEntryList activity={activity} entries={entries} />
   ) : (
-    <UiInfo message={`Activity not found: ${type}`} />
+    <UiStack>
+      <Group justify="flex-end">
+        <Button
+          onClick={() => {
+            mutation
+              .mutateAsync()
+              .then((res) => {
+                console.log('res', res)
+              })
+              .catch((err) => {
+                console.log('err', err)
+              })
+            console.log('Create', account, type)
+          }}
+        >
+          Create List
+        </Button>
+      </Group>
+    </UiStack>
   )
 }

@@ -108,10 +108,10 @@ export type AppConfig = {
 export type Asset = {
   __typename?: 'Asset'
   account: Scalars['String']['output']
+  activities: Array<PresetActivity>
   attributes: Array<Array<Scalars['String']['output']>>
   description: Scalars['String']['output']
   image: Scalars['String']['output']
-  lists: Array<AssetActivityType>
   name: Scalars['String']['output']
 }
 
@@ -124,7 +124,7 @@ export type AssetActivity = {
   pointsLabel: Scalars['String']['output']
   pointsTotal: Scalars['Float']['output']
   startDate: Scalars['DateTime']['output']
-  type: AssetActivityType
+  type: PresetActivity
 }
 
 export type AssetActivityEntry = {
@@ -133,11 +133,6 @@ export type AssetActivityEntry = {
   points?: Maybe<Scalars['Float']['output']>
   timestamp: Scalars['DateTime']['output']
   url?: Maybe<Scalars['String']['output']>
-}
-
-export enum AssetActivityType {
-  Payouts = 'Payouts',
-  Points = 'Points',
 }
 
 export type Claim = {
@@ -342,6 +337,7 @@ export type Mutation = {
   adminUpdateUser?: Maybe<User>
   adminUpdateWallet?: Maybe<Wallet>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
+  createAssetActivity?: Maybe<AssetActivity>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
@@ -469,6 +465,11 @@ export type MutationAnonVerifyIdentityChallengeArgs = {
   input: VerifyIdentityChallengeInput
 }
 
+export type MutationCreateAssetActivityArgs = {
+  account: Scalars['String']['input']
+  type: PresetActivity
+}
+
 export type MutationLoginArgs = {
   input: LoginInput
 }
@@ -591,6 +592,7 @@ export type PagingMeta = {
 
 export type Preset = {
   __typename?: 'Preset'
+  activities?: Maybe<Array<PresetActivity>>
   color: Scalars['String']['output']
   config?: Maybe<Scalars['JSON']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
@@ -599,6 +601,11 @@ export type Preset = {
   imageUrl?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
+}
+
+export enum PresetActivity {
+  Payouts = 'Payouts',
+  Points = 'Points',
 }
 
 export type PresetAdminCreateInput = {
@@ -703,7 +710,7 @@ export type Query = {
   appConfig: AppConfig
   currencies: Array<Currency>
   getAsset: Asset
-  getAssetActivity: AssetActivity
+  getAssetActivity?: Maybe<AssetActivity>
   me?: Maybe<User>
   metadataAll?: Maybe<Scalars['JSON']['output']>
   solanaGetBalance?: Maybe<Scalars['String']['output']>
@@ -811,7 +818,7 @@ export type QueryGetAssetArgs = {
 
 export type QueryGetAssetActivityArgs = {
   account: Scalars['String']['input']
-  type: AssetActivityType
+  type: PresetActivity
 }
 
 export type QueryMetadataAllArgs = {
@@ -1109,7 +1116,7 @@ export type AssetDetailsFragment = {
   name: string
   description: string
   image: string
-  lists: Array<AssetActivityType>
+  activities: Array<PresetActivity>
   attributes: Array<Array<string>>
 }
 
@@ -1123,7 +1130,7 @@ export type AssetActivityEntryDetailsFragment = {
 
 export type AssetActivityDetailsFragment = {
   __typename?: 'AssetActivity'
-  type: AssetActivityType
+  type: PresetActivity
   label: string
   startDate: Date
   endDate: Date
@@ -1150,21 +1157,21 @@ export type GetAssetQuery = {
     name: string
     description: string
     image: string
-    lists: Array<AssetActivityType>
+    activities: Array<PresetActivity>
     attributes: Array<Array<string>>
   }
 }
 
 export type GetAssetActivityQueryVariables = Exact<{
   account: Scalars['String']['input']
-  type: AssetActivityType
+  type: PresetActivity
 }>
 
 export type GetAssetActivityQuery = {
   __typename?: 'Query'
-  item: {
+  item?: {
     __typename?: 'AssetActivity'
-    type: AssetActivityType
+    type: PresetActivity
     label: string
     startDate: Date
     endDate: Date
@@ -1177,7 +1184,32 @@ export type GetAssetActivityQuery = {
       points?: number | null
       url?: string | null
     }> | null
-  }
+  } | null
+}
+
+export type CreateAssetActivityMutationVariables = Exact<{
+  account: Scalars['String']['input']
+  type: PresetActivity
+}>
+
+export type CreateAssetActivityMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AssetActivity'
+    type: PresetActivity
+    label: string
+    startDate: Date
+    endDate: Date
+    pointsLabel: string
+    pointsTotal: number
+    entries?: Array<{
+      __typename?: 'AssetActivityEntry'
+      timestamp: Date
+      message: string
+      points?: number | null
+      url?: string | null
+    }> | null
+  } | null
 }
 
 export type LoginMutationVariables = Exact<{
@@ -3147,6 +3179,7 @@ export type PresetDetailsFragment = {
   imageUrl?: string | null
   color: string
   config?: any | null
+  activities?: Array<PresetActivity> | null
   updatedAt?: Date | null
 }
 
@@ -3167,6 +3200,7 @@ export type AdminFindManyPresetQuery = {
       imageUrl?: string | null
       color: string
       config?: any | null
+      activities?: Array<PresetActivity> | null
       updatedAt?: Date | null
     }>
     meta: {
@@ -3197,6 +3231,7 @@ export type AdminFindOnePresetQuery = {
     imageUrl?: string | null
     color: string
     config?: any | null
+    activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
   } | null
 }
@@ -3216,6 +3251,7 @@ export type AdminCreatePresetMutation = {
     imageUrl?: string | null
     color: string
     config?: any | null
+    activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
   } | null
 }
@@ -3236,6 +3272,7 @@ export type AdminUpdatePresetMutation = {
     imageUrl?: string | null
     color: string
     config?: any | null
+    activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
   } | null
 }
@@ -3263,6 +3300,7 @@ export type UserFindManyPresetQuery = {
       imageUrl?: string | null
       color: string
       config?: any | null
+      activities?: Array<PresetActivity> | null
       updatedAt?: Date | null
     }>
     meta: {
@@ -3293,6 +3331,7 @@ export type UserFindOnePresetQuery = {
     imageUrl?: string | null
     color: string
     config?: any | null
+    activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
   } | null
 }
@@ -4194,7 +4233,7 @@ export const AssetDetailsFragmentDoc = gql`
     name
     description
     image
-    lists
+    activities
     attributes
   }
 `
@@ -4407,6 +4446,7 @@ export const PresetDetailsFragmentDoc = gql`
     imageUrl
     color
     config
+    activities
     updatedAt
   }
 `
@@ -4456,8 +4496,16 @@ export const GetAssetDocument = gql`
   ${AssetDetailsFragmentDoc}
 `
 export const GetAssetActivityDocument = gql`
-  query getAssetActivity($account: String!, $type: AssetActivityType!) {
+  query getAssetActivity($account: String!, $type: PresetActivity!) {
     item: getAssetActivity(account: $account, type: $type) {
+      ...AssetActivityDetails
+    }
+  }
+  ${AssetActivityDetailsFragmentDoc}
+`
+export const CreateAssetActivityDocument = gql`
+  mutation createAssetActivity($account: String!, $type: PresetActivity!) {
+    item: createAssetActivity(account: $account, type: $type) {
       ...AssetActivityDetails
     }
   }
@@ -5258,6 +5306,7 @@ export type SdkFunctionWrapper = <T>(
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType, variables) => action()
 const GetAssetDocumentString = print(GetAssetDocument)
 const GetAssetActivityDocumentString = print(GetAssetActivityDocument)
+const CreateAssetActivityDocumentString = print(CreateAssetActivityDocument)
 const LoginDocumentString = print(LoginDocument)
 const LogoutDocumentString = print(LogoutDocument)
 const RegisterDocumentString = print(RegisterDocument)
@@ -5388,6 +5437,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
           }),
         'getAssetActivity',
         'query',
+        variables,
+      )
+    },
+    createAssetActivity(
+      variables: CreateAssetActivityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: CreateAssetActivityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<CreateAssetActivityMutation>(CreateAssetActivityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'createAssetActivity',
+        'mutation',
         variables,
       )
     },
@@ -7361,13 +7431,13 @@ export const isDefinedNonNullAny = (v: any): v is definedNonNullAny => v !== und
 
 export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny(v))
 
-export const AssetActivityTypeSchema = z.nativeEnum(AssetActivityType)
-
 export const ClaimStatusSchema = z.nativeEnum(ClaimStatus)
 
 export const CommunityMemberRoleSchema = z.nativeEnum(CommunityMemberRole)
 
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
+
+export const PresetActivitySchema = z.nativeEnum(PresetActivity)
 
 export const UserRoleSchema = z.nativeEnum(UserRole)
 

@@ -6,6 +6,7 @@ fragment PresetDetails on Preset {
   imageUrl
   color
   config
+  activities
   updatedAt
 }
 

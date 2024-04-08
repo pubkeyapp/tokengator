@@ -13,11 +13,10 @@ export function AssetUiItem({ asset }: { asset: Asset }) {
       <UiStack>
         <AssetUiAttributes
           attributes={[
-            //
             ['Name', <UiCardTitle>{asset.name}</UiCardTitle>],
             ['Description', asset.description],
             ['account', asset.account],
-            ['lists', asset.lists.join(', ')],
+            ['activities', asset.activities.join(', ')],
             ...asset.attributes,
           ]}
         />

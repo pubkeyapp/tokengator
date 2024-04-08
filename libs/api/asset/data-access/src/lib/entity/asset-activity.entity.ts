@@ -1,18 +1,12 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
-
-export enum AssetActivityType {
-  Payouts = 'Payouts',
-  Points = 'Points',
-}
-
-registerEnumType(AssetActivityType, { name: 'AssetActivityType' })
+import { Field, ObjectType } from '@nestjs/graphql'
+import { PresetActivity } from '@tokengator/api-preset-data-access'
 
 @ObjectType()
 export class AssetActivity {
   @Field()
   account!: string
-  @Field(() => AssetActivityType)
-  type!: AssetActivityType
+  @Field(() => PresetActivity)
+  type!: PresetActivity
   @Field()
   label!: string
   @Field()

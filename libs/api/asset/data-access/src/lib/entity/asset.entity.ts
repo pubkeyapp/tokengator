@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { AssetActivityType } from './asset-activity.entity'
+import { PresetActivity } from '@tokengator/api-preset-data-access'
 
 @ObjectType()
 export class Asset {
@@ -11,8 +11,8 @@ export class Asset {
   description!: string
   @Field()
   image!: string
-  @Field(() => [AssetActivityType])
-  lists!: AssetActivityType[]
+  @Field(() => [PresetActivity])
+  activities!: PresetActivity[]
   @Field(() => [[String]])
   attributes!: [string, string][]
 }

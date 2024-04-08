@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { Injectable, Logger } from '@nestjs/common'
-import { Preset } from '@prisma/client'
+import { Preset, PresetActivity } from '@prisma/client'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
 import {
@@ -21,6 +21,7 @@ import {
 import { ApiCoreService } from '@tokengator/api-core-data-access'
 import { ApiSolanaService } from '@tokengator/api-solana-data-access'
 import {
+  getActivityPda,
   getCommunityPda,
   getIdentityProviders,
   getMinterPda,
@@ -34,10 +35,12 @@ import {
   WEN_NEW_STANDARD_PROGRAM_ID,
   WenNewStandardIDL,
 } from '@tokengator/api-solana-util'
+import { Buffer } from 'buffer'
 import { LRUCache } from 'lru-cache'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
 import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
+import { TokenGatorActivity } from './entity/token-gator-activity.entity'
 import { TokenGatorMinter } from './entity/token-gator-minter.entity'
 import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'
 
@@ -58,6 +61,20 @@ export class ApiPresetMinterService {
     fetchMethod: async (commitment = 'confirmed') => {
       this.logger.verbose(`Caching slot`)
       return this.solana.connection.getSlot(commitment as Commitment)
+    },
+  })
+  private readonly cacheActivity = new LRUCache<string, TokenGatorActivity | boolean>({
+    max: 1000,
+    ttl: 30_000,
+    fetchMethod: async (activityPda: string) => {
+      this.logger.verbose(`Caching slot`)
+      return this.getProgramTokenMinter()
+        .account.activity.fetch(activityPda)
+        .then((res) => {
+          console.log(`Activity: ${activityPda}`, res)
+          return res ? (res as unknown as TokenGatorActivity) : false
+        })
+        .catch(() => false)
     },
   })
 
@@ -258,7 +275,7 @@ export class ApiPresetMinterService {
     const metadata: [string, string][] = [...collectionMetadata, ...metadataMint] as [string, string][]
     const feePayer = this.feePayer
 
-    const groupMintPublicKey = found.minterConfig.mint
+    const mintPublicKey = found.minterConfig.mint
     const memberMintKeypair = Keypair.generate()
     const { name, symbol, uri } = {
       uri: this.getMetadataUrl(memberMintKeypair.publicKey.toString()),
@@ -273,7 +290,7 @@ export class ApiPresetMinterService {
     )
     // ---- THIS WILL BE MOVED TO THE SDK AT SOME POINT ----
 
-    const [group] = getWNSGroupPda(groupMintPublicKey, WEN_NEW_STANDARD_PROGRAM_ID)
+    const [group] = getWNSGroupPda(mintPublicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [member] = getWNSMemberPda(memberMintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
@@ -382,6 +399,112 @@ export class ApiPresetMinterService {
     return signature
   }
 
+  async createActivity({
+    minter,
+    asset,
+    activity,
+  }: {
+    minter: TokenGatorMinter
+    asset: string
+    activity: PresetActivity
+  }) {
+    // const memberPublicKey = new PublicKey(member)
+    const [activityPda] = getActivityPda({
+      mint: new PublicKey(asset),
+      label: activity.toLowerCase(),
+      programId: this.programId,
+    })
+
+    const mintPublicKey = new PublicKey(minter.minterConfig.mint)
+    const [group] = getWNSGroupPda(mintPublicKey, WEN_NEW_STANDARD_PROGRAM_ID)
+
+    const assetPublicKey = new PublicKey(asset)
+    const [member] = getWNSMemberPda(new PublicKey(asset), WEN_NEW_STANDARD_PROGRAM_ID)
+
+    const [slot, { blockhash, lastValidBlockHeight }] = await Promise.all([
+      this.getCachedSlot(),
+      this.getCachedBlockhash(),
+    ])
+
+    const [createLookupTableIx, lookupTableAccount] = AddressLookupTableProgram.createLookupTable({
+      authority: this.feePayer.publicKey,
+      payer: this.feePayer.publicKey,
+      recentSlot: slot - 1,
+    })
+
+    const extendLookupTableIx = AddressLookupTableProgram.extendLookupTable({
+      addresses: [
+        group,
+        activityPda,
+        new PublicKey(minter.publicKey),
+        member,
+        this.feePayer.publicKey,
+        SYSVAR_RENT_PUBKEY,
+        WEN_NEW_STANDARD_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_2022_PROGRAM_ID,
+        SystemProgram.programId,
+      ],
+      authority: this.feePayer.publicKey,
+      lookupTable: lookupTableAccount,
+      payer: this.feePayer.publicKey,
+    })
+
+    const txMessage = new TransactionMessage({
+      instructions: [createLookupTableIx, extendLookupTableIx],
+      payerKey: this.feePayer.publicKey,
+      recentBlockhash: blockhash,
+    }).compileToV0Message()
+
+    const tx = new VersionedTransaction(txMessage)
+    tx.sign([this.feePayer])
+
+    await this.sendAndConfirmTransaction({ transaction: tx, blockhash, lastValidBlockHeight })
+
+    // Wait for 500 ms
+    await new Promise((resolve) => setTimeout(resolve, 750))
+
+    this.logger.debug(`Creating activity: ${activity} for minter: ${minter.publicKey}`)
+    const createActivityIx = await this.getProgramTokenMinter(this.solana.getAnchorProvider(this.feePayer))
+      .methods.createActivity({
+        label: activity.toLowerCase(),
+        endDate: null,
+        startDate: null,
+      })
+      .accounts({
+        activity: activityPda,
+        minter: minter.publicKey,
+        mint: assetPublicKey,
+        group,
+        member,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+
+    const { value: lookupTableStore } = await this.solana.connection.getAddressLookupTable(lookupTableAccount)
+
+    if (!lookupTableStore) {
+      throw new Error('Lookup table not found')
+    }
+    this.logger.debug(`Lookup table: ${lookupTableStore}`)
+    const transactionMessage = new TransactionMessage({
+      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 30_000 }), createActivityIx],
+      payerKey: this.feePayer.publicKey,
+      recentBlockhash: blockhash,
+    }).compileToV0Message([lookupTableStore])
+
+    const transaction = new VersionedTransaction(transactionMessage)
+    transaction.sign([this.feePayer])
+
+    this.logger.debug(`Sending Transaction: ${transactionMessage}`)
+
+    await this.sendAndConfirmTransaction({ transaction, blockhash, lastValidBlockHeight })
+
+    this.logger.verbose(`Activity created: ${activity} for minter: ${minter.publicKey}`)
+
+    return
+  }
+
   async getMinters(): Promise<TokenGatorMinter[]> {
     return this.getProgramTokenMinter()
       .account.minter.all()
@@ -397,6 +520,19 @@ export class ApiPresetMinterService {
           )
           .sort((a, b) => a.name.localeCompare(b.name)),
       )
+  }
+
+  getActivityPda({ mint, label }: { mint: PublicKey; label: string }) {
+    const [account] = getActivityPda({
+      mint,
+      label: label.toLowerCase(),
+      programId: this.programId,
+    })
+    return account
+  }
+
+  async getActivity({ account }: { account: PublicKey }) {
+    return this.cacheActivity.fetch(account.toString())
   }
 
   getCommunityPda(communitySlug: string): PublicKey {
@@ -481,6 +617,7 @@ export class ApiPresetMinterService {
     blockhash: string
     lastValidBlockHeight: number
   }): Promise<string> {
+    console.log(Buffer.from(transaction.serialize()).toString('base64'))
     const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
     this.logger.debug(`Signature: ${signature}`)
     await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')

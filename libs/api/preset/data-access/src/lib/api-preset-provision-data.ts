@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { PresetActivity } from './entity/preset-activity.enum'
 
 export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
@@ -7,6 +8,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-business-visa.png',
     color: 'indigo',
     config: {},
+    activities: [PresetActivity.Payouts],
     prices: {
       create: [
         //
@@ -21,6 +23,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-visitor-pass.png',
     color: 'lime',
     config: {},
+    activities: [PresetActivity.Points],
     prices: {
       create: [
         //
@@ -35,6 +38,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-citizenship.png',
     color: 'grape',
     config: {},
+    activities: [],
     prices: {
       create: [
         //
@@ -49,6 +53,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-residence.png',
     color: 'teal',
     config: {},
+    activities: [PresetActivity.Payouts],
     prices: {
       create: [
         //

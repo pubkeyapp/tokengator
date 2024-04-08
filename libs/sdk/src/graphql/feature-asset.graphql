@@ -3,7 +3,7 @@ fragment AssetDetails on Asset {
   name
   description
   image
-  lists
+  activities
   attributes
 }
 
@@ -32,8 +32,14 @@ query getAsset($account: String!) {
   }
 }
 
-query getAssetActivity($account: String!, $type: AssetActivityType!) {
+query getAssetActivity($account: String!, $type: PresetActivity!) {
   item: getAssetActivity(account: $account, type: $type) {
+    ...AssetActivityDetails
+  }
+}
+
+mutation createAssetActivity($account: String!, $type: PresetActivity!) {
+  item: createAssetActivity(account: $account, type: $type) {
     ...AssetActivityDetails
   }
 }

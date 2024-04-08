@@ -84,10 +84,10 @@ type AppConfig {
 
 type Asset {
   account: String!
+  activities: [PresetActivity!]!
   attributes: [[String!]!]!
   description: String!
   image: String!
-  lists: [AssetActivityType!]!
   name: String!
 }
 
@@ -99,7 +99,7 @@ type AssetActivity {
   pointsLabel: String!
   pointsTotal: Float!
   startDate: DateTime!
-  type: AssetActivityType!
+  type: PresetActivity!
 }
 
 type AssetActivityEntry {
@@ -107,11 +107,6 @@ type AssetActivityEntry {
   points: Float
   timestamp: DateTime!
   url: String
-}
-
-enum AssetActivityType {
-  Payouts
-  Points
 }
 
 type Claim {
@@ -316,6 +311,7 @@ type Mutation {
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   adminUpdateWallet(input: WalletAdminUpdateInput!, walletId: String!): Wallet
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
+  createAssetActivity(account: String!, type: PresetActivity!): AssetActivity
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
@@ -355,6 +351,7 @@ type PagingMeta {
 }
 
 type Preset {
+  activities: [PresetActivity!]
   color: String!
   config: JSON
   createdAt: DateTime
@@ -363,6 +360,11 @@ type Preset {
   imageUrl: String
   name: String!
   updatedAt: DateTime
+}
+
+enum PresetActivity {
+  Payouts
+  Points
 }
 
 input PresetAdminCreateInput {
@@ -464,7 +466,7 @@ type Query {
   appConfig: AppConfig!
   currencies: [Currency!]!
   getAsset(account: String!): Asset!
-  getAssetActivity(account: String!, type: AssetActivityType!): AssetActivity!
+  getAssetActivity(account: String!, type: PresetActivity!): AssetActivity
   me: User
   metadataAll(account: String!): JSON
   solanaGetBalance(account: String!): String

@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
 import { PagingResponse } from '@tokengator/api-core-data-access'
 import { GraphQLJSON } from 'graphql-scalars'
+import { PresetActivity } from './preset-activity.enum'
 
 @ObjectType()
 export class Preset {
@@ -21,6 +22,8 @@ export class Preset {
   imageUrl?: string | null
   @Field(() => GraphQLJSON, { nullable: true })
   config!: Prisma.JsonValue | null
+  @Field(() => [PresetActivity], { nullable: true })
+  activities?: PresetActivity[]
 }
 
 @ObjectType()

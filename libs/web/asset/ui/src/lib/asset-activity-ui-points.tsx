@@ -1,5 +1,5 @@
 import { Text, TextProps } from '@mantine/core'
-import { AssetActivity, AssetActivityEntry, AssetActivityType } from '@tokengator/sdk'
+import { AssetActivity, AssetActivityEntry, PresetActivity } from '@tokengator/sdk'
 
 export function AssetActivityUiPoints({
   activity,
@@ -8,7 +8,7 @@ export function AssetActivityUiPoints({
 }: TextProps & { activity: AssetActivity; entry?: AssetActivityEntry }) {
   const points = entry?.points ?? activity.pointsTotal ?? 0
   const label = activity.pointsLabel ?? 'Points'
-  const prefix = activity.type === AssetActivityType.Payouts ? '$' : ''
+  const prefix = activity.type === PresetActivity.Payouts ? '$' : ''
 
   return (
     <Text {...props} span>
