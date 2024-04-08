@@ -2,8 +2,8 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class TokenGatorActivityEntry {
-  @Field()
-  timestamp!: Date
+  @Field({ nullable: true })
+  timestamp!: string | null
   @Field()
   message!: string
   @Field({ nullable: true })

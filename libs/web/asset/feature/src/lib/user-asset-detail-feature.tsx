@@ -2,7 +2,12 @@ import { Accordion, Button, Group, SimpleGrid, Text } from '@mantine/core'
 import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiStack, UiWarning } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { PresetActivity, TokenGatorAsset } from '@tokengator/sdk'
-import { useCreateAssetActivity, useGetAsset, useGetAssetActivity } from '@tokengator/web-asset-data-access'
+import {
+  useCreateAssetActivity,
+  useCreateAssetActivityEvent,
+  useGetAsset,
+  useGetAssetActivity,
+} from '@tokengator/web-asset-data-access'
 import { AssetActivityUiEntryList, AssetActivityUiPoints, AssetUiItem } from '@tokengator/web-asset-ui'
 import { useSdk } from '@tokengator/web-core-data-access'
 import { SolanaExplorerIcon } from '@tokengator/web-solana-ui'
@@ -87,12 +92,30 @@ function UserAssetActivityLabel({ account, type }: { account: string; type: Pres
 function UserAssetActivityDetails({ account, type }: { account: string; type: PresetActivity }) {
   const query = useGetAssetActivity({ account, type })
   const mutation = useCreateAssetActivity({ account, type })
+  const mutationEvent = useCreateAssetActivityEvent({ account, type })
   const activity = query.data
   const entries = activity?.entries || []
   return query.isLoading ? (
     <UiLoader />
   ) : activity ? (
-    <AssetActivityUiEntryList activity={activity} entries={entries} />
+    <div>
+      <AssetActivityUiEntryList activity={activity} entries={entries} />
+      <Button
+        onClick={() => {
+          mutationEvent
+            .mutateAsync(`Event ${Date.now()}`)
+            .then((res) => {
+              console.log('res', res)
+            })
+            .catch((err) => {
+              console.log('err', err)
+            })
+          console.log('Create', account, type)
+        }}
+      >
+        Create Event
+      </Button>
+    </div>
   ) : (
     <UiStack>
       <Group justify="flex-end">

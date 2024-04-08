@@ -20,3 +20,14 @@ export function useCreateAssetActivity({ account, type }: { account: string; typ
       sdk.createAssetActivity({ account, type }).then((res) => res.data?.item as TokenGatorActivity | undefined),
   })
 }
+
+export function useCreateAssetActivityEvent({ account, type }: { account: string; type: PresetActivity }) {
+  const sdk = useSdk()
+
+  return useMutation({
+    mutationFn: async (message: string) =>
+      sdk
+        .createAssetActivityEvent({ account, type, message })
+        .then((res) => res.data?.item as TokenGatorActivity | undefined),
+  })
+}

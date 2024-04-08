@@ -115,4 +115,16 @@ export class ApiAssetService {
 
     return this.preset.minter.createActivity({ minter, asset: account, activity })
   }
+
+  async createAssetActivityEvent(account: string, activity: PresetActivity, message: string) {
+    const { accountMetadata } = await this.metadata.getAll(account)
+
+    const mint = accountMetadata?.state.updateAuthority
+    if (!mint) {
+      throw new Error('Asset minter not found')
+    }
+    const minter = await this.preset.minter.getMinter(mint.toString())
+
+    return this.preset.minter.createActivityEvent({ minter, asset: account, activity, message })
+  }
 }

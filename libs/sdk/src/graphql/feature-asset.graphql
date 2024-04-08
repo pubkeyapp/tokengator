@@ -15,3 +15,9 @@ mutation createAssetActivity($account: String!, $type: PresetActivity!) {
     ...TokenGatorActivityDetails
   }
 }
+
+mutation createAssetActivityEvent($account: String!, $type: PresetActivity!, $message: String!) {
+  item: createAssetActivityEvent(account: $account, type: $type, message: $message) {
+    ...TokenGatorActivityDetails
+  }
+}

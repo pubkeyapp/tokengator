@@ -696,6 +696,59 @@ export class ApiPresetMinterService {
     return
   }
 
+  async createActivityEvent({
+    minter,
+    asset,
+    activity,
+    message,
+  }: {
+    minter: TokenGatorMinter
+    asset: string
+    activity: PresetActivity
+    message: string
+  }) {
+    const [activityPda] = getActivityPda({
+      mint: new PublicKey(asset),
+      label: activity.toLowerCase(),
+      programId: this.programId,
+    })
+
+    this.logger.debug(`Creating activity entry message: ${message} for activity: ${activityPda}`)
+
+    const { blockhash, lastValidBlockHeight } = await this.getCachedBlockhash()
+
+    const appendActivityEntryIx = await this.getProgramTokenMinter(this.solana.getAnchorProvider(this.feePayer))
+      .methods.appendActivityEntry({
+        message,
+        points: 10,
+        timestamp: null,
+        url: 'https://gib.work',
+      })
+      .accounts({
+        activity: activityPda,
+        feePayer: this.feePayer.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+
+    const transactionMessage = new TransactionMessage({
+      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 30_000 }), appendActivityEntryIx],
+      payerKey: this.feePayer.publicKey,
+      recentBlockhash: blockhash,
+    }).compileToV0Message()
+
+    const transaction = new VersionedTransaction(transactionMessage)
+    transaction.sign([this.feePayer])
+
+    this.logger.debug(`Sending Transaction: ${transactionMessage}`)
+
+    await this.sendAndConfirmTransaction({ transaction, blockhash, lastValidBlockHeight })
+
+    this.logger.verbose(`Activity created: ${activity} for minter: ${minter.publicKey}`)
+
+    return
+  }
+
   async getMinters(): Promise<TokenGatorMinter[]> {
     return this.getProgramTokenMinter()
       .account.minter.all()

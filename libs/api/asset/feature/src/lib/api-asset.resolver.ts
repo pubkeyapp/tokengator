@@ -29,4 +29,13 @@ export class ApiAssetResolver {
   ) {
     return this.service.createAssetActivity(account, type)
   }
+
+  @Mutation(() => TokenGatorActivity, { nullable: true })
+  createAssetActivityEvent(
+    @Args('account') account: string,
+    @Args({ name: 'type', type: () => PresetActivity }) type: PresetActivity,
+    @Args({ name: 'message' }) message: string,
+  ) {
+    return this.service.createAssetActivityEvent(account, type, message)
+  }
 }

@@ -308,6 +308,7 @@ export type Mutation = {
   adminUpdateWallet?: Maybe<Wallet>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   createAssetActivity?: Maybe<TokenGatorActivity>
+  createAssetActivityEvent?: Maybe<TokenGatorActivity>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
@@ -437,6 +438,12 @@ export type MutationAnonVerifyIdentityChallengeArgs = {
 
 export type MutationCreateAssetActivityArgs = {
   account: Scalars['String']['input']
+  type: PresetActivity
+}
+
+export type MutationCreateAssetActivityEventArgs = {
+  account: Scalars['String']['input']
+  message: Scalars['String']['input']
   type: PresetActivity
 }
 
@@ -909,7 +916,7 @@ export type TokenGatorActivityEntry = {
   __typename?: 'TokenGatorActivityEntry'
   message: Scalars['String']['output']
   points?: Maybe<Scalars['Float']['output']>
-  timestamp: Scalars['DateTime']['output']
+  timestamp?: Maybe<Scalars['String']['output']>
   url?: Maybe<Scalars['String']['output']>
 }
 
@@ -1144,7 +1151,7 @@ export type GetAssetActivityQuery = {
     pointsTotal: number
     entries?: Array<{
       __typename?: 'TokenGatorActivityEntry'
-      timestamp: Date
+      timestamp?: string | null
       message: string
       points?: number | null
       url?: string | null
@@ -1169,7 +1176,33 @@ export type CreateAssetActivityMutation = {
     pointsTotal: number
     entries?: Array<{
       __typename?: 'TokenGatorActivityEntry'
-      timestamp: Date
+      timestamp?: string | null
+      message: string
+      points?: number | null
+      url?: string | null
+    }> | null
+  } | null
+}
+
+export type CreateAssetActivityEventMutationVariables = Exact<{
+  account: Scalars['String']['input']
+  type: PresetActivity
+  message: Scalars['String']['input']
+}>
+
+export type CreateAssetActivityEventMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'TokenGatorActivity'
+    type: PresetActivity
+    label: string
+    startDate?: string | null
+    endDate?: string | null
+    pointsLabel: string
+    pointsTotal: number
+    entries?: Array<{
+      __typename?: 'TokenGatorActivityEntry'
+      timestamp?: string | null
       message: string
       points?: number | null
       url?: string | null
@@ -3730,7 +3763,7 @@ export type TokenGatorAssetDetailsFragment = {
 
 export type TokenGatorActivityEntryDetailsFragment = {
   __typename?: 'TokenGatorActivityEntry'
-  timestamp: Date
+  timestamp?: string | null
   message: string
   points?: number | null
   url?: string | null
@@ -3746,7 +3779,7 @@ export type TokenGatorActivityDetailsFragment = {
   pointsTotal: number
   entries?: Array<{
     __typename?: 'TokenGatorActivityEntry'
-    timestamp: Date
+    timestamp?: string | null
     message: string
     points?: number | null
     url?: string | null
@@ -4506,6 +4539,14 @@ export const GetAssetActivityDocument = gql`
 export const CreateAssetActivityDocument = gql`
   mutation createAssetActivity($account: String!, $type: PresetActivity!) {
     item: createAssetActivity(account: $account, type: $type) {
+      ...TokenGatorActivityDetails
+    }
+  }
+  ${TokenGatorActivityDetailsFragmentDoc}
+`
+export const CreateAssetActivityEventDocument = gql`
+  mutation createAssetActivityEvent($account: String!, $type: PresetActivity!, $message: String!) {
+    item: createAssetActivityEvent(account: $account, type: $type, message: $message) {
       ...TokenGatorActivityDetails
     }
   }
@@ -5307,6 +5348,7 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 const GetAssetDocumentString = print(GetAssetDocument)
 const GetAssetActivityDocumentString = print(GetAssetActivityDocument)
 const CreateAssetActivityDocumentString = print(CreateAssetActivityDocument)
+const CreateAssetActivityEventDocumentString = print(CreateAssetActivityEventDocument)
 const LoginDocumentString = print(LoginDocument)
 const LogoutDocumentString = print(LogoutDocument)
 const RegisterDocumentString = print(RegisterDocument)
@@ -5457,6 +5499,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'createAssetActivity',
+        'mutation',
+        variables,
+      )
+    },
+    createAssetActivityEvent(
+      variables: CreateAssetActivityEventMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: CreateAssetActivityEventMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<CreateAssetActivityEventMutation>(CreateAssetActivityEventDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'createAssetActivityEvent',
         'mutation',
         variables,
       )
