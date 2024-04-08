@@ -1,7 +1,19 @@
-import { Accordion, Button, Group, SimpleGrid, Text } from '@mantine/core'
-import { UiCard, UiDebugModal, UiGroup, UiInfo, UiLoader, UiPage, UiStack, UiWarning } from '@pubkey-ui/core'
+import { Accordion, Button, Group, NumberInput, SimpleGrid, Text, TextInput } from '@mantine/core'
+import { useForm } from '@mantine/form'
+import {
+  toastError,
+  toastSuccess,
+  UiCard,
+  UiDebugModal,
+  UiGroup,
+  UiInfo,
+  UiLoader,
+  UiPage,
+  UiStack,
+  UiWarning,
+} from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
-import { PresetActivity, TokenGatorAsset } from '@tokengator/sdk'
+import { PresetActivity, TokenGatorActivityEntryInput, TokenGatorAsset } from '@tokengator/sdk'
 import {
   useCreateAssetActivity,
   useCreateAssetActivityEvent,
@@ -98,43 +110,95 @@ function UserAssetActivityDetails({ account, type }: { account: string; type: Pr
   return query.isLoading ? (
     <UiLoader />
   ) : activity ? (
-    <div>
+    <UiStack>
       <AssetActivityUiEntryList activity={activity} entries={entries} />
-      <Button
-        onClick={() => {
+      <CreateEventFrom
+        loading={mutationEvent.isPending}
+        submit={(input) =>
           mutationEvent
-            .mutateAsync(`Event ${Date.now()}`)
-            .then((res) => {
-              console.log('res', res)
+            .mutateAsync(input)
+            .then(async (res) => {
+              toastSuccess('Event created')
+              await query.refetch()
             })
             .catch((err) => {
-              console.log('err', err)
+              toastError(`Error creating event: ${err}`)
             })
-          console.log('Create', account, type)
-        }}
-      >
-        Create Event
-      </Button>
-    </div>
+        }
+      />
+    </UiStack>
   ) : (
     <UiStack>
       <Group justify="flex-end">
         <Button
+          loading={mutation.isPending}
           onClick={() => {
             mutation
               .mutateAsync()
-              .then((res) => {
-                console.log('res', res)
+              .then(async (res) => {
+                toastSuccess('List created')
+                await query.refetch()
               })
               .catch((err) => {
-                console.log('err', err)
+                toastError(`Error creating list: ${err}`)
               })
-            console.log('Create', account, type)
           }}
         >
           Create List
         </Button>
       </Group>
     </UiStack>
+  )
+}
+
+export function CreateEventFrom({
+  loading,
+  submit,
+}: {
+  loading: boolean
+  submit: (input: TokenGatorActivityEntryInput) => void
+}) {
+  const form = useForm<TokenGatorActivityEntryInput>({
+    initialValues: {
+      message: `Event ${Date.now()}`,
+      url: 'https://example.com',
+      points: 1,
+    },
+  })
+
+  return (
+    <form
+      onSubmit={form.onSubmit((values) => {
+        submit({ ...values, points: Number(values.points) })
+      })}
+    >
+      <UiStack>
+        <TextInput
+          required
+          name="message"
+          description="Message to display in the activity feed"
+          label="Message"
+          {...form.getInputProps('message')}
+        />
+        <NumberInput
+          description="Points to award for this activity."
+          name="points"
+          label="Points"
+          {...form.getInputProps('points')}
+        />
+        <TextInput
+          description="URL to link to in the activity feed"
+          name="url"
+          label="URL"
+          {...form.getInputProps('url')}
+        />
+
+        <Group justify="flex-end">
+          <Button loading={loading} type="submit">
+            Create Event
+          </Button>
+        </Group>
+      </UiStack>
+    </form>
   )
 }

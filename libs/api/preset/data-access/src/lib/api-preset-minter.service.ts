@@ -4,14 +4,14 @@ import { Injectable, Logger } from '@nestjs/common'
 import { Preset, PresetActivity } from '@prisma/client'
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  createSyncNativeInstruction,
+  createWrappedNativeAccount,
   getAssociatedTokenAddressSync,
+  getMint,
   NATIVE_MINT,
   NATIVE_MINT_2022,
   TOKEN_2022_PROGRAM_ID,
-  createWrappedNativeAccount,
   TOKEN_PROGRAM_ID,
-  getMint,
-  createSyncNativeInstruction,
 } from '@solana/spl-token'
 
 import {
@@ -29,6 +29,7 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js'
 import { ApiCoreService } from '@tokengator/api-core-data-access'
+import { TokenGatorActivityEntryInput } from './dto/token-gator-activity-entry.input'
 import { ApiSolanaService } from '@tokengator/api-solana-data-access'
 import {
   getActivityPda,
@@ -45,7 +46,6 @@ import {
   WEN_NEW_STANDARD_PROGRAM_ID,
   WenNewStandardIDL,
 } from '@tokengator/api-solana-util'
-import { Buffer } from 'buffer'
 import { LRUCache } from 'lru-cache'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
@@ -59,7 +59,7 @@ export class ApiPresetMinterService {
   private readonly logger = new Logger(ApiPresetMinterService.name)
   private readonly cacheLatestBlockhash = new LRUCache<string, BlockhashWithExpiryBlockHeight>({
     max: 1000,
-    ttl: 30_000,
+    ttl: 10,
     fetchMethod: async (commitment = 'confirmed') => {
       this.logger.verbose(`Caching latest blockhash`)
       return this.solana.connection.getLatestBlockhash(commitment as Commitment)
@@ -67,7 +67,7 @@ export class ApiPresetMinterService {
   })
   private readonly cacheSlot = new LRUCache<string, number>({
     max: 1000,
-    ttl: 30_000,
+    ttl: 10,
     fetchMethod: async (commitment = 'confirmed') => {
       this.logger.verbose(`Caching slot`)
       return this.solana.connection.getSlot(commitment as Commitment)
@@ -75,13 +75,12 @@ export class ApiPresetMinterService {
   })
   private readonly cacheActivity = new LRUCache<string, TokenGatorActivity | boolean>({
     max: 1000,
-    ttl: 30_000,
+    ttl: 10,
     fetchMethod: async (account: string) => {
       this.logger.verbose(`Caching slot`)
       return this.getProgramTokenMinter()
         .account.activity.fetch(account)
         .then((res) => {
-          console.log(`Activity: ${account}`, res)
           return res ? (res as unknown as TokenGatorActivity) : false
         })
         .catch(() => false)
@@ -406,7 +405,6 @@ export class ApiPresetMinterService {
     }
 
     const paymentConfig = found.minterConfig.applicationConfig.paymentConfig
-    console.log(paymentConfig.price.toString())
     const metadataConfig = found.minterConfig.metadataConfig
     const collectionMetadata = (metadataConfig?.metadata ?? []) as [string, string][]
     const metadataMint: [string, string][] = [['username', user.username]]
@@ -700,12 +698,12 @@ export class ApiPresetMinterService {
     minter,
     asset,
     activity,
-    message,
+    input: { message, points, url },
   }: {
     minter: TokenGatorMinter
     asset: string
     activity: PresetActivity
-    message: string
+    input: TokenGatorActivityEntryInput
   }) {
     const [activityPda] = getActivityPda({
       mint: new PublicKey(asset),
@@ -720,9 +718,9 @@ export class ApiPresetMinterService {
     const appendActivityEntryIx = await this.getProgramTokenMinter(this.solana.getAnchorProvider(this.feePayer))
       .methods.appendActivityEntry({
         message,
-        points: 10,
+        points: points ?? 0,
         timestamp: null,
-        url: 'https://gib.work',
+        url: url ?? '',
       })
       .accounts({
         activity: activityPda,
@@ -742,11 +740,11 @@ export class ApiPresetMinterService {
 
     this.logger.debug(`Sending Transaction: ${transactionMessage}`)
 
-    await this.sendAndConfirmTransaction({ transaction, blockhash, lastValidBlockHeight })
+    const signature = await this.sendAndConfirmTransaction({ transaction, blockhash, lastValidBlockHeight })
 
     this.logger.verbose(`Activity created: ${activity} for minter: ${minter.publicKey}`)
 
-    return
+    return signature
   }
 
   async getMinters(): Promise<TokenGatorMinter[]> {
@@ -864,7 +862,6 @@ export class ApiPresetMinterService {
     blockhash: string
     lastValidBlockHeight: number
   }): Promise<string> {
-    console.log(Buffer.from(transaction.serialize()).toString('base64'))
     const signature = await this.solana.connection.sendTransaction(transaction, { skipPreflight: true })
     this.logger.debug(`Signature: ${signature}`)
     await this.solana.connection.confirmTransaction({ blockhash, lastValidBlockHeight, signature }, 'confirmed')

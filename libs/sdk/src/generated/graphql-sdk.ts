@@ -308,7 +308,7 @@ export type Mutation = {
   adminUpdateWallet?: Maybe<Wallet>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   createAssetActivity?: Maybe<TokenGatorActivity>
-  createAssetActivityEvent?: Maybe<TokenGatorActivity>
+  createAssetActivityEvent?: Maybe<Scalars['String']['output']>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
@@ -443,7 +443,7 @@ export type MutationCreateAssetActivityArgs = {
 
 export type MutationCreateAssetActivityEventArgs = {
   account: Scalars['String']['input']
-  message: Scalars['String']['input']
+  input: TokenGatorActivityEntryInput
   type: PresetActivity
 }
 
@@ -916,8 +916,15 @@ export type TokenGatorActivityEntry = {
   __typename?: 'TokenGatorActivityEntry'
   message: Scalars['String']['output']
   points?: Maybe<Scalars['Float']['output']>
-  timestamp?: Maybe<Scalars['String']['output']>
+  timestamp: Scalars['DateTime']['output']
   url?: Maybe<Scalars['String']['output']>
+}
+
+export type TokenGatorActivityEntryInput = {
+  message: Scalars['String']['input']
+  points?: InputMaybe<Scalars['Int']['input']>
+  timestamp?: InputMaybe<Scalars['DateTime']['input']>
+  url?: InputMaybe<Scalars['String']['input']>
 }
 
 export type TokenGatorAsset = {
@@ -1151,7 +1158,7 @@ export type GetAssetActivityQuery = {
     pointsTotal: number
     entries?: Array<{
       __typename?: 'TokenGatorActivityEntry'
-      timestamp?: string | null
+      timestamp: Date
       message: string
       points?: number | null
       url?: string | null
@@ -1176,7 +1183,7 @@ export type CreateAssetActivityMutation = {
     pointsTotal: number
     entries?: Array<{
       __typename?: 'TokenGatorActivityEntry'
-      timestamp?: string | null
+      timestamp: Date
       message: string
       points?: number | null
       url?: string | null
@@ -1187,28 +1194,10 @@ export type CreateAssetActivityMutation = {
 export type CreateAssetActivityEventMutationVariables = Exact<{
   account: Scalars['String']['input']
   type: PresetActivity
-  message: Scalars['String']['input']
+  input: TokenGatorActivityEntryInput
 }>
 
-export type CreateAssetActivityEventMutation = {
-  __typename?: 'Mutation'
-  item?: {
-    __typename?: 'TokenGatorActivity'
-    type: PresetActivity
-    label: string
-    startDate?: string | null
-    endDate?: string | null
-    pointsLabel: string
-    pointsTotal: number
-    entries?: Array<{
-      __typename?: 'TokenGatorActivityEntry'
-      timestamp?: string | null
-      message: string
-      points?: number | null
-      url?: string | null
-    }> | null
-  } | null
-}
+export type CreateAssetActivityEventMutation = { __typename?: 'Mutation'; item?: string | null }
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput
@@ -3763,7 +3752,7 @@ export type TokenGatorAssetDetailsFragment = {
 
 export type TokenGatorActivityEntryDetailsFragment = {
   __typename?: 'TokenGatorActivityEntry'
-  timestamp?: string | null
+  timestamp: Date
   message: string
   points?: number | null
   url?: string | null
@@ -3779,7 +3768,7 @@ export type TokenGatorActivityDetailsFragment = {
   pointsTotal: number
   entries?: Array<{
     __typename?: 'TokenGatorActivityEntry'
-    timestamp?: string | null
+    timestamp: Date
     message: string
     points?: number | null
     url?: string | null
@@ -4545,12 +4534,9 @@ export const CreateAssetActivityDocument = gql`
   ${TokenGatorActivityDetailsFragmentDoc}
 `
 export const CreateAssetActivityEventDocument = gql`
-  mutation createAssetActivityEvent($account: String!, $type: PresetActivity!, $message: String!) {
-    item: createAssetActivityEvent(account: $account, type: $type, message: $message) {
-      ...TokenGatorActivityDetails
-    }
+  mutation createAssetActivityEvent($account: String!, $type: PresetActivity!, $input: TokenGatorActivityEntryInput!) {
+    item: createAssetActivityEvent(account: $account, type: $type, input: $input)
   }
-  ${TokenGatorActivityDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {
@@ -7759,6 +7745,15 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
   return z.object({
     provider: IdentityProviderSchema,
     providerId: z.string(),
+  })
+}
+
+export function TokenGatorActivityEntryInputSchema(): z.ZodObject<Properties<TokenGatorActivityEntryInput>> {
+  return z.object({
+    message: z.string(),
+    points: z.number().nullish(),
+    timestamp: definedNonNullAnySchema.nullish(),
+    url: z.string().nullish(),
   })
 }
 

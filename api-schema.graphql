@@ -285,7 +285,7 @@ type Mutation {
   adminUpdateWallet(input: WalletAdminUpdateInput!, walletId: String!): Wallet
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   createAssetActivity(account: String!, type: PresetActivity!): TokenGatorActivity
-  createAssetActivityEvent(account: String!, message: String!, type: PresetActivity!): TokenGatorActivity
+  createAssetActivityEvent(account: String!, input: TokenGatorActivityEntryInput!, type: PresetActivity!): String
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
@@ -494,7 +494,14 @@ type TokenGatorActivity {
 type TokenGatorActivityEntry {
   message: String!
   points: Float
-  timestamp: String
+  timestamp: DateTime!
+  url: String
+}
+
+input TokenGatorActivityEntryInput {
+  message: String!
+  points: Int
+  timestamp: DateTime
   url: String
 }
 

@@ -5,8 +5,10 @@ import {
   ApiPresetService,
   PresetActivity,
   TokenGatorActivity,
+  TokenGatorActivityEntryInput,
   TokenGatorAsset,
 } from '@tokengator/api-preset-data-access'
+import { formatAnchorDate } from '@tokengator/api-solana-util'
 
 @Injectable()
 export class ApiAssetService {
@@ -61,33 +63,13 @@ export class ApiAssetService {
       throw new Error('Activity not found')
     }
 
-    // this.preset.minter.getCommunityPda()
-    console.log(`Account, type: ${account}, ${type}`, activity)
-
-    const found = {
-      label: `${type}`,
-      startDate: new Date(),
-      endDate: new Date().getTime() + 30 * 24 * 60 * 60 * 1000,
-      entries:
-        type === PresetActivity.Payouts
-          ? [
-              { timestamp: new Date(2024, 0, 1), message: 'Payout for December 2023', points: 100 },
-              { timestamp: new Date(2024, 1, 1), message: 'Payout for January 2024', points: 100 },
-              { timestamp: new Date(2024, 2, 1), message: 'Payout for February 2024', points: 100 },
-              { timestamp: new Date(2024, 3, 1), message: 'Payout for March 2024', points: 100 },
-            ]
-          : [
-              { timestamp: new Date(2024, 0, 1), message: 'Points for January 1st 2023', points: 5 },
-              { timestamp: new Date(2024, 0, 2), message: 'Points for January 2nd 2023', points: 5 },
-              { timestamp: new Date(2024, 0, 3), message: 'Points for January 3rd 2023', points: 5 },
-              { timestamp: new Date(2024, 0, 4), message: 'Points for January 4th 2023', points: 5 },
-              { timestamp: new Date(2024, 0, 5), message: 'Points for January 5th 2023', points: 5 },
-              { timestamp: new Date(2024, 0, 6), message: 'Points for January 6th 2023', points: 5 },
-              { timestamp: new Date(2024, 0, 7), message: 'Points for January 7th 2023', points: 5 },
-            ],
-    }
-
-    const pointsTotal = found.entries.reduce((acc, entry) => acc + (entry.points ?? 0), 0)
+    const entries = (activity.entries ?? [])
+      .map((entry) => ({
+        ...entry,
+        timestamp: formatAnchorDate(entry.timestamp),
+      }))
+      .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+    const pointsTotal = entries.reduce((acc, entry) => acc + (entry.points ?? 0), 0)
     const pointsLabel = type === PresetActivity.Payouts ? 'USD' : 'Points'
 
     return {
@@ -100,7 +82,7 @@ export class ApiAssetService {
       // endDate: activity.endDate ? new Date(activity.endDate) : null,
       pointsLabel,
       pointsTotal,
-      entries: activity.entries ?? [],
+      entries,
     }
   }
 
@@ -116,7 +98,11 @@ export class ApiAssetService {
     return this.preset.minter.createActivity({ minter, asset: account, activity })
   }
 
-  async createAssetActivityEvent(account: string, activity: PresetActivity, message: string) {
+  async createAssetActivityEvent(
+    account: string,
+    activity: PresetActivity,
+    input: TokenGatorActivityEntryInput,
+  ): Promise<string> {
     const { accountMetadata } = await this.metadata.getAll(account)
 
     const mint = accountMetadata?.state.updateAuthority
@@ -125,6 +111,6 @@ export class ApiAssetService {
     }
     const minter = await this.preset.minter.getMinter(mint.toString())
 
-    return this.preset.minter.createActivityEvent({ minter, asset: account, activity, message })
+    return this.preset.minter.createActivityEvent({ minter, asset: account, activity, input })
   }
 }

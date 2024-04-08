@@ -2,7 +2,12 @@ import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { ApiAssetService } from '@tokengator/api-asset-data-access'
 import { ApiAuthGraphQLUserGuard } from '@tokengator/api-auth-data-access'
-import { PresetActivity, TokenGatorActivity, TokenGatorAsset } from '@tokengator/api-preset-data-access'
+import {
+  PresetActivity,
+  TokenGatorActivity,
+  TokenGatorActivityEntryInput,
+  TokenGatorAsset,
+} from '@tokengator/api-preset-data-access'
 
 @Resolver(() => TokenGatorAsset)
 @UseGuards(ApiAuthGraphQLUserGuard)
@@ -30,12 +35,12 @@ export class ApiAssetResolver {
     return this.service.createAssetActivity(account, type)
   }
 
-  @Mutation(() => TokenGatorActivity, { nullable: true })
+  @Mutation(() => String, { nullable: true })
   createAssetActivityEvent(
     @Args('account') account: string,
     @Args({ name: 'type', type: () => PresetActivity }) type: PresetActivity,
-    @Args({ name: 'message' }) message: string,
+    @Args('input') input: TokenGatorActivityEntryInput,
   ) {
-    return this.service.createAssetActivityEvent(account, type, message)
+    return this.service.createAssetActivityEvent(account, type, input)
   }
 }

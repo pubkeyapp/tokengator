@@ -20,8 +20,7 @@ export function AssetActivityUiEntryList({
               Earned <AssetActivityUiPoints activity={activity} entry={entry} />
             </Text>
           ) : null}
-          timestamp
-          {/* <UiTime date={new Date(entry.timestamp)} size="xs" mt={4} /> */}
+          <UiTime date={new Date(entry.timestamp)} size="xs" mt={4} />
         </Timeline.Item>
       ))}
     </Timeline>

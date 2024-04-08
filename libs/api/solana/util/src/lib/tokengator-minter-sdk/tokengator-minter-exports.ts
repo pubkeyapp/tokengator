@@ -1,4 +1,5 @@
 // Here we export some useful types and functions for interacting with the Anchor program.
+import { BN } from '@coral-xyz/anchor'
 import { Cluster, PublicKey } from '@solana/web3.js'
 import type { TokengatorMinter } from './types/tokengator_minter'
 import { IDL as TokengatorMinterIDL } from './types/tokengator_minter'
@@ -18,4 +19,8 @@ export function getTokengatorMinterProgramId(cluster: Cluster) {
     default:
       return TOKENGATOR_MINTER_PROGRAM_ID
   }
+}
+
+export function formatAnchorDate(date: BN) {
+  return new Date(parseInt(date?.toString() ?? '') * 1000)
 }
