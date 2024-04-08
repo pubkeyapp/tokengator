@@ -9,6 +9,7 @@ import {
 export const PREFIX = encodeToBuffer('tokengator_minter')
 export const MINTER = encodeToBuffer('minter')
 export const ACTIVITY = encodeToBuffer('activity')
+export const RECEIPT = encodeToBuffer('receipt')
 
 export enum IdentityProvider {
   Discord = 'discord',
@@ -70,6 +71,23 @@ function encodeToBuffer(input: string) {
 
 export function getActivityPda({ programId, mint, label }: { label: string; mint: PublicKey; programId: PublicKey }) {
   return PublicKey.findProgramAddressSync([PREFIX, ACTIVITY, mint.toBuffer(), encodeToBuffer(label)], programId)
+}
+
+export function getReceiptPda({
+  programId,
+  sender,
+  receiver,
+  paymentMint,
+}: {
+  sender: PublicKey
+  receiver: PublicKey
+  paymentMint: PublicKey
+  programId: PublicKey
+}) {
+  return PublicKey.findProgramAddressSync(
+    [PREFIX, RECEIPT, sender.toBuffer(), receiver.toBuffer(), paymentMint.toBuffer()],
+    programId,
+  )
 }
 
 export function getMetadataProgram(provider: Provider, programId: PublicKey = WEN_NEW_STANDARD_PROGRAM_ID) {

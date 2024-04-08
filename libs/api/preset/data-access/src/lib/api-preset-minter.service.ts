@@ -2,7 +2,17 @@ import * as anchor from '@coral-xyz/anchor'
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { Injectable, Logger } from '@nestjs/common'
 import { Preset, PresetActivity } from '@prisma/client'
-import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddressSync,
+  NATIVE_MINT,
+  NATIVE_MINT_2022,
+  TOKEN_2022_PROGRAM_ID,
+  createWrappedNativeAccount,
+  TOKEN_PROGRAM_ID,
+  getMint,
+  createSyncNativeInstruction,
+} from '@solana/spl-token'
 
 import {
   AddressLookupTableAccount,
@@ -25,12 +35,12 @@ import {
   getCommunityPda,
   getIdentityProviders,
   getMinterPda,
+  getReceiptPda,
   getTokengatorMinterProgramId,
   getWNSGroupPda,
   getWNSManagerPda,
   getWNSMemberPda,
   IdentityProvider,
-  MINT_USDC,
   TokengatorMinterIDL,
   WEN_NEW_STANDARD_PROGRAM_ID,
   WenNewStandardIDL,
@@ -114,6 +124,46 @@ export class ApiPresetMinterService {
     return new Program(WenNewStandardIDL, WEN_NEW_STANDARD_PROGRAM_ID, provider)
   }
 
+  async topUpWSOL(mint: PublicKey, paymentAmount: anchor.BN, wsolTokenAccount: PublicKey, owner: Keypair) {
+    const tokenProgramId = mint.equals(NATIVE_MINT_2022) ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID
+
+    const accountInfo = await this.solana.connection.getAccountInfo(wsolTokenAccount)
+
+    if (!accountInfo) {
+      await createWrappedNativeAccount(
+        this.solana.connection,
+        this.feePayer,
+        owner.publicKey,
+        paymentAmount,
+        undefined,
+        { commitment: 'confirmed' },
+        tokenProgramId,
+        mint,
+      )
+    } else {
+      const { blockhash, lastValidBlockHeight } = await this.solana.connection.getLatestBlockhash('confirmed')
+
+      const transferIx = SystemProgram.transfer({
+        fromPubkey: owner.publicKey,
+        toPubkey: wsolTokenAccount,
+        lamports: paymentAmount,
+      })
+
+      const syncNativeIx = createSyncNativeInstruction(wsolTokenAccount, TOKEN_2022_PROGRAM_ID)
+
+      const transaction = new VersionedTransaction(
+        new TransactionMessage({
+          instructions: [transferIx, syncNativeIx],
+          payerKey: this.feePayer.publicKey,
+          recentBlockhash: blockhash,
+        }).compileToV0Message(),
+      )
+
+      transaction.sign([owner, this.feePayer])
+      this.sendAndConfirmTransaction({ transaction, blockhash, lastValidBlockHeight })
+    }
+  }
+
   async mintFromPreset({ communitySlug, presetId }: PresetUserMintFromPreset) {
     const preset = await this.data.findOne(presetId)
 
@@ -140,6 +190,14 @@ export class ApiPresetMinterService {
 
     // BELOW HERE WILL MOVE TO THE SDK AT SOME POINT
     const [minter] = getMinterPda({ name, mint: mintKeypair.publicKey, programId: this.programId })
+
+    const [receipt] = getReceiptPda({
+      paymentMint: paymentConfig.mint,
+      sender: authority.publicKey,
+      receiver: authority.publicKey,
+      programId: this.programId,
+    })
+
     const [group] = getWNSGroupPda(mintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
@@ -150,6 +208,53 @@ export class ApiPresetMinterService {
       TOKEN_2022_PROGRAM_ID,
       ASSOCIATED_TOKEN_PROGRAM_ID,
     )
+
+    // TODO: Change funder as per needed
+    const funder = authority
+    const funderPaymentTokenAccount = getAssociatedTokenAddressSync(
+      paymentConfig.mint,
+      funder.publicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    )
+
+    const { decimals: paymentConfigDecimals } = await getMint(
+      this.solana.connection,
+      paymentConfig.mint,
+      'confirmed',
+      TOKEN_2022_PROGRAM_ID,
+    )
+
+    const { decimals: appPaymentConfigDecimals } = await getMint(
+      this.solana.connection,
+      appPaymentConfig.mint,
+      'confirmed',
+      TOKEN_2022_PROGRAM_ID,
+    )
+
+    const paymentAmount = new anchor.BN(paymentConfig.price * 10 ** paymentConfigDecimals)
+    const appPaymentAmount = new anchor.BN(appPaymentConfig.price * 10 ** appPaymentConfigDecimals)
+
+    const authorityPaymentTokenAccount = getAssociatedTokenAddressSync(
+      paymentConfig.mint,
+      authority.publicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    )
+
+    const feePayerPaymentTokenAccount = getAssociatedTokenAddressSync(
+      paymentConfig.mint,
+      this.feePayer.publicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    )
+
+    if (paymentConfig.mint.equals(NATIVE_MINT_2022) || paymentConfig.mint.equals(NATIVE_MINT)) {
+      this.topUpWSOL(paymentConfig.mint, paymentAmount, funderPaymentTokenAccount, funder)
+    }
 
     const identities = getIdentityProviders([IdentityProvider.Discord])
 
@@ -169,7 +274,11 @@ export class ApiPresetMinterService {
         minter,
         group,
         manager,
+        receipt,
         minterTokenAccount,
+        // funderPaymentTokenAccount,
+        authorityPaymentTokenAccount,
+        feePayerPaymentTokenAccount,
         authority.publicKey,
         remoteFeePayer.publicKey,
         mintKeypair.publicKey,
@@ -195,6 +304,26 @@ export class ApiPresetMinterService {
 
     await this.sendAndConfirmTransaction({ transaction: tx, blockhash, lastValidBlockHeight })
 
+    const prepareForPaymentIx = await programTokenMinter.methods
+      .prepareForPayment({
+        paymentAmount,
+        paymentType: { community: {} },
+      })
+      .accounts({
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+        receiver: authority.publicKey,
+        sender: funder.publicKey,
+        mint: paymentConfig.mint,
+        senderTokenAccount: funderPaymentTokenAccount,
+        receiverTokenAccount: authorityPaymentTokenAccount,
+        feePayer: remoteFeePayer.publicKey,
+        receipt,
+      })
+      .signers([authority])
+      .instruction()
+
     const createMinterWnsIx = await programTokenMinter.methods
       .createMinterWns({
         community: communitySlug,
@@ -211,21 +340,24 @@ export class ApiPresetMinterService {
             days: appPaymentConfig.days,
             expiresAt: new anchor.BN(appPaymentConfig.expiresAt),
             mint: appPaymentConfig.mint,
-            price: new anchor.BN(appPaymentConfig.price),
+            price: appPaymentAmount,
           },
         },
         paymentConfig: {
           amount: paymentConfig.amount,
           days: paymentConfig.days,
-          expiresAt: new anchor.BN(paymentConfig.expiresAt),
           mint: paymentConfig.mint,
-          price: new anchor.BN(paymentConfig.price),
+          price: paymentAmount,
         },
       })
       .accounts({
         minter,
         group,
         manager,
+        receipt,
+        authorityTokenAccount: authorityPaymentTokenAccount,
+        paymentMint: paymentConfig.mint,
+        feePayerTokenAccount: feePayerPaymentTokenAccount,
         minterTokenAccount,
         authority: authority.publicKey,
         feePayer: remoteFeePayer.publicKey,
@@ -250,7 +382,11 @@ export class ApiPresetMinterService {
       authority,
       feePayer: remoteFeePayer,
       mintKeypair,
-      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 250_000 }), createMinterWnsIx],
+      instructions: [
+        ComputeBudgetProgram.setComputeUnitLimit({ units: 350_000 }),
+        prepareForPaymentIx,
+        createMinterWnsIx,
+      ],
     })
   }
 
@@ -269,11 +405,16 @@ export class ApiPresetMinterService {
       throw new Error(`Minter has no metadata config: ${minterAccount}`)
     }
 
+    const paymentConfig = found.minterConfig.applicationConfig.paymentConfig
+    console.log(paymentConfig.price.toString())
     const metadataConfig = found.minterConfig.metadataConfig
     const collectionMetadata = (metadataConfig?.metadata ?? []) as [string, string][]
     const metadataMint: [string, string][] = [['username', user.username]]
     const metadata: [string, string][] = [...collectionMetadata, ...metadataMint] as [string, string][]
     const feePayer = this.feePayer
+
+    // TODO: This should be the user invoking the operation.
+    const buyer = this.feePayer
 
     const mintPublicKey = found.minterConfig.mint
     const memberMintKeypair = Keypair.generate()
@@ -294,13 +435,61 @@ export class ApiPresetMinterService {
     const [member] = getWNSMemberPda(memberMintKeypair.publicKey, WEN_NEW_STANDARD_PROGRAM_ID)
     const [manager] = getWNSManagerPda(WEN_NEW_STANDARD_PROGRAM_ID)
 
-    const authorityTokenAccount = getAssociatedTokenAddressSync(
+    const [receipt] = getReceiptPda({
+      paymentMint: paymentConfig.mint,
+      sender: buyer.publicKey,
+      receiver: authority.publicKey,
+      programId: this.programId,
+    })
+
+    const buyerTokenAccount = getAssociatedTokenAddressSync(
       memberMintKeypair.publicKey,
+      buyer.publicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    )
+
+    const buyerPaymentTokenAccount = getAssociatedTokenAddressSync(
+      paymentConfig.mint,
+      buyer.publicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    )
+
+    const authorityPaymentTokenAccount = getAssociatedTokenAddressSync(
+      paymentConfig.mint,
       authority.publicKey,
       false,
       TOKEN_2022_PROGRAM_ID,
       ASSOCIATED_TOKEN_PROGRAM_ID,
     )
+
+    const paymentAmount = paymentConfig.price
+    if (paymentConfig.mint.equals(NATIVE_MINT_2022) || paymentConfig.mint.equals(NATIVE_MINT)) {
+      this.topUpWSOL(paymentConfig.mint, paymentAmount, buyerPaymentTokenAccount, buyer)
+    }
+
+    const prepareForPaymentIx = await programTokenMinter.methods
+      .prepareForPayment({
+        paymentAmount,
+        paymentType: { user: {} },
+      })
+      .accounts({
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+        sender: buyer.publicKey,
+        receiver: authority.publicKey,
+        senderTokenAccount: buyerPaymentTokenAccount,
+        receiverTokenAccount: authorityPaymentTokenAccount,
+        mint: paymentConfig.mint,
+        feePayer: this.feePayer.publicKey,
+        receipt,
+      })
+      .signers([authority])
+      .instruction()
 
     const createMintIx = await programTokenMinter.methods
       .mintMinterWns({ name, symbol, uri, metadata })
@@ -309,7 +498,9 @@ export class ApiPresetMinterService {
         group,
         manager,
         member,
-        authorityTokenAccount,
+        receipt,
+        receiver: buyer.publicKey,
+        receiverTokenAccount: buyerTokenAccount,
         authority: authority.publicKey,
         feePayer: feePayer.publicKey,
         mint: memberMintKeypair.publicKey,
@@ -326,7 +517,7 @@ export class ApiPresetMinterService {
       authority,
       feePayer,
       mintKeypair: memberMintKeypair,
-      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 350_000 }), createMintIx],
+      instructions: [ComputeBudgetProgram.setComputeUnitLimit({ units: 350_000 }), prepareForPaymentIx, createMintIx],
     })
   }
 
@@ -678,7 +869,7 @@ function getPresetConfig({ communitySlug, url, preset }: { communitySlug: string
         // The expires_at field is calculated based on the current timestamp and the days field at time of minting
         paymentConfig: getPaymentConfig({
           amount: 1,
-          price: 0.5,
+          price: 0.1,
           days: 30,
         }),
       },
@@ -694,7 +885,7 @@ function getPaymentConfig({
   days,
   price,
   amount,
-  mint = new PublicKey(MINT_USDC.address),
+  mint = NATIVE_MINT_2022,
 }: {
   days: number
   price: number

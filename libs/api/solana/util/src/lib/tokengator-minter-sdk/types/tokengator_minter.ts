@@ -3,6 +3,69 @@ export type TokengatorMinter = {
   "name": "tokengator_minter",
   "instructions": [
     {
+      "name": "prepareForPayment",
+      "accounts": [
+        {
+          "name": "receipt",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "sender",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "senderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "receiver",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "receiverTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "PrepareForPaymentArgs"
+          }
+        }
+      ]
+    },
+    {
       "name": "createMinter",
       "accounts": [
         {
@@ -77,12 +140,17 @@ export type TokengatorMinter = {
           "isSigner": false
         },
         {
-          "name": "minter",
+          "name": "receipt",
           "isMut": true,
           "isSigner": false,
           "docs": [
             ""
           ]
+        },
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "minterTokenAccount",
@@ -103,6 +171,21 @@ export type TokengatorMinter = {
           "name": "authority",
           "isMut": false,
           "isSigner": true
+        },
+        {
+          "name": "authorityTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayerTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "paymentMint",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "rent",
@@ -222,7 +305,7 @@ export type TokengatorMinter = {
           "isSigner": false
         },
         {
-          "name": "minter",
+          "name": "receipt",
           "isMut": true,
           "isSigner": false,
           "docs": [
@@ -230,12 +313,17 @@ export type TokengatorMinter = {
           ]
         },
         {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "mint",
           "isMut": true,
           "isSigner": true
         },
         {
-          "name": "authorityTokenAccount",
+          "name": "receiverTokenAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -248,6 +336,11 @@ export type TokengatorMinter = {
           "name": "authority",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "receiver",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
@@ -599,9 +692,79 @@ export type TokengatorMinter = {
           }
         ]
       }
+    },
+    {
+      "name": "receipt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "paymentType",
+            "type": {
+              "defined": "ReceiptType"
+            }
+          },
+          {
+            "name": "createdAt",
+            "type": "i64"
+          },
+          {
+            "name": "paymentAmount",
+            "type": "u64"
+          },
+          {
+            "name": "sender",
+            "type": "publicKey"
+          },
+          {
+            "name": "receiver",
+            "type": "publicKey"
+          },
+          {
+            "name": "senderTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "receiverTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "paymentMint",
+            "type": "publicKey"
+          }
+        ]
+      }
     }
   ],
   "types": [
+    {
+      "name": "PaymentConfigArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u16"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "days",
+            "type": "u8"
+          }
+        ]
+      }
+    },
     {
       "name": "AppendActivityEntryArgs",
       "type": {
@@ -739,6 +902,24 @@ export type TokengatorMinter = {
       }
     },
     {
+      "name": "PrepareForPaymentArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "paymentAmount",
+            "type": "u64"
+          },
+          {
+            "name": "paymentType",
+            "type": {
+              "defined": "ReceiptType"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "UpdateMemberMetadataArgs",
       "type": {
         "kind": "struct",
@@ -786,7 +967,7 @@ export type TokengatorMinter = {
           {
             "name": "paymentConfig",
             "type": {
-              "defined": "PaymentConfig"
+              "defined": "PaymentConfigArgs"
             }
           },
           {
@@ -1065,6 +1246,20 @@ export type TokengatorMinter = {
           }
         ]
       }
+    },
+    {
+      "name": "ReceiptType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "User"
+          },
+          {
+            "name": "Community"
+          }
+        ]
+      }
     }
   ],
   "errors": [
@@ -1080,81 +1275,96 @@ export type TokengatorMinter = {
     },
     {
       "code": 6002,
+      "name": "InvalidAuthority",
+      "msg": "Invalid authority"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidReceiver",
+      "msg": "Invalid receiver"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidReceipt",
+      "msg": "Invalid receipt"
+    },
+    {
+      "code": 6005,
       "name": "UnAuthorized",
       "msg": "Account unauthorized to perform this action"
     },
     {
-      "code": 6003,
+      "code": 6006,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6004,
+      "code": 6007,
       "name": "AuthorityNonExistant",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6005,
+      "code": 6008,
       "name": "CannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6006,
+      "code": 6009,
       "name": "InvalidMinterTokenAccount",
       "msg": "Invalid minter token account"
     },
     {
-      "code": 6007,
+      "code": 6010,
       "name": "InvalidAuthorityTokenAccount",
       "msg": "Invalid authority token account"
     },
     {
-      "code": 6008,
+      "code": 6011,
       "name": "InvalidWNSGroup",
       "msg": "Invalid WNS group account"
     },
     {
-      "code": 6009,
+      "code": 6012,
       "name": "InvalidWNSMember",
       "msg": "Invalid WNS member account"
     },
     {
-      "code": 6010,
+      "code": 6013,
       "name": "InvalidWNSManager",
       "msg": "Invalid WNS manager account"
     },
     {
-      "code": 6011,
+      "code": 6014,
       "name": "InvalidMinterName",
       "msg": "Invalid minter name"
     },
     {
-      "code": 6012,
+      "code": 6015,
       "name": "InvalidMinterDescription",
       "msg": "Invalid minter description"
     },
     {
-      "code": 6013,
+      "code": 6016,
       "name": "InvalidMinterImageURL",
       "msg": "Invalid Image Url"
     },
     {
-      "code": 6014,
+      "code": 6017,
       "name": "MaxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6015,
+      "code": 6018,
       "name": "InvalidMint",
       "msg": "Invalid mint account passed"
     },
     {
-      "code": 6016,
+      "code": 6019,
       "name": "InvalidTokenProgram",
       "msg": "Token extensions program required"
     },
     {
-      "code": 6017,
+      "code": 6020,
       "name": "CannotRemoveNonZeroSupplyMinter",
       "msg": "Cannot remove minter of non-zero supply"
     }
@@ -1166,6 +1376,69 @@ export const IDL: TokengatorMinter = {
   "name": "tokengator_minter",
   "instructions": [
     {
+      "name": "prepareForPayment",
+      "accounts": [
+        {
+          "name": "receipt",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "sender",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "senderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "receiver",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "receiverTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "PrepareForPaymentArgs"
+          }
+        }
+      ]
+    },
+    {
       "name": "createMinter",
       "accounts": [
         {
@@ -1240,12 +1513,17 @@ export const IDL: TokengatorMinter = {
           "isSigner": false
         },
         {
-          "name": "minter",
+          "name": "receipt",
           "isMut": true,
           "isSigner": false,
           "docs": [
             ""
           ]
+        },
+        {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "minterTokenAccount",
@@ -1266,6 +1544,21 @@ export const IDL: TokengatorMinter = {
           "name": "authority",
           "isMut": false,
           "isSigner": true
+        },
+        {
+          "name": "authorityTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feePayerTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "paymentMint",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "rent",
@@ -1385,7 +1678,7 @@ export const IDL: TokengatorMinter = {
           "isSigner": false
         },
         {
-          "name": "minter",
+          "name": "receipt",
           "isMut": true,
           "isSigner": false,
           "docs": [
@@ -1393,12 +1686,17 @@ export const IDL: TokengatorMinter = {
           ]
         },
         {
+          "name": "minter",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "mint",
           "isMut": true,
           "isSigner": true
         },
         {
-          "name": "authorityTokenAccount",
+          "name": "receiverTokenAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -1411,6 +1709,11 @@ export const IDL: TokengatorMinter = {
           "name": "authority",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "receiver",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
@@ -1762,9 +2065,79 @@ export const IDL: TokengatorMinter = {
           }
         ]
       }
+    },
+    {
+      "name": "receipt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "paymentType",
+            "type": {
+              "defined": "ReceiptType"
+            }
+          },
+          {
+            "name": "createdAt",
+            "type": "i64"
+          },
+          {
+            "name": "paymentAmount",
+            "type": "u64"
+          },
+          {
+            "name": "sender",
+            "type": "publicKey"
+          },
+          {
+            "name": "receiver",
+            "type": "publicKey"
+          },
+          {
+            "name": "senderTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "receiverTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "paymentMint",
+            "type": "publicKey"
+          }
+        ]
+      }
     }
   ],
   "types": [
+    {
+      "name": "PaymentConfigArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u16"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "days",
+            "type": "u8"
+          }
+        ]
+      }
+    },
     {
       "name": "AppendActivityEntryArgs",
       "type": {
@@ -1902,6 +2275,24 @@ export const IDL: TokengatorMinter = {
       }
     },
     {
+      "name": "PrepareForPaymentArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "paymentAmount",
+            "type": "u64"
+          },
+          {
+            "name": "paymentType",
+            "type": {
+              "defined": "ReceiptType"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "UpdateMemberMetadataArgs",
       "type": {
         "kind": "struct",
@@ -1949,7 +2340,7 @@ export const IDL: TokengatorMinter = {
           {
             "name": "paymentConfig",
             "type": {
-              "defined": "PaymentConfig"
+              "defined": "PaymentConfigArgs"
             }
           },
           {
@@ -2228,6 +2619,20 @@ export const IDL: TokengatorMinter = {
           }
         ]
       }
+    },
+    {
+      "name": "ReceiptType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "User"
+          },
+          {
+            "name": "Community"
+          }
+        ]
+      }
     }
   ],
   "errors": [
@@ -2243,81 +2648,96 @@ export const IDL: TokengatorMinter = {
     },
     {
       "code": 6002,
+      "name": "InvalidAuthority",
+      "msg": "Invalid authority"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidReceiver",
+      "msg": "Invalid receiver"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidReceipt",
+      "msg": "Invalid receipt"
+    },
+    {
+      "code": 6005,
       "name": "UnAuthorized",
       "msg": "Account unauthorized to perform this action"
     },
     {
-      "code": 6003,
+      "code": 6006,
       "name": "AuthorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6004,
+      "code": 6007,
       "name": "AuthorityNonExistant",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6005,
+      "code": 6008,
       "name": "CannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6006,
+      "code": 6009,
       "name": "InvalidMinterTokenAccount",
       "msg": "Invalid minter token account"
     },
     {
-      "code": 6007,
+      "code": 6010,
       "name": "InvalidAuthorityTokenAccount",
       "msg": "Invalid authority token account"
     },
     {
-      "code": 6008,
+      "code": 6011,
       "name": "InvalidWNSGroup",
       "msg": "Invalid WNS group account"
     },
     {
-      "code": 6009,
+      "code": 6012,
       "name": "InvalidWNSMember",
       "msg": "Invalid WNS member account"
     },
     {
-      "code": 6010,
+      "code": 6013,
       "name": "InvalidWNSManager",
       "msg": "Invalid WNS manager account"
     },
     {
-      "code": 6011,
+      "code": 6014,
       "name": "InvalidMinterName",
       "msg": "Invalid minter name"
     },
     {
-      "code": 6012,
+      "code": 6015,
       "name": "InvalidMinterDescription",
       "msg": "Invalid minter description"
     },
     {
-      "code": 6013,
+      "code": 6016,
       "name": "InvalidMinterImageURL",
       "msg": "Invalid Image Url"
     },
     {
-      "code": 6014,
+      "code": 6017,
       "name": "MaxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6015,
+      "code": 6018,
       "name": "InvalidMint",
       "msg": "Invalid mint account passed"
     },
     {
-      "code": 6016,
+      "code": 6019,
       "name": "InvalidTokenProgram",
       "msg": "Token extensions program required"
     },
     {
-      "code": 6017,
+      "code": 6020,
       "name": "CannotRemoveNonZeroSupplyMinter",
       "msg": "Cannot remove minter of non-zero supply"
     }
