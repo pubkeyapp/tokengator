@@ -9,6 +9,7 @@ import {
   ClaimUserFindManyInput,
   ClaimUserUpdateInput,
 } from '@tokengator/api-claim-data-access'
+import { IdentityProvider } from '@tokengator/api-identity-data-access'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)
@@ -28,6 +29,14 @@ export class ApiClaimUserResolver {
   @Query(() => Claim)
   userGetClaim(@CtxUserId() userId: string, @Args('claimId') claimId: string) {
     return this.service.user.userGetClaim(userId, claimId)
+  }
+
+  @Query(() => [Claim])
+  userGetClaimsByProvider(
+    @Args({ name: 'provider', type: () => IdentityProvider }) provider: IdentityProvider,
+    @Args('providerId') providerId: string,
+  ) {
+    return this.service.user.userGetClaimsByProvider(provider, providerId)
   }
 
   @Query(() => [Claim])

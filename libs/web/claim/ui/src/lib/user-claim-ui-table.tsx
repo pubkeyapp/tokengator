@@ -1,6 +1,6 @@
 import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { UiDebugModal } from '@pubkey-ui/core'
-import { IconPencil, IconTrash } from '@tabler/icons-react'
+import { IconEye, IconPencil, IconTrash } from '@tabler/icons-react'
 import { Claim } from '@tokengator/sdk'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
@@ -44,6 +44,10 @@ export function UserClaimUiTable({
             render: (item) => (
               <Group gap="xs" justify="right">
                 <UiDebugModal data={item} />
+
+                <ActionIcon color="brand" variant="light" size="sm" component={Link} to={item.claimUrl}>
+                  <IconEye size={16} />
+                </ActionIcon>
                 <ActionIcon color="brand" variant="light" size="sm" component={Link} to={`./${item.id}/settings`}>
                   <IconPencil size={16} />
                 </ActionIcon>

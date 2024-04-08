@@ -86,6 +86,7 @@ type Claim {
   account: String!
   amount: String!
   avatarUrl: String
+  claimUrl: String!
   community: Community
   communityId: String!
   createdAt: DateTime
@@ -463,6 +464,7 @@ type Query {
   userFindOneWallet(publicKey: String!): Wallet
   userGetClaim(claimId: String!): Claim!
   userGetClaims: [Claim!]!
+  userGetClaimsByProvider(provider: IdentityProvider!, providerId: String!): [Claim!]!
   userGetMinter(account: String!): TokenGatorMinter!
   userGetMinterAssets(account: String!): JSON!
   userGetMinters: TokenGatorMinter!

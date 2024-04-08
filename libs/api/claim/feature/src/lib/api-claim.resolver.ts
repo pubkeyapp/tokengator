@@ -18,4 +18,9 @@ export class ApiClaimResolver {
       ? `${claim.provider}: ${ellipsify(claim.providerId)} `
       : claim.providerId
   }
+
+  @ResolveField(() => String)
+  claimUrl(@Parent() claim: Claim) {
+    return `/claims/${claim.provider}/${claim.providerId}`
+  }
 }

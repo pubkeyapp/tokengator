@@ -110,6 +110,7 @@ export type Claim = {
   account: Scalars['String']['output']
   amount: Scalars['String']['output']
   avatarUrl?: Maybe<Scalars['String']['output']>
+  claimUrl: Scalars['String']['output']
   community?: Maybe<Community>
   communityId: Scalars['String']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
@@ -710,6 +711,7 @@ export type Query = {
   userFindOneWallet?: Maybe<Wallet>
   userGetClaim: Claim
   userGetClaims: Array<Claim>
+  userGetClaimsByProvider: Array<Claim>
   userGetMinter: TokenGatorMinter
   userGetMinterAssets: Scalars['JSON']['output']
   userGetMinters: TokenGatorMinter
@@ -872,6 +874,11 @@ export type QueryUserFindOneWalletArgs = {
 
 export type QueryUserGetClaimArgs = {
   claimId: Scalars['String']['input']
+}
+
+export type QueryUserGetClaimsByProviderArgs = {
+  provider: IdentityProvider
+  providerId: Scalars['String']['input']
 }
 
 export type QueryUserGetMinterArgs = {
@@ -1290,6 +1297,7 @@ export type ClaimDetailsFragment = {
   providerId: string
   status: ClaimStatus
   name: string
+  claimUrl: string
   updatedAt?: Date | null
   identity?: {
     __typename?: 'Identity'
@@ -1381,6 +1389,7 @@ export type AdminFindManyClaimQuery = {
       providerId: string
       status: ClaimStatus
       name: string
+      claimUrl: string
       updatedAt?: Date | null
       identity?: {
         __typename?: 'Identity'
@@ -1482,6 +1491,7 @@ export type AdminFindOneClaimQuery = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -1572,6 +1582,7 @@ export type AdminCreateClaimMutation = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -1663,6 +1674,7 @@ export type AdminUpdateClaimMutation = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -1761,6 +1773,7 @@ export type UserFindManyClaimQuery = {
       providerId: string
       status: ClaimStatus
       name: string
+      claimUrl: string
       updatedAt?: Date | null
       identity?: {
         __typename?: 'Identity'
@@ -1862,6 +1875,7 @@ export type UserGetClaimQuery = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -1933,6 +1947,98 @@ export type UserGetClaimQuery = {
   }
 }
 
+export type UserGetClaimsByProviderQueryVariables = Exact<{
+  provider: IdentityProvider
+  providerId: Scalars['String']['input']
+}>
+
+export type UserGetClaimsByProviderQuery = {
+  __typename?: 'Query'
+  items: Array<{
+    __typename?: 'Claim'
+    createdAt?: Date | null
+    id: string
+    communityId: string
+    account: string
+    amount: string
+    avatarUrl?: string | null
+    signature?: string | null
+    provider: IdentityProvider
+    providerId: string
+    status: ClaimStatus
+    name: string
+    claimUrl: string
+    updatedAt?: Date | null
+    identity?: {
+      __typename?: 'Identity'
+      createdAt?: Date | null
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt?: Date | null
+      url?: string | null
+      verified?: boolean | null
+    } | null
+    community?: {
+      __typename?: 'Community'
+      createdAt?: Date | null
+      id: string
+      name: string
+      slug: string
+      description: string
+      iconUrl?: string | null
+      logoUrl?: string | null
+      publicUrl?: string | null
+      updatedAt?: Date | null
+    } | null
+    minter?: {
+      __typename?: 'TokenGatorMinter'
+      publicKey: string
+      bump: number
+      communityId: string
+      name: string
+      description: string
+      imageUrl: string
+      feePayer: string
+      authorities: Array<string>
+      paymentConfig: {
+        __typename?: 'TokenGatorMinterPaymentConfig'
+        mint: string
+        days: number
+        amount: number
+        expiresAt: string
+        price: string
+      }
+      minterConfig: {
+        __typename?: 'TokenGatorMinterConfig'
+        mint: string
+        applicationConfig: {
+          __typename?: 'TokenGatorMinterApplicationConfig'
+          identities: Array<IdentityProvider>
+          paymentConfig: {
+            __typename?: 'TokenGatorMinterPaymentConfig'
+            mint: string
+            days: number
+            amount: number
+            expiresAt: string
+            price: string
+          }
+        }
+        metadataConfig: {
+          __typename?: 'TokenGatorMinterMetadataConfig'
+          metadata: Array<Array<string>>
+          name: string
+          symbol: string
+          uri: string
+        }
+      }
+    } | null
+  }>
+}
+
 export type UserGetClaimsQueryVariables = Exact<{ [key: string]: never }>
 
 export type UserGetClaimsQuery = {
@@ -1950,6 +2056,7 @@ export type UserGetClaimsQuery = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -2040,6 +2147,7 @@ export type UserFindOneClaimQuery = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -2130,6 +2238,7 @@ export type UserCreateClaimMutation = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -2221,6 +2330,7 @@ export type UserUpdateClaimMutation = {
     providerId: string
     status: ClaimStatus
     name: string
+    claimUrl: string
     updatedAt?: Date | null
     identity?: {
       __typename?: 'Identity'
@@ -4348,6 +4458,7 @@ export const ClaimDetailsFragmentDoc = gql`
     providerId
     status
     name
+    claimUrl
     updatedAt
     identity {
       ...IdentityDetails
@@ -4631,6 +4742,14 @@ export const UserFindManyClaimDocument = gql`
 export const UserGetClaimDocument = gql`
   query userGetClaim($claimId: String!) {
     item: userGetClaim(claimId: $claimId) {
+      ...ClaimDetails
+    }
+  }
+  ${ClaimDetailsFragmentDoc}
+`
+export const UserGetClaimsByProviderDocument = gql`
+  query userGetClaimsByProvider($provider: IdentityProvider!, $providerId: String!) {
+    items: userGetClaimsByProvider(provider: $provider, providerId: $providerId) {
       ...ClaimDetails
     }
   }
@@ -5346,6 +5465,7 @@ const AdminUpdateClaimDocumentString = print(AdminUpdateClaimDocument)
 const AdminDeleteClaimDocumentString = print(AdminDeleteClaimDocument)
 const UserFindManyClaimDocumentString = print(UserFindManyClaimDocument)
 const UserGetClaimDocumentString = print(UserGetClaimDocument)
+const UserGetClaimsByProviderDocumentString = print(UserGetClaimsByProviderDocument)
 const UserGetClaimsDocumentString = print(UserGetClaimsDocument)
 const UserFindOneClaimDocumentString = print(UserFindOneClaimDocument)
 const UserCreateClaimDocumentString = print(UserCreateClaimDocument)
@@ -5716,6 +5836,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userGetClaim',
+        'query',
+        variables,
+      )
+    },
+    userGetClaimsByProvider(
+      variables: UserGetClaimsByProviderQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserGetClaimsByProviderQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserGetClaimsByProviderQuery>(UserGetClaimsByProviderDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userGetClaimsByProvider',
         'query',
         variables,
       )

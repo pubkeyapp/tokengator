@@ -10,6 +10,7 @@ fragment ClaimDetails on Claim {
   providerId
   status
   name
+  claimUrl
   updatedAt
   identity {
     ...IdentityDetails
@@ -68,6 +69,12 @@ query userFindManyClaim($input: ClaimUserFindManyInput!) {
 
 query userGetClaim($claimId: String!) {
   item: userGetClaim(claimId: $claimId) {
+    ...ClaimDetails
+  }
+}
+
+query userGetClaimsByProvider($provider: IdentityProvider!, $providerId: String!) {
+  items: userGetClaimsByProvider(provider: $provider, providerId: $providerId) {
     ...ClaimDetails
   }
 }

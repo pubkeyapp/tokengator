@@ -21,6 +21,7 @@ const client = new QueryClient({
 // eslint-disable-next-line func-style
 export const ThemeLink: UiThemeLink = ({ children, ...props }) => <Link {...props}>{children}</Link>
 const theme = themeWithBrand('green', { colors: { dark: BACKGROUND_COLORS['stone'] } })
+console.log('theme', JSON.stringify(theme.colors))
 export function WebCoreFeature() {
   return (
     <BrowserRouter>

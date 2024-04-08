@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { IdentityProvider } from '@prisma/client'
 import { ApiClaimDataService } from './api-claim-data.service'
 import { ClaimUserCreateInput } from './dto/claim-user-create.input'
 import { ClaimUserFindManyInput } from './dto/claim-user-find-many.input'
@@ -41,5 +42,9 @@ export class ApiClaimDataUserService {
 
   async userGetClaim(userId: string, claimId: string) {
     return this.data.getClaim(userId, claimId)
+  }
+
+  async userGetClaimsByProvider(provider: IdentityProvider, providerId: string) {
+    return this.data.getClaimsByProvider(provider, providerId)
   }
 }

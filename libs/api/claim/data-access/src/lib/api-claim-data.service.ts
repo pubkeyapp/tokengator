@@ -100,4 +100,26 @@ export class ApiClaimDataService {
     }
     return found
   }
+
+  async getClaimsByProvider(provider: IdentityProvider, providerId: string) {
+    return this.core.data.claim
+      .findMany({
+        where: { provider, providerId },
+        include: { community: true },
+      })
+      .then(async (claims) => {
+        const uniqueMinters = Array.from(new Set(claims.map((claim) => claim.account)))
+        const minters = await Promise.all([...uniqueMinters.map((minter) => this.minterCache.fetch(minter))])
+
+        return claims.map((claim) => {
+          const minter = minters.find((m) => m?.publicKey.toString() === claim.account)
+
+          return {
+            ...claim,
+            minter,
+            // identity,
+          }
+        })
+      })
+  }
 }
