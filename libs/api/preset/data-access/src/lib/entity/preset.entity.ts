@@ -16,6 +16,8 @@ export class Preset {
   name!: string
   @Field({ nullable: true })
   description?: string | null
+  @Field({ nullable: true })
+  enabled?: boolean | null
   @Field()
   color!: string
   @Field({ nullable: true })

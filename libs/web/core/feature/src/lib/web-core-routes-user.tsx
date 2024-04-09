@@ -12,9 +12,8 @@ import { RouteObject, useRoutes } from 'react-router-dom'
 const links: UiDashboardItem[] = [
   // User Dashboard Links are added by the web-crud generator
   { label: 'Communities', icon: IconUsersGroup, to: '/c' },
-  { label: 'Settings', icon: IconSettings, to: '/settings' },
   { label: 'Presets', icon: IconAdjustmentsX, to: '/presets' },
-  { label: 'Prices', icon: IconSettings, to: '/prices' },
+  { label: 'Settings', icon: IconSettings, to: '/settings' },
 ]
 
 const routes: RouteObject[] = [

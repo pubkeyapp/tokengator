@@ -1,5 +1,5 @@
-import { Group } from '@mantine/core'
-import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { Group, Text } from '@mantine/core'
+import { UiBack, UiDebugModal, UiInfo, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
 import { UiSearchField } from '@tokengator/web-core-ui'
 import { useUserFindManyPreset } from '@tokengator/web-preset-data-access'
 import { PresetUiGrid } from '@tokengator/web-preset-ui'
@@ -19,6 +19,19 @@ export default function UserPresetListFeature() {
         </Group>
       }
     >
+      <UiInfo
+        variant="outline"
+        title="About Presets"
+        message={
+          <UiStack>
+            <Text>
+              Presets are a pre-defined set of settings that define how the collection and the assets are created and
+              behave.
+            </Text>
+          </UiStack>
+        }
+      />
+
       <Group>
         <UiSearchField placeholder="Search preset" setSearch={setSearch} />
       </Group>

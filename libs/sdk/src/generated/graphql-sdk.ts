@@ -575,6 +575,7 @@ export type Preset = {
   config?: Maybe<Scalars['JSON']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
   description?: Maybe<Scalars['String']['output']>
+  enabled?: Maybe<Scalars['Boolean']['output']>
   id: Scalars['String']['output']
   imageUrl?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
@@ -3275,6 +3276,7 @@ export type PresetDetailsFragment = {
   description?: string | null
   imageUrl?: string | null
   color: string
+  enabled?: boolean | null
   config?: any | null
   activities?: Array<PresetActivity> | null
   updatedAt?: Date | null
@@ -3296,6 +3298,7 @@ export type AdminFindManyPresetQuery = {
       description?: string | null
       imageUrl?: string | null
       color: string
+      enabled?: boolean | null
       config?: any | null
       activities?: Array<PresetActivity> | null
       updatedAt?: Date | null
@@ -3327,6 +3330,7 @@ export type AdminFindOnePresetQuery = {
     description?: string | null
     imageUrl?: string | null
     color: string
+    enabled?: boolean | null
     config?: any | null
     activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
@@ -3347,6 +3351,7 @@ export type AdminCreatePresetMutation = {
     description?: string | null
     imageUrl?: string | null
     color: string
+    enabled?: boolean | null
     config?: any | null
     activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
@@ -3368,6 +3373,7 @@ export type AdminUpdatePresetMutation = {
     description?: string | null
     imageUrl?: string | null
     color: string
+    enabled?: boolean | null
     config?: any | null
     activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
@@ -3396,6 +3402,7 @@ export type UserFindManyPresetQuery = {
       description?: string | null
       imageUrl?: string | null
       color: string
+      enabled?: boolean | null
       config?: any | null
       activities?: Array<PresetActivity> | null
       updatedAt?: Date | null
@@ -3427,6 +3434,7 @@ export type UserFindOnePresetQuery = {
     description?: string | null
     imageUrl?: string | null
     color: string
+    enabled?: boolean | null
     config?: any | null
     activities?: Array<PresetActivity> | null
     updatedAt?: Date | null
@@ -4553,6 +4561,7 @@ export const PresetDetailsFragmentDoc = gql`
     description
     imageUrl
     color
+    enabled
     config
     activities
     updatedAt

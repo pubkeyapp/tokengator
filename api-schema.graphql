@@ -331,6 +331,7 @@ type Preset {
   config: JSON
   createdAt: DateTime
   description: String
+  enabled: Boolean
   id: String!
   imageUrl: String
   name: String!

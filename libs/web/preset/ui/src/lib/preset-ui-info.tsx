@@ -5,8 +5,9 @@ export function PresetUiInfo({ preset }: { preset?: Preset }) {
   if (!preset) return null
 
   const items: UiInfoItems = [
-    ['name', preset.name],
-    ['description', preset.description],
+    ['Name', preset.name],
+    ['Description', preset.description],
+    ['Enabled', `This preset is ${preset.enabled ? 'enabled' : 'disabled'}.`],
     ['Created At', <UiTime size="xs" c="dimmed" date={new Date(preset.createdAt ?? '0')} />],
     ['Updated At', <UiTime size="xs" c="dimmed" date={new Date(preset.updatedAt ?? '0')} />],
   ]

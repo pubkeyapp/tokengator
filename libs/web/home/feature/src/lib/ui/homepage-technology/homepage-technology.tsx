@@ -22,7 +22,7 @@ export const FEATURES: FeatureProps[] = [
       'Prisma revolutionizes our database management, offering a next-generation ORM for Node.js and TypeScript. It simplifies database access, schema management, and migrations, enabling TokenGator to handle complex data models with ease and efficiency.',
   },
   {
-    logo: '/assets/graphql.png',
+    logo: '/assets/graphql.svg',
     title: 'GraphQL: Flexible Data Queries',
     description:
       'TokenGator utilizes GraphQL to provide a flexible and efficient API for data queries and mutations. This allows users and developers to retrieve exactly the data they need from our platform, reducing bandwidth and improving the user experience.',

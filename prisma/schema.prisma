@@ -97,6 +97,7 @@ model Preset {
   color       String
   description String?
   imageUrl    String?
+  enabled     Boolean          @default(true)
   config      Json
   activities  PresetActivity[]
   prices      Price[]

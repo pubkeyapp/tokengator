@@ -1,9 +1,9 @@
 import { Button, Group, Select } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { UiDebug, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 import { Community, Preset, TokenGatorMinter } from '@tokengator/sdk'
-import { useUserFindOneCommunity, useUserGetMintersByCommunity } from '@tokengator/web-community-data-access'
+import { useUserCreateMintFromPreset, useUserGetMintersByCommunity } from '@tokengator/web-community-data-access'
 import { MinterUiList } from '@tokengator/web-community-ui'
 import { useSdk } from '@tokengator/web-core-data-access'
 import { useUserFindManyPreset } from '@tokengator/web-preset-data-access'
@@ -18,7 +18,7 @@ function useUserDeleteMinter({ communitySlug }: { communitySlug: string }) {
 }
 
 export function UserCommunityDetailMinterListTab({ community }: { community: Community }) {
-  const { createMinter } = useUserFindOneCommunity({ slug: community.slug })
+  const createMinter = useUserCreateMintFromPreset({ slug: community.slug })
   const mutationDelete = useUserDeleteMinter({ communitySlug: community.slug })
   const query = useUserGetMintersByCommunity({ slug: community.slug })
   const { items: presets } = useUserFindManyPreset()
@@ -45,23 +45,24 @@ export function UserCommunityDetailMinterListTab({ community }: { community: Com
         <Button
           onClick={() => {
             modals.open({
+              centered: true,
               title: 'Create Collection',
               children: (
                 <Modal
                   presets={presets}
                   createMinter={async ({ presetId }) =>
-                    createMinter({ presetId }).then(async () => {
+                    createMinter.mutateAsync({ presetId }).then(async () => {
                       modals.closeAll()
                       await query.refetch()
                     })
                   }
-                  loading={query.isPending}
+                  loading={createMinter.isPending}
                 />
               ),
             })
           }}
         >
-          Create
+          Create Collection
         </Button>
       </Group>
     </UiStack>
@@ -78,7 +79,7 @@ function Modal({
   loading: boolean
 }) {
   const [presetId, setPresetId] = useState<string | null>(null)
-  const presetOptions = presets.map((preset) => ({ value: preset.id, label: preset.name }))
+  const presetOptions = presets.map((preset) => ({ value: preset.id, label: preset.name, disabled: !preset.enabled }))
   return (
     <UiStack>
       <Select
@@ -89,22 +90,22 @@ function Modal({
         }}
         placeholder="Select preset"
       />
-
-      <Button
-        disabled={!presetId}
-        loading={loading}
-        onClick={() => {
-          if (!presetId) {
-            return
-          }
-          createMinter({ presetId }).then(() => {
-            modals.closeAll()
-          })
-        }}
-      >
-        Create Collection
-      </Button>
-      <UiDebug data={{ presetId }} />
+      <Group justify="flex-end">
+        <Button
+          disabled={!presetId}
+          loading={loading}
+          onClick={() => {
+            if (!presetId) {
+              return
+            }
+            createMinter({ presetId }).then(() => {
+              modals.closeAll()
+            })
+          }}
+        >
+          Create Collection
+        </Button>
+      </Group>
     </UiStack>
   )
 }

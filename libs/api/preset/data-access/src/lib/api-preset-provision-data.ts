@@ -3,6 +3,7 @@ import { PresetActivity } from './entity/preset-activity.enum'
 
 export const provisionPresets: Prisma.PresetCreateInput[] = [
   {
+    enabled: true,
     name: 'Business Visa',
     description: 'Temporary access, can earn in the community',
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-business-visa.png',
@@ -18,6 +19,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     },
   },
   {
+    enabled: false,
     name: 'Visitor Pass',
     description: 'Temporary access, no earning in the community',
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-visitor-pass.png',
@@ -33,6 +35,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     },
   },
   {
+    enabled: false,
     name: 'Citizenship',
     description: 'Permanent access, no need for renewal',
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-citizenship.png',
@@ -48,6 +51,7 @@ export const provisionPresets: Prisma.PresetCreateInput[] = [
     },
   },
   {
+    enabled: false,
     name: 'Residence',
     description: 'Permanent access, renewal required',
     imageUrl: 'https://raw.githubusercontent.com/pubkeyapp/tokengator-assets/main/presets/preset-residence.png',

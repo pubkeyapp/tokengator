@@ -40,11 +40,11 @@ export default function UserPresetDetailFeature() {
       label: 'Prices',
       element: <UserPriceFeature presetId={presetId} />,
     },
-    {
-      path: 'create',
-      label: 'Create',
-      element: <CreateMinterComponent presetId={presetId} />,
-    },
+    // {
+    //   path: 'create',
+    //   label: 'Create',
+    //   element: <CreateMinterComponent presetId={presetId} />,
+    // },
   ]
 
   return (
