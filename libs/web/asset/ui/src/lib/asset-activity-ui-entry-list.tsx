@@ -1,5 +1,5 @@
 import { Text, Timeline } from '@mantine/core'
-import { UiTime } from '@pubkey-ui/core'
+import { UiAnchor, UiTime } from '@pubkey-ui/core'
 import { IconCheck } from '@tabler/icons-react'
 import { TokenGatorActivity, TokenGatorActivityEntry } from '@tokengator/sdk'
 import { AssetActivityUiPoints } from './asset-activity-ui-points'
@@ -14,7 +14,15 @@ export function AssetActivityUiEntryList({
   return (
     <Timeline active={entries.length} bulletSize={24} lineWidth={2}>
       {entries.reverse().map((entry) => (
-        <Timeline.Item key={entry.timestamp?.toString()} bullet={<IconCheck size={12} />} title={entry.message}>
+        <Timeline.Item
+          key={entry.timestamp?.toString()}
+          bullet={<IconCheck size={12} />}
+          title={
+            <UiAnchor target="_blank" to={entry.url ?? undefined}>
+              {entry.message}
+            </UiAnchor>
+          }
+        >
           {(entry?.points ?? 0) > 0 ? (
             <Text c="dimmed" size="sm" span>
               Earned <AssetActivityUiPoints activity={activity} entry={entry} />

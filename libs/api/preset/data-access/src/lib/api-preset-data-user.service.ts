@@ -58,8 +58,7 @@ export class ApiPresetDataUserService {
       throw new Error('Minter does not belong to this community')
     }
 
-    // TODO: delete minter
-    return false
+    return this.minter.deleteMinter({ minter, communitySlug })
   }
 
   async addMinterAuthority(userId: string, account: string, authority: string, communitySlug: string): Promise<string> {

@@ -115,10 +115,6 @@ function TemplateRender({
   const base64PoweredBy = Buffer.from(poweredBy).toString('base64')
   const base64Icon = Buffer.from(icon).toString('base64')
   const base64Logo = Buffer.from(logo).toString('base64')
-  const base64Discord = Buffer.from(brands.discord).toString('base64')
-  const base64Github = Buffer.from(brands.github).toString('base64')
-  const base64Google = Buffer.from(brands.google).toString('base64')
-  const base64X = Buffer.from(brands.x).toString('base64')
 
   const gray = '#383838'
   const brand = '#8743FF'

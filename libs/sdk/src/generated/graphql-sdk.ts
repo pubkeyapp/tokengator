@@ -3615,6 +3615,13 @@ export type UserRemoveMinterAuthorityMutationVariables = Exact<{
 
 export type UserRemoveMinterAuthorityMutation = { __typename?: 'Mutation'; removed?: string | null }
 
+export type UserDeleteMinterMutationVariables = Exact<{
+  account: Scalars['String']['input']
+  communitySlug: Scalars['String']['input']
+}>
+
+export type UserDeleteMinterMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
 export type PriceDetailsFragment = {
   __typename?: 'Price'
   createdAt?: Date | null
@@ -5205,6 +5212,11 @@ export const UserRemoveMinterAuthorityDocument = gql`
     removed: userRemoveMinterAuthority(account: $account, authority: $authority, communitySlug: $communitySlug)
   }
 `
+export const UserDeleteMinterDocument = gql`
+  mutation userDeleteMinter($account: String!, $communitySlug: String!) {
+    deleted: userDeleteMinter(account: $account, communitySlug: $communitySlug)
+  }
+`
 export const AdminFindManyPriceDocument = gql`
   query adminFindManyPrice($input: PriceAdminFindManyInput!) {
     items: adminFindManyPrice(input: $input) {
@@ -5521,6 +5533,7 @@ const UserCreateMintFromPresetDocumentString = print(UserCreateMintFromPresetDoc
 const UserCreateMintFromMinterDocumentString = print(UserCreateMintFromMinterDocument)
 const UserAddMinterAuthorityDocumentString = print(UserAddMinterAuthorityDocument)
 const UserRemoveMinterAuthorityDocumentString = print(UserRemoveMinterAuthorityDocument)
+const UserDeleteMinterDocumentString = print(UserDeleteMinterDocument)
 const AdminFindManyPriceDocumentString = print(AdminFindManyPriceDocument)
 const AdminFindOnePriceDocumentString = print(AdminFindOnePriceDocument)
 const AdminCreatePriceDocumentString = print(AdminCreatePriceDocument)
@@ -6994,6 +7007,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userRemoveMinterAuthority',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteMinter(
+      variables: UserDeleteMinterMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteMinterMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteMinterMutation>(UserDeleteMinterDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteMinter',
         'mutation',
         variables,
       )

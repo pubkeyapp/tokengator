@@ -1,0 +1,47 @@
+.wrapper {
+  padding-top: calc(var(--mantine-spacing-xl) * 2);
+  min-height: rem(500px);
+  position: relative;
+}
+
+.item {
+  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  border-bottom: 0;
+  border-radius: var(--mantine-radius-md);
+  box-shadow: var(--mantine-shadow-lg);
+  overflow: hidden;
+}
+
+.control {
+  font-size: var(--mantine-font-size-lg);
+  padding: var(--mantine-spacing-lg) var(--mantine-spacing-xl);
+
+  @mixin hover {
+    background-color: transparent;
+  }
+}
+
+.content {
+  padding-left: var(--mantine-spacing-xl);
+  line-height: 1.6;
+}
+
+.icon {
+  margin-left: var(--mantine-spacing-md);
+}
+
+.itemOpened {
+  & .icon {
+    transform: rotate(45deg);
+  }
+}
+
+.button {
+  display: block;
+  margin-top: var(--mantine-spacing-md);
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    display: block;
+    width: 100%;
+  }
+}

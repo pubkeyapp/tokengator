@@ -1,5 +1,14 @@
 # TokenGator
 
+> The Easiest Way to Manage Dynamic NFT Collections on Solana.
+
+## Repositories
+
+TokenGator is currently split into two repositories, one for the platform (API/SDK/Web UI) and one for the Anchor program.
+
+- [TokenGator Platform](https://github.com/pubkeyapp/tokengator) (this repository)
+- [TokenGator Program Library](https://github.com/pubkeyapp/tokengator-program-library)
+
 ## Getting Started
 
 ### Prerequisites

@@ -96,3 +96,7 @@ mutation userAddMinterAuthority($account: String!, $authority: String!, $communi
 mutation userRemoveMinterAuthority($account: String!, $authority: String!, $communitySlug: String!) {
   removed: userRemoveMinterAuthority(account: $account, authority: $authority, communitySlug: $communitySlug)
 }
+
+mutation userDeleteMinter($account: String!, $communitySlug: String!) {
+  deleted: userDeleteMinter(account: $account, communitySlug: $communitySlug)
+}

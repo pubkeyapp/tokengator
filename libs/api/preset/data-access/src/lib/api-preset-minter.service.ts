@@ -29,7 +29,6 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js'
 import { ApiCoreService } from '@tokengator/api-core-data-access'
-import { TokenGatorActivityEntryInput } from './dto/token-gator-activity-entry.input'
 import { ApiSolanaService } from '@tokengator/api-solana-data-access'
 import {
   getActivityPda,
@@ -50,6 +49,7 @@ import { LRUCache } from 'lru-cache'
 import { ApiPresetDataService } from './api-preset-data.service'
 import { PresetUserMintFromMinter } from './dto/preset-user-mint-from-minter'
 import { PresetUserMintFromPreset } from './dto/preset-user-mint-from-preset'
+import { TokenGatorActivityEntryInput } from './dto/token-gator-activity-entry.input'
 import { TokenGatorActivity } from './entity/token-gator-activity.entity'
 import { TokenGatorMinter } from './entity/token-gator-minter.entity'
 import { formatTokenGatorMinter } from './helpers/format-token-gator-minter'
@@ -888,6 +888,30 @@ export class ApiPresetMinterService {
     return this.getProgramWns()
       .account.tokenGroupMember.all([{ memcmp: { offset: 32 + 8, bytes: account.toBase58() } }])
       .then((res) => res.sort((a, b) => a.account.memberNumber - b.account.memberNumber))
+  }
+
+  async deleteMinter({ communitySlug, minter }: { communitySlug: string; minter: TokenGatorMinter }) {
+    this.logger.verbose(`Deleting minter: ${minter.publicKey} from community: ${communitySlug}`)
+    const authority = await this.getKeypairFromCommunity(communitySlug)
+    const feePayer = this.feePayer
+    const minterProgram = this.getProgramTokenMinter(this.solana.getAnchorProvider(feePayer))
+
+    const signature = await minterProgram.methods
+      .removeMinter()
+      .accounts({
+        minter: minter.publicKey,
+        mint: minter.minterConfig.mint,
+        feePayer: feePayer.publicKey,
+        authority: authority.publicKey,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([authority, feePayer])
+      .rpc({ commitment: 'confirmed', skipPreflight: true })
+
+    this.logger.verbose(`Signature: ${signature}`)
+    return signature
   }
 }
 

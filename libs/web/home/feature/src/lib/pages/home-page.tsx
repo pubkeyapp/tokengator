@@ -1,34 +1,47 @@
-import { Button, Container, Group, Text, Title } from '@mantine/core'
-import { UiStack } from '@pubkey-ui/core'
-import { IconBrandGithub, IconRocket } from '@tabler/icons-react'
-import { Link } from 'react-router-dom'
+import { Box, useMantineTheme } from '@mantine/core'
+import { UiStack, useUiColorScheme } from '@pubkey-ui/core'
+import { ReactNode } from 'react'
+import { HomepageFeatures } from '../ui/homepage-features/homepage-features'
+import { HomepageFooter } from '../ui/homepage-footer/homepage-footer'
+import { HomepageHeader } from '../ui/homepage-header/homepage-header'
+import { HomepageHero } from '../ui/homepage-hero/homepage-hero'
+import { HomepagePricing } from '../ui/homepage-pricing/homepage-pricing'
+import { HomepageTechnology } from '../ui/homepage-technology/homepage-technology'
+import { HomepageUseCases } from '../ui/homepage-use-cases/homepage-use-cases'
 
 export default function HomePage() {
+  const items: { id: string; element: ReactNode }[] = [
+    { id: 'homepage', element: <HomepageHero /> },
+    { id: 'features', element: <HomepageFeatures /> },
+    { id: 'pricing', element: <HomepagePricing /> },
+    { id: 'use-cases', element: <HomepageUseCases /> },
+    { id: 'technology', element: <HomepageTechnology /> },
+  ]
+
   return (
-    <Container size={800}>
-      <UiStack gap="xl" my="xl">
-        <Title>Welcome to TokenGator.</Title>
+    <UiStack gap={0}>
+      <HomepageHeader />
+      {items.map(({ id, element }, index) => (
+        <HomepageSection key={id} id={id} index={index}>
+          {element}
+        </HomepageSection>
+      ))}
+      <HomepageFooter />
+    </UiStack>
+  )
+}
 
-        <Text c="dimmed">This is the TokenGator project website.</Text>
-        <Group>
-          <Button component={Link} to="/dashboard" size="xl" color="brand" leftSection={<IconRocket />}>
-            Get started
-          </Button>
-          <Button component={Link} to="/about" variant="light" size="xl" color="brand">
-            About
-          </Button>
+function HomepageSection({ children, id, index }: { children: ReactNode; id: string; index: number }) {
+  const { colors } = useMantineTheme()
+  const { colorScheme } = useUiColorScheme()
+  const isDark = colorScheme === 'dark'
+  const isOdd = index % 2 === 0
 
-          <Button
-            component={'a'}
-            href="https://github.com/pubkeyapp/tokengator"
-            size="xl"
-            variant="default"
-            leftSection={<IconBrandGithub />}
-          >
-            Star on GitHub
-          </Button>
-        </Group>
-      </UiStack>
-    </Container>
+  const bg = isDark ? colors.dark[isOdd ? 8 : 9] : isOdd ? colors.gray[0] : colors.gray[1]
+
+  return (
+    <Box bg={bg} id={id} py="xl">
+      {children}
+    </Box>
   )
 }

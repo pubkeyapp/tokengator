@@ -38,7 +38,13 @@ export function UserCommunityDetailMinterDetailTab({ community }: { community: C
               mutation.mutateAsync({ username }).then(() => queryAssets.refetch())
             }}
           />
-          {items?.length ? <MinterUiAssets items={items} /> : <UiInfo message="No assets found" />}
+          {queryAssets.isLoading ? (
+            <UiLoader />
+          ) : items?.length ? (
+            <MinterUiAssets items={items} />
+          ) : (
+            <UiInfo message="No assets found" />
+          )}
         </UiStack>
       ),
     },

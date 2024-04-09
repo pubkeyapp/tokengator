@@ -1,14 +1,25 @@
 import { Button, Group, Select } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { UiDebug, UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { useMutation } from '@tanstack/react-query'
 import { Community, Preset, TokenGatorMinter } from '@tokengator/sdk'
 import { useUserFindOneCommunity, useUserGetMintersByCommunity } from '@tokengator/web-community-data-access'
 import { MinterUiList } from '@tokengator/web-community-ui'
+import { useSdk } from '@tokengator/web-core-data-access'
 import { useUserFindManyPreset } from '@tokengator/web-preset-data-access'
 import { useState } from 'react'
 
+function useUserDeleteMinter({ communitySlug }: { communitySlug: string }) {
+  const sdk = useSdk()
+
+  return useMutation({
+    mutationFn: (account: string) => sdk.userDeleteMinter({ account, communitySlug }).then((res) => res.data.deleted),
+  })
+}
+
 export function UserCommunityDetailMinterListTab({ community }: { community: Community }) {
   const { createMinter } = useUserFindOneCommunity({ slug: community.slug })
+  const mutationDelete = useUserDeleteMinter({ communitySlug: community.slug })
   const query = useUserGetMintersByCommunity({ slug: community.slug })
   const { items: presets } = useUserFindManyPreset()
   const items: TokenGatorMinter[] = query.data ?? []
@@ -20,7 +31,12 @@ export function UserCommunityDetailMinterListTab({ community }: { community: Com
       {query.isLoading ? (
         <UiLoader />
       ) : items.length ? (
-        <MinterUiList items={items ?? []} />
+        <MinterUiList
+          items={items ?? []}
+          deleteMinter={async (item) => {
+            mutationDelete.mutateAsync(item).then(() => query.refetch())
+          }}
+        />
       ) : (
         <UiInfo message="No minters found" />
       )}

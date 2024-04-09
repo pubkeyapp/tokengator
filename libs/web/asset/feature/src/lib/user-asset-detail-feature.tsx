@@ -69,9 +69,10 @@ export function UserAssetDetailFeature() {
 }
 
 function UserAssetActivities({ asset }: { asset: TokenGatorAsset }) {
+  const types = asset.activities || []
   return (
-    <Accordion multiple variant="separated">
-      {asset.activities?.map((type) => (
+    <Accordion multiple variant="separated" defaultValue={types}>
+      {types?.map((type) => (
         <Accordion.Item key={type} value={type}>
           <Accordion.Control>
             <UserAssetActivityLabel account={asset.account} type={type} />
@@ -160,9 +161,9 @@ export function CreateEventFrom({
 }) {
   const form = useForm<TokenGatorActivityEntryInput>({
     initialValues: {
-      message: `Event ${Date.now()}`,
-      url: 'https://example.com',
-      points: 1,
+      message: '',
+      url: '',
+      points: 0,
     },
   })
 
