@@ -47,7 +47,7 @@ export class ApiPresetUserResolver {
     return this.service.user.removeMinterAuthority(userId, account, authority, communitySlug)
   }
 
-  @Mutation(() => Boolean, { nullable: true })
+  @Mutation(() => String, { nullable: true })
   userDeleteMinter(
     @CtxUserId() userId: string,
     @Args('account') account: string,

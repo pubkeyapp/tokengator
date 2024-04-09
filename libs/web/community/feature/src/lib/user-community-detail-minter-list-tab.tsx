@@ -38,7 +38,7 @@ export function UserCommunityDetailMinterListTab({ community }: { community: Com
           }}
         />
       ) : (
-        <UiInfo message="No minters found" />
+        <UiInfo message="No collections found" />
       )}
       <Group justify="flex-end">
         <UiDebugModal data={{ items, presets }} />

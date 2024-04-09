@@ -907,7 +907,7 @@ export class ApiPresetMinterService {
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
       })
-      .signers([authority, feePayer])
+      .signers([authority])
       .rpc({ commitment: 'confirmed', skipPreflight: true })
 
     this.logger.verbose(`Signature: ${signature}`)

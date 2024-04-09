@@ -325,7 +325,7 @@ export type Mutation = {
   userDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   userDeleteCommunityMember?: Maybe<Scalars['Boolean']['output']>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
-  userDeleteMinter?: Maybe<Scalars['Boolean']['output']>
+  userDeleteMinter?: Maybe<Scalars['String']['output']>
   userDeleteWallet?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
   userRemoveMinterAuthority?: Maybe<Scalars['String']['output']>
@@ -3628,7 +3628,7 @@ export type UserDeleteMinterMutationVariables = Exact<{
   communitySlug: Scalars['String']['input']
 }>
 
-export type UserDeleteMinterMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+export type UserDeleteMinterMutation = { __typename?: 'Mutation'; deleted?: string | null }
 
 export type PriceDetailsFragment = {
   __typename?: 'Price'

@@ -1,4 +1,5 @@
 import { ActionIcon, Group, SimpleGrid, Text, Tooltip } from '@mantine/core'
+import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 import { TokenGatorMinter } from '@tokengator/sdk'
 
@@ -24,7 +25,14 @@ export function MinterUiList({
                 variant="light"
                 size="sm"
                 onClick={() => {
+                  if (!window.confirm('Are you sure you want to delete this minter?')) return
                   deleteMinter(item.publicKey)
+                    .then(() => {
+                      toastSuccess('Minter deleted')
+                    })
+                    .catch((err) => {
+                      toastError(err.message)
+                    })
                 }}
               >
                 <IconTrash size={16} />

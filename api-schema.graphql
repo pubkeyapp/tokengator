@@ -302,7 +302,7 @@ type Mutation {
   userDeleteCommunity(communityId: String!): Boolean
   userDeleteCommunityMember(communityMemberId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
-  userDeleteMinter(account: String!, communitySlug: String!): Boolean
+  userDeleteMinter(account: String!, communitySlug: String!): String
   userDeleteWallet(publicKey: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
   userRemoveMinterAuthority(account: String!, authority: String!, communitySlug: String!): String
